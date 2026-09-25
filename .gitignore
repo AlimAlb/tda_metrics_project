@@ -7,3 +7,5 @@ data/
 .pytest_cache/
 build/
 dist/
+AGENTS.md
+docs/
