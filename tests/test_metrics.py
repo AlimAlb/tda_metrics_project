@@ -126,6 +126,13 @@ def test_mtd0_zero_for_exact_subset(metrics):
     assert metrics.mtd0(P[:50], P) == pytest.approx(0.0, abs=1e-12)
 
 
+def test_mtd0_consistent_with_ripser_h0(metrics, clouds):
+    """Кросс-чек двух независимых реализаций H0: scipy single-linkage (mtd0)
+    против ripser++ (mtd_homology, dim=1 возвращает H0-сумму)."""
+    P, Q = clouds
+    assert metrics.mtd0(P, Q) * len(P) == pytest.approx(metrics.mtd_homology(P, Q)['H0'], rel=1e-4)
+
+
 def test_ntd_same_law_near_one(metrics):
     P = sample_gaussian(500, seed=42)
     Q = sample_gaussian(500, seed=7)
