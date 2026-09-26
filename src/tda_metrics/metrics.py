@@ -12,10 +12,11 @@ tf.disable_v2_behavior()
 import mtd
 import rtd
 from precision_recall import knn_precision_recall_features
+from scipy.cluster.hierarchy import linkage
 from scipy.linalg import sqrtm
 from scipy.special import digamma, gammaln
 from scipy.spatial import cKDTree
-from scipy.spatial.distance import cdist, pdist
+from scipy.spatial.distance import cdist, pdist, squareform
 
 __all__ = ['TopologyMetrics', 'np_random_seed']
 
@@ -54,6 +55,7 @@ class TopologyMetrics:
     def __init__(self, seed=42, device='cpu'):
         self.seed = seed
         self.device = device
+        self.ntd_repeats = 5
 
     # ---------- топологические ----------
 
@@ -89,6 +91,53 @@ class TopologyMetrics:
             bars = np.asarray(bars, dtype=float).reshape(-1, 2)
             scores[f'H{level}'] = float(np.sum(bars[:, 1] - bars[:, 0]))
         return scores
+
+    def mtd0(self, P, Q):
+        """mtd^0: средняя длина H0-баров кросс-баркода (Dmitriev et al., IEEE Access 2025).
+
+        Внутренние расстояния Q обнулены (Q предслит в один блок), H0-бары —
+        на каких дистанциях точки P подключаются к многообразию Q; среднее вместо
+        суммы снимает зависимость от размера облака. H0-баркод фильтрации
+        вырождается в merge-дистанции single-linkage кластеризации, поэтому
+        считается напрямую через scipy (без ripser++/joblib: детерминированно и
+        быстро на любых размерах).
+        """
+        P = np.asarray(P, dtype=np.float64)
+        Q = np.asarray(Q, dtype=np.float64)
+        pooled = np.vstack([Q, P])
+        full = squareform(pdist(pooled))
+        n_q = len(Q)
+        full[:n_q, :n_q] = 0.0
+        condensed = squareform(full, checks=False)
+        merges = linkage(condensed, method='single')
+        return float(merges[:, 2].sum() / len(P))
+
+    def ntd(self, X, Y, n_repeats=10, subsample_size=50, factor=3):
+        """Normalized Topological Divergence (Dmitriev et al., IEEE Access 2025).
+
+        NTD(X, Y) = E[mtd^0(Xs, Yb)] / E[mtd^0(Ys, Yb)]: кросс-расходимость X
+        против Y, нормированная на шумовой пол референса Y (две независимые
+        подвыборки Y). X — «модель», Y — «данные».
+
+        Смысл: ~1 — выборки одного закона; < 1 — точки X близки к многообразию Y
+        (X «внутри» Y, precision-подобно); > 1 — у X есть моды вне Y
+        (mode invention). NTD(Y, X) — обратное направление (покрытие, recall-подобно).
+        Подвыборки: Xs, Ys по subsample_size точек, Yb — в factor раз больше
+        (правило 3 * n_s <= n_b из статьи).
+        """
+        if len(Y) < 2 * subsample_size:
+            raise ValueError('ntd требует |Y| >= 2 * subsample_size')
+        m = min(subsample_size, len(X), len(Y) // factor)
+        rng = np.random.default_rng(self.seed)
+        nominator = []
+        denominator = []
+        for _ in range(n_repeats):
+            Xs = X[rng.choice(len(X), size=m, replace=False)]
+            Ys = Y[rng.choice(len(Y), size=m, replace=False)]
+            Yb = Y[rng.choice(len(Y), size=factor * m, replace=False)]
+            nominator.append(self.mtd0(Xs, Yb))
+            denominator.append(self.mtd0(Ys, Yb))
+        return float(np.mean(nominator) / np.mean(denominator))
 
     def rtd(self, P, Q, trials=10, batch=500):
         """Representation Topology Divergence. Симметрична, требует |P| == |Q|."""
@@ -192,7 +241,9 @@ class TopologyMetrics:
 
         rtd_trials=5 по умолчанию (10 усреднений, как в статье RTD, вдвое дороже
         по времени — основная стоимость compute_all как раз в RTD).
-        skip — имена метрик, которые не считать ('rtd' полезен в permutation-циклах).
+        ntd_PQ / ntd_QP — Normalized Topological Divergence в двух направлениях
+        (n_repeats усреднений по подвыборкам; 'ntd' в skip выключает оба).
+        skip — имена метрик, которые не считать ('rtd', 'ntd' полезны в циклах).
         """
         result = {
             'mtd_PQ': self.mtd(P, Q),
@@ -203,5 +254,8 @@ class TopologyMetrics:
         }
         if 'rtd' not in skip:
             result['rtd'] = self.rtd(P, Q, trials=rtd_trials, batch=rtd_batch)
+        if 'ntd' not in skip:
+            result['ntd_PQ'] = self.ntd(P, Q, n_repeats=self.ntd_repeats)
+            result['ntd_QP'] = self.ntd(Q, P, n_repeats=self.ntd_repeats)
         result.update(self.improved_precision_recall(P, Q, nhood_sizes=nhood_sizes))
         return result

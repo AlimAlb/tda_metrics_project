@@ -168,12 +168,13 @@ def permutation_test(P, Q, metrics_obj, n_permutations=50, seed=42, rtd_trials=0
     z-оценка и односторонний p-value в сторону «различия» (для дистанций —
     вправо, для PR-метрик — влево). rtd_trials=0 исключает RTD (дорого);
     при rtd_trials>0 RTD считается с уменьшенным числом усреднений и только
-    когда |P| == |Q|.
+    когда |P| == |Q|. NTD исключена всегда — у неё собственная нормировка
+    на шумовой пол референса.
     """
     rng = np.random.default_rng(seed)
     pooled = np.vstack([P, Q])
     n_p = len(P)
-    skip = ('rtd',) if rtd_trials == 0 else ()
+    skip = ('rtd', 'ntd') if rtd_trials == 0 else ('ntd',)
 
     observed = metrics_obj.compute_all(P, Q, rtd_trials=max(rtd_trials, 5), skip=skip)
     null_rows = []
@@ -210,9 +211,10 @@ def bootstrap_ci(P, Q, metrics_obj, n_resamples=50, seed=42, rtd_trials=0):
     Идея: облака — лишь выборки из своих распределений; CI показывает, какие
     различия метрик устойчивы к конкретной реализации выборки. rtd_trials=0
     исключает RTD (дорого), иначе считается с уменьшенным числом усреднений.
+    NTD исключена всегда — у неё собственная нормировка на шумовой пол.
     """
     rng = np.random.default_rng(seed)
-    skip = ('rtd',) if rtd_trials == 0 else ()
+    skip = ('rtd', 'ntd') if rtd_trials == 0 else ('ntd',)
     rows = []
     for _ in range(n_resamples):
         Pi = P[rng.integers(0, len(P), size=len(P))]
