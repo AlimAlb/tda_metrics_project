@@ -94,6 +94,8 @@ class TopologyMetrics:
         """Representation Topology Divergence. Симметрична, требует |P| == |Q|."""
         if len(P) != len(Q):
             raise ValueError('rtd определен для облаков одинакового размера')
+        if trials < 1:
+            raise ValueError('trials должен быть >= 1')
         with np_random_seed(self.seed):
             value = rtd.rtd(
                 P, Q, pdist_device=self.device, trials=trials, batch=min(batch, len(P)),
@@ -185,19 +187,21 @@ class TopologyMetrics:
 
     # ---------- все сразу ----------
 
-    def compute_all(self, P, Q, nhood_sizes=(1, 3, 10), js_k=5, rtd_trials=5, rtd_batch=500):
+    def compute_all(self, P, Q, nhood_sizes=(1, 3, 10), js_k=5, rtd_trials=5, rtd_batch=500, skip=()):
         """Все метрики одним вызовом; плоский словарь -> строка pandas.DataFrame.
 
         rtd_trials=5 по умолчанию (10 усреднений, как в статье RTD, вдвое дороже
         по времени — основная стоимость compute_all как раз в RTD).
+        skip — имена метрик, которые не считать ('rtd' полезен в permutation-циклах).
         """
         result = {
             'mtd_PQ': self.mtd(P, Q),
             'mtd_QP': self.mtd(Q, P),
-            'rtd': self.rtd(P, Q, trials=rtd_trials, batch=rtd_batch),
             'mmd': self.mmd(P, Q),
             'frechet': self.frechet_distance(P, Q),
             'js': self.js_divergence(P, Q, k=js_k),
         }
+        if 'rtd' not in skip:
+            result['rtd'] = self.rtd(P, Q, trials=rtd_trials, batch=rtd_batch)
         result.update(self.improved_precision_recall(P, Q, nhood_sizes=nhood_sizes))
         return result

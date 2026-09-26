@@ -13,6 +13,7 @@ __all__ = [
     'constant_cloud', 'translated_cloud', 'run_experiment', 'show_steps',
     'plot_clouds', 'plot_trajectories',
     'trajectories_correlation', 'plot_correlation_heatmap', 'group_correlation_summary',
+    'permutation_test', 'bootstrap_ci',
 ]
 
 DISTANCE_METRICS = ['mtd_PQ', 'mtd_QP', 'rtd', 'mmd', 'frechet', 'js']
@@ -40,12 +41,16 @@ def translated_cloud(cloud, eps):
 
 
 def run_experiment(name, data_fn, model_fn, n_steps, metrics_obj, extra=None):
-    """Все метрики на каждом шаге; data_fn/model_fn(step) -> облако точек."""
+    """Все метрики на каждом шаге; data_fn/model_fn(step) -> облако точек.
+
+    extra — либо словарь (одинаков во всех строках), либо функция step -> словарь
+    (например, {'alpha_deg': alpha} в сканах по параметру).
+    """
     rows = []
     for step in tqdm(range(n_steps), desc=name):
         row = {'experiment': name, 'step': step}
         if extra is not None:
-            row.update(extra)
+            row.update(extra(step) if callable(extra) else extra)
         row.update(metrics_obj.compute_all(data_fn(step), model_fn(step)))
         rows.append(row)
     return pd.DataFrame(rows)
@@ -152,3 +157,72 @@ def group_correlation_summary(corr):
                 'средняя корреляция': float(np.mean(values)),
             })
     return pd.DataFrame(rows).pivot(index='группа A', columns='группа B', values='средняя корреляция')
+
+
+def permutation_test(P, Q, metrics_obj, n_permutations=50, seed=42, rtd_trials=0):
+    """Нулевое распределение метрик при перемешивании меток P/Q.
+
+    Объединенная выборка перемешивается и режется на размеры |P| и |Q|; метрика
+    на перестановке — «сколько она стоила бы, если бы различий не было».
+    Возвращает DataFrame: наблюдаемое значение, среднее/std нулевого,
+    z-оценка и односторонний p-value в сторону «различия» (для дистанций —
+    вправо, для PR-метрик — влево). rtd_trials=0 исключает RTD (дорого);
+    при rtd_trials>0 RTD считается с уменьшенным числом усреднений и только
+    когда |P| == |Q|.
+    """
+    rng = np.random.default_rng(seed)
+    pooled = np.vstack([P, Q])
+    n_p = len(P)
+    skip = ('rtd',) if rtd_trials == 0 else ()
+
+    observed = metrics_obj.compute_all(P, Q, rtd_trials=max(rtd_trials, 5), skip=skip)
+    null_rows = []
+    for _ in range(n_permutations):
+        idx = rng.permutation(len(pooled))
+        Pi, Qi = pooled[idx[:n_p]], pooled[idx[n_p:]]
+        if len(Pi) != len(Qi) and 'rtd' not in skip:
+            null_rows.append(metrics_obj.compute_all(Pi, Qi, skip=('rtd',)))
+        else:
+            null_rows.append(metrics_obj.compute_all(Pi, Qi, rtd_trials=rtd_trials, skip=skip))
+
+    null = pd.DataFrame(null_rows)
+    rows = []
+    for metric in null.columns:
+        obs = observed[metric]
+        null_values = null[metric].values
+        similarities = metric.startswith(('precision', 'recall'))
+        exceed = (null_values <= obs) if similarities else (null_values >= obs)
+        p_value = (np.sum(exceed) + 1.0) / (n_permutations + 1.0)
+        rows.append({
+            'метрика': metric,
+            'наблюдение': obs,
+            'нуль_среднее': float(np.mean(null_values)),
+            'нуль_std': float(np.std(null_values)),
+            'z': float((obs - np.mean(null_values)) / max(np.std(null_values), 1e-12)),
+            'p_value': float(p_value),
+        })
+    return pd.DataFrame(rows).set_index('метрика')
+
+
+def bootstrap_ci(P, Q, metrics_obj, n_resamples=50, seed=42, rtd_trials=0):
+    """Процентные интервалы (2.5%, 97.5%) метрик при ресэмплировании P и Q.
+
+    Идея: облака — лишь выборки из своих распределений; CI показывает, какие
+    различия метрик устойчивы к конкретной реализации выборки. rtd_trials=0
+    исключает RTD (дорого), иначе считается с уменьшенным числом усреднений.
+    """
+    rng = np.random.default_rng(seed)
+    skip = ('rtd',) if rtd_trials == 0 else ()
+    rows = []
+    for _ in range(n_resamples):
+        Pi = P[rng.integers(0, len(P), size=len(P))]
+        Qi = Q[rng.integers(0, len(Q), size=len(Q))]
+        rows.append(metrics_obj.compute_all(Pi, Qi, rtd_trials=rtd_trials, skip=skip))
+    df = pd.DataFrame(rows)
+    summary = pd.DataFrame({
+        'среднее': df.mean(),
+        'ci_2.5%': df.quantile(0.025),
+        'ci_97.5%': df.quantile(0.975),
+    })
+    summary['ширина'] = summary['ci_97.5%'] - summary['ci_2.5%']
+    return summary

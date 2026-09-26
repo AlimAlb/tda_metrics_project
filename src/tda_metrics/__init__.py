@@ -4,7 +4,10 @@
     samplers    — сэмплеры облаков точек для 2D-экспериментов;
     metrics     — класс TopologyMetrics (MTD, RTD, improved PR, MMD, Fréchet, JS);
     experiments — пайплайн экспериментов и корреляционный анализ;
-    embeddings  — CLIP-эмбеддинги (тяжелая секция, импортируется явно).
+    reduction   — PCA-сжатие признаков (SVD);
+    embeddings  — CLIP-эмбеддинги (тяжелая секция, импортируется явно);
+    datasets    — параметрические датасеты на MNIST (явный импорт);
+    models      — VAE и DCGAN на torch (явный импорт).
 """
 from tda_metrics.samplers import (
     sample_gaussian,
@@ -28,7 +31,10 @@ from tda_metrics.experiments import (
     trajectories_correlation,
     plot_correlation_heatmap,
     group_correlation_summary,
+    permutation_test,
+    bootstrap_ci,
 )
+from tda_metrics.reduction import pca_fit, pca_transform
 
 __all__ = [
     'sample_gaussian', 'sample_uniform_cube', 'sample_ball', 'sample_ring',
@@ -38,4 +44,6 @@ __all__ = [
     'constant_cloud', 'translated_cloud', 'run_experiment', 'show_steps',
     'plot_clouds', 'plot_trajectories',
     'trajectories_correlation', 'plot_correlation_heatmap', 'group_correlation_summary',
+    'permutation_test', 'bootstrap_ci',
+    'pca_fit', 'pca_transform',
 ]

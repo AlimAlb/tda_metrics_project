@@ -7,6 +7,7 @@ import pytest
 
 from tda_metrics.metrics import TopologyMetrics
 from tda_metrics.samplers import sample_gaussian, sample_ball, sample_ring
+from tda_metrics.experiments import permutation_test, bootstrap_ci
 
 
 @pytest.fixture(scope='module')
@@ -45,6 +46,8 @@ def test_rtd_is_symmetric_and_requires_equal_sizes(metrics, clouds):
     assert metrics.rtd(P, Q) == pytest.approx(metrics.rtd(Q, P))
     with pytest.raises(ValueError):
         metrics.rtd(P, Q[:100])
+    with pytest.raises(ValueError):
+        metrics.rtd(P, Q, trials=0)
 
 
 def test_mtd_is_deterministic(metrics):
@@ -81,3 +84,37 @@ def test_mtd_homology_keys(metrics, clouds):
     scores = metrics.mtd_homology(P, Q)
     assert set(scores) == {'H0', 'H1'}
     assert scores['H1'] == pytest.approx(metrics.mtd(P, Q), rel=1e-6)
+
+
+def test_compute_all_skip(metrics, clouds):
+    P, Q = clouds
+    result = metrics.compute_all(P, Q, skip=('rtd',))
+    assert 'rtd' not in result
+    assert 'mmd' in result and 'mtd_PQ' in result
+
+
+def test_permutation_detects_shift(metrics):
+    P = sample_gaussian(200, seed=42)
+    Q = sample_gaussian(200, mean=(3.0, 0.0), seed=7)
+    result = permutation_test(P, Q, metrics, n_permutations=8, seed=42)
+    assert result.loc['mmd', 'z'] > 3.0
+    assert result.loc['mmd', 'p_value'] <= 1.0 / 9.0
+    assert result.loc['precision@3', 'p_value'] <= 1.0 / 9.0
+
+
+def test_permutation_same_law_is_not_significant(metrics):
+    P = sample_gaussian(200, seed=42)
+    Q = sample_gaussian(200, seed=7)
+    result = permutation_test(P, Q, metrics, n_permutations=8, seed=42)
+    assert result.loc['mmd', 'p_value'] > 0.05
+    assert 0.0 <= result['p_value'].min() <= result['p_value'].max() <= 1.0
+
+
+def test_bootstrap_ci_brackets_mean_and_skips_rtd(metrics):
+    P = sample_gaussian(200, seed=42)
+    Q = sample_ball(200, radius=2.0, seed=7)
+    summary = bootstrap_ci(P, Q, metrics, n_resamples=8, seed=42)
+    assert 'rtd' not in summary.index
+    assert (summary['ci_2.5%'] <= summary['среднее']).all()
+    assert (summary['среднее'] <= summary['ci_97.5%']).all()
+    assert (summary['ширина'] >= 0.0).all()
