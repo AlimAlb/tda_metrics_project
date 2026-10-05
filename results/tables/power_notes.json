@@ -1,0 +1,11 @@
+{
+  "n_control": 20,
+  "n_effect": 20,
+  "effective_alpha_note": "пороги эмпирические (quantile higher); фактический уровень 1/(n_control+1) при вырождении; alpha=0.05 и 0.10 различимы при n_control>=20",
+  "effects_discrete": {
+    "drop0.1": "1/8 = 12.5% мод",
+    "drop0.25": "2/8 = 25%",
+    "invent0.15": "1 пара = 2/8 = 25%",
+    "invent0.5": "2 пары = 4/8 = 50%"
+  }
+}

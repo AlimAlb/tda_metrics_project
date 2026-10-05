@@ -1,0 +1,62 @@
+{
+  "answer_kinds": {
+    "correct": 10000,
+    "hallucinated": 10000
+  },
+  "dataset_sha256": "89ed139ec5e3a3169a0b30e45569ac1283846f76f27f7bb5e908ee6deed57e88",
+  "dtype": "float16",
+  "input_format": "chat_knowledge_v1",
+  "layer_fractions": [
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "layer_indices": [
+    9,
+    18,
+    27,
+    36
+  ],
+  "lens": {
+    "answer": {
+      "max": 127.0,
+      "mean": 11.9642,
+      "min": 3.0,
+      "p10": 4.0,
+      "p25": 5.0,
+      "p50": 9.0,
+      "p75": 16.0,
+      "p90": 24.0
+    },
+    "pooled": {
+      "max": 127.0,
+      "mean": 11.9642,
+      "min": 3.0,
+      "p10": 4.0,
+      "p25": 5.0,
+      "p50": 9.0,
+      "p75": 16.0,
+      "p90": 24.0
+    },
+    "prompt": {
+      "max": 466.0,
+      "mean": 141.3248,
+      "min": 58.0,
+      "p10": 97.0,
+      "p25": 112.0,
+      "p50": 135.0,
+      "p75": 164.0,
+      "p90": 193.0
+    }
+  },
+  "max_length": 1024,
+  "model": "Qwen/Qwen2.5-3B-Instruct",
+  "model_revision": null,
+  "n_items": 20000,
+  "n_records": 10000,
+  "pooling": "mean_answer",
+  "prompt_ids_hash": "f57c06e2bb2cb3d95e50f8b37263cac3b9216055ae22561d9ef11faf621e116a",
+  "template_notes": "chat_knowledge_v1: user-сообщение = knowledge + '\\n\\n' + prompt (knowledge пустой -> только prompt), assistant-сообщение = ответ; сериализация через tokenizer.apply_chat_template",
+  "truncation_share": 0.0
+}

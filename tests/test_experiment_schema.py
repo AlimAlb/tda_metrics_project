@@ -2,6 +2,7 @@
 изоляция ошибок, manifest mismatch. Тесты чисто механические: heavy-стек
 (mtd/rtd/PR) не нужен, достаточно pandas + pyarrow."""
 import json
+from dataclasses import asdict
 from dataclasses import fields as dataclass_fields
 
 import pandas as pd
@@ -368,3 +369,14 @@ def test_config_key_rejects_nan():
     config = make_config(alpha=float('nan'))
     with pytest.raises(ValueError):
         config.key()
+
+
+def test_round_trip_preserves_float_severity(tmp_path):
+    """C3-уровни порчи — float (0.05..0.75): round-trip не должен превращать их в int."""
+    config = make_config(corruption='gaussian_blur', severity=0.05)
+    store = ResultStore(tmp_path / 'store_f')
+    store.append(ResultRow(**asdict(config), status='ok'))
+    reopened = ResultStore(tmp_path / 'store_f')
+    row = reopened.rows()[0]
+    assert row.severity == 0.05
+    assert isinstance(row.severity, float)

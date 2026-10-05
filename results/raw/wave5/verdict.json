@@ -1,0 +1,269 @@
+{
+  "stage": "wave5_confirm",
+  "decision": "D-010",
+  "primary_config": {
+    "dataset": "halueval_qa",
+    "model": "qwen2.5-3b-instruct",
+    "representation": "hidden",
+    "layer": 18,
+    "pooling": "mean_answer",
+    "pca_dim": 16,
+    "pca_fit": "dev-correct",
+    "n_cloud": 1000,
+    "split_id": "val",
+    "prompt_ids_hash": "98c55b0de59675e6f9ba8ccc33e0d0a3ac79f71069345b5cf2a71371b3b1a1a4",
+    "prompt_ids_hash_dev": "debfc629f24af648526470f23db8fe2d837ea40e06eeaea8b24d32c54559a3cf",
+    "alphas": [
+      0.1,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "repeats": 5,
+    "metric_params_a": {
+      "js_k": 5,
+      "nhood_sizes": [
+        1,
+        3,
+        10
+      ],
+      "ntd_repeats": 5,
+      "rtd_batch": 500,
+      "rtd_mode": "random-coupling-exploratory",
+      "rtd_trials": 2
+    },
+    "metric_params_b": {
+      "rtd_batch": 500,
+      "rtd_mode": "paired-replacement-native",
+      "rtd_trials": 2
+    }
+  },
+  "power_artifact": {
+    "values": "/content/results/raw/power/power_values.parquet",
+    "summary": "missing",
+    "n": 1000,
+    "alpha_sig": 0.05,
+    "target_power": 0.8
+  },
+  "caveat": "пороги обнаружения перенесены из синтетического power-артефакта (2D mode-reference, drop/invent): NTD кросс-сравнима между пространствами по построению; перенос порога для precision/recall — условный, интерпретировать с оговоркой",
+  "metrics": {
+    "ntd_PQ": {
+      "direction_worse": "greater",
+      "threshold": 1.445391108864127,
+      "control": {
+        "n_values": 80,
+        "mean": 1.2364661428025805,
+        "sd": 0.10845284655169998
+      },
+      "mde": {
+        "alpha_star": 0.1,
+        "effect": "drop0.1",
+        "power": 0.85
+      },
+      "alpha_eval": 0.1,
+      "observed": {
+        "l4a_by_alpha": {
+          "0.1": {
+            "mean": 1.0567011912578685,
+            "detected_fraction": 0.0,
+            "n_repeats": 5
+          },
+          "0.25": {
+            "mean": 1.1044961217936673,
+            "detected_fraction": 0.0,
+            "n_repeats": 5
+          },
+          "0.5": {
+            "mean": 1.2186427663934167,
+            "detected_fraction": 0.0,
+            "n_repeats": 5
+          },
+          "0.75": {
+            "mean": 1.3885903618925282,
+            "detected_fraction": 0.0,
+            "n_repeats": 5
+          },
+          "1": {
+            "mean": 1.8763063588716933,
+            "detected_fraction": 1.0,
+            "n_repeats": 5
+          }
+        },
+        "l3_direct": {
+          "mean": 1.8763063588716933,
+          "detected_fraction": 1.0,
+          "n_repeats": 5
+        }
+      },
+      "alpha_observed": 1.0,
+      "verdict": "not_confirmed"
+    },
+    "ntd_QP": {
+      "direction_worse": "greater",
+      "threshold": 1.436129036203693,
+      "control": {
+        "n_values": 80,
+        "mean": 1.2195109305166698,
+        "sd": 0.09923788444411354
+      },
+      "mde": {
+        "alpha_star": 0.15,
+        "effect": "invent0.15",
+        "power": 1.0
+      },
+      "alpha_eval": 0.25,
+      "observed": {
+        "l4a_by_alpha": {
+          "0.1": {
+            "mean": 1.1253693561665286,
+            "detected_fraction": 0.0,
+            "n_repeats": 5
+          },
+          "0.25": {
+            "mean": 1.1962703115441389,
+            "detected_fraction": 0.0,
+            "n_repeats": 5
+          },
+          "0.5": {
+            "mean": 1.2464280655444242,
+            "detected_fraction": 0.0,
+            "n_repeats": 5
+          },
+          "0.75": {
+            "mean": 1.2725985618067992,
+            "detected_fraction": 0.0,
+            "n_repeats": 5
+          },
+          "1": {
+            "mean": 1.312303302530292,
+            "detected_fraction": 0.0,
+            "n_repeats": 5
+          }
+        },
+        "l3_direct": {
+          "mean": 1.312303302530292,
+          "detected_fraction": 0.0,
+          "n_repeats": 5
+        }
+      },
+      "alpha_observed": null,
+      "verdict": "not_confirmed"
+    },
+    "precision@3": {
+      "direction_worse": "lower",
+      "threshold": 0.957,
+      "control": {
+        "n_values": 80,
+        "mean": 0.9716000000000001,
+        "sd": 0.00778443757470188
+      },
+      "mde": {
+        "alpha_star": 0.15,
+        "effect": "invent0.15",
+        "power": 1.0
+      },
+      "alpha_eval": 0.25,
+      "observed": {
+        "l4a_by_alpha": {
+          "0.1": {
+            "mean": 0.9784,
+            "detected_fraction": 0.0,
+            "n_repeats": 5
+          },
+          "0.25": {
+            "mean": 0.9478,
+            "detected_fraction": 0.8,
+            "n_repeats": 5
+          },
+          "0.5": {
+            "mean": 0.8936,
+            "detected_fraction": 1.0,
+            "n_repeats": 5
+          },
+          "0.75": {
+            "mean": 0.8427999999999999,
+            "detected_fraction": 1.0,
+            "n_repeats": 5
+          },
+          "1": {
+            "mean": 0.789,
+            "detected_fraction": 1.0,
+            "n_repeats": 5
+          }
+        },
+        "l3_direct": {
+          "mean": 0.789,
+          "detected_fraction": 1.0,
+          "n_repeats": 5
+        }
+      },
+      "alpha_observed": 0.25,
+      "verdict": "confirmed"
+    },
+    "recall@3": {
+      "direction_worse": "lower",
+      "threshold": 0.961,
+      "control": {
+        "n_values": 80,
+        "mean": 0.96975,
+        "sd": 0.005417972903194228
+      },
+      "mde": {
+        "alpha_star": 0.1,
+        "effect": "drop0.1",
+        "power": 1.0
+      },
+      "alpha_eval": 0.1,
+      "observed": {
+        "l4a_by_alpha": {
+          "0.1": {
+            "mean": 0.9916,
+            "detected_fraction": 0.0,
+            "n_repeats": 5
+          },
+          "0.25": {
+            "mean": 0.977,
+            "detected_fraction": 0.0,
+            "n_repeats": 5
+          },
+          "0.5": {
+            "mean": 0.9545999999999999,
+            "detected_fraction": 1.0,
+            "n_repeats": 5
+          },
+          "0.75": {
+            "mean": 0.9179999999999999,
+            "detected_fraction": 1.0,
+            "n_repeats": 5
+          },
+          "1": {
+            "mean": 0.5748000000000001,
+            "detected_fraction": 1.0,
+            "n_repeats": 5
+          }
+        },
+        "l3_direct": {
+          "mean": 0.5748000000000001,
+          "detected_fraction": 1.0,
+          "n_repeats": 5
+        }
+      },
+      "alpha_observed": 0.5,
+      "verdict": "not_confirmed"
+    }
+  },
+  "summary": {
+    "confirmed": [
+      "precision@3"
+    ],
+    "not_confirmed": [
+      "ntd_PQ",
+      "ntd_QP",
+      "recall@3"
+    ],
+    "no_mde": [],
+    "insufficient_data": [],
+    "no_control": []
+  }
+}

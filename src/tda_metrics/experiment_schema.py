@@ -71,7 +71,7 @@ class ExperimentConfig:
     drop_fraction: Optional[float] = None
     invent_fraction: Optional[float] = None
     corruption: Optional[str] = None
-    severity: Optional[int] = None
+    severity: Optional[float] = None
     seed: Optional[int] = None
     split_id: Optional[str] = None
     prompt_ids_hash: Optional[str] = None
@@ -100,13 +100,13 @@ METRIC_COLUMNS = (
 ROW_COLUMNS = CONFIG_COLUMNS + METRIC_COLUMNS + ('runtime_seconds', 'status', 'error_message')
 FRAME_COLUMNS = ROW_COLUMNS + ('config_key',)
 
-_INT_ROW_FIELDS = ('n_P', 'n_Q', 'layer', 'pca_dim', 'severity', 'seed')
+_INT_ROW_FIELDS = ('n_P', 'n_Q', 'layer', 'pca_dim', 'seed')
 _METRIC_ROW_FIELDS = (
     'mtd_PQ', 'mtd_QP', 'ntd_PQ', 'ntd_QP', 'rtd',
     'precision_1', 'recall_1', 'precision_3', 'recall_3', 'precision_10', 'recall_10',
     'mmd', 'frechet', 'js',
 )
-_FLOAT_ROW_FIELDS = ('alpha', 'drop_fraction', 'invent_fraction') + _METRIC_ROW_FIELDS + ('runtime_seconds',)
+_FLOAT_ROW_FIELDS = ('alpha', 'drop_fraction', 'invent_fraction', 'severity') + _METRIC_ROW_FIELDS + ('runtime_seconds',)
 NUMERIC_COLUMNS = tuple(
     _FIELD_TO_COLUMN.get(name, name) for name in _INT_ROW_FIELDS + _FLOAT_ROW_FIELDS
 )
@@ -165,7 +165,7 @@ class ResultRow:
     drop_fraction: Optional[float] = None
     invent_fraction: Optional[float] = None
     corruption: Optional[str] = None
-    severity: Optional[int] = None
+    severity: Optional[float] = None
     seed: Optional[int] = None
     split_id: Optional[str] = None
     prompt_ids_hash: Optional[str] = None

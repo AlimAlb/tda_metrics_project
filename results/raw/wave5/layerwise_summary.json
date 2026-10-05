@@ -1,0 +1,128 @@
+{
+  "stage": "wave5_layerwise",
+  "note": "побочный анализ L5: послойный RTD/CKA cross (correct vs hall) и identity (same-law пол) на dev, n=1000, PCA-16 (fit dev-correct)",
+  "config": {
+    "layers": [
+      9,
+      18,
+      27,
+      36
+    ],
+    "n_cloud": 1000,
+    "repeats": 5,
+    "split_id": "dev",
+    "pca_dim": 16,
+    "pca_fit": "dev-correct",
+    "rtd_params": {
+      "rtd_batch": 500,
+      "rtd_trials": 2,
+      "rtd_mode": "random-coupling-exploratory"
+    }
+  },
+  "by_layer": {
+    "9": {
+      "cross": {
+        "rtd": {
+          "mean": 50.13253479003906,
+          "sd": 1.64625167495622,
+          "n_repeats": 5
+        },
+        "cka_distance": {
+          "mean": 0.8574560147908923,
+          "sd": 0.008032122035455398,
+          "n_repeats": 5
+        }
+      },
+      "identity": {
+        "rtd": {
+          "mean": 57.06593551635742,
+          "sd": 0.667432797511387,
+          "n_repeats": 5
+        },
+        "cka_distance": {
+          "mean": 0.9943217858465759,
+          "sd": 0.0009363221204990315,
+          "n_repeats": 5
+        }
+      }
+    },
+    "18": {
+      "cross": {
+        "rtd": {
+          "mean": 48.29028854370117,
+          "sd": 1.3019189507923994,
+          "n_repeats": 5
+        },
+        "cka_distance": {
+          "mean": 0.7691598117592721,
+          "sd": 0.009873851934270284,
+          "n_repeats": 5
+        }
+      },
+      "identity": {
+        "rtd": {
+          "mean": 60.0353645324707,
+          "sd": 0.46358009622041063,
+          "n_repeats": 5
+        },
+        "cka_distance": {
+          "mean": 0.9936533319222874,
+          "sd": 0.0009849710236244547,
+          "n_repeats": 5
+        }
+      }
+    },
+    "27": {
+      "cross": {
+        "rtd": {
+          "mean": 46.57136764526367,
+          "sd": 1.3381880946019036,
+          "n_repeats": 5
+        },
+        "cka_distance": {
+          "mean": 0.7629876724084582,
+          "sd": 0.008156627561050235,
+          "n_repeats": 5
+        }
+      },
+      "identity": {
+        "rtd": {
+          "mean": 59.40532684326172,
+          "sd": 0.46394497817522135,
+          "n_repeats": 5
+        },
+        "cka_distance": {
+          "mean": 0.99336629042291,
+          "sd": 0.0008362018533832852,
+          "n_repeats": 5
+        }
+      }
+    },
+    "36": {
+      "cross": {
+        "rtd": {
+          "mean": 45.6139633178711,
+          "sd": 1.702036271087066,
+          "n_repeats": 5
+        },
+        "cka_distance": {
+          "mean": 0.9175024619518606,
+          "sd": 0.007367741757252552,
+          "n_repeats": 5
+        }
+      },
+      "identity": {
+        "rtd": {
+          "mean": 53.83023300170898,
+          "sd": 0.5447068958120259,
+          "n_repeats": 5
+        },
+        "cka_distance": {
+          "mean": 0.9955333683109737,
+          "sd": 0.001026378268540687,
+          "n_repeats": 5
+        }
+      }
+    }
+  }
+}
