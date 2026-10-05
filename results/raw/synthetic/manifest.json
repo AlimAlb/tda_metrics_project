@@ -1,0 +1,2508 @@
+{
+  "schema_version": 1,
+  "format": "parquet",
+  "n_rows": 625,
+  "rows": {
+    "2b147d9d93434612": {
+      "experiment_id": "s0_gaussian_copy_n250_k0",
+      "status": "ok"
+    },
+    "41bd6985059320b2": {
+      "experiment_id": "s0_gaussian_copy_n250_k1",
+      "status": "ok"
+    },
+    "f143558a52334197": {
+      "experiment_id": "s0_gaussian_copy_n250_k2",
+      "status": "ok"
+    },
+    "0f05720846026471": {
+      "experiment_id": "s0_gaussian_copy_n250_k3",
+      "status": "ok"
+    },
+    "ce1c5906b9689209": {
+      "experiment_id": "s0_gaussian_copy_n250_k4",
+      "status": "ok"
+    },
+    "1d82670cdd79bb91": {
+      "experiment_id": "s0_gaussian_samelaw_n250_k0",
+      "status": "ok"
+    },
+    "832d9ade324b2d1d": {
+      "experiment_id": "s0_gaussian_samelaw_n250_k1",
+      "status": "ok"
+    },
+    "1d528b3e93ed53e2": {
+      "experiment_id": "s0_gaussian_samelaw_n250_k2",
+      "status": "ok"
+    },
+    "c5e531507d0e36a3": {
+      "experiment_id": "s0_gaussian_samelaw_n250_k3",
+      "status": "ok"
+    },
+    "a9d1f3520f5ba78f": {
+      "experiment_id": "s0_gaussian_samelaw_n250_k4",
+      "status": "ok"
+    },
+    "fddca3a31e1df448": {
+      "experiment_id": "s0_gaussian_copy_n500_k0",
+      "status": "ok"
+    },
+    "eee481d004745f0e": {
+      "experiment_id": "s0_gaussian_copy_n500_k1",
+      "status": "ok"
+    },
+    "43650a491a7c1b09": {
+      "experiment_id": "s0_gaussian_copy_n500_k2",
+      "status": "ok"
+    },
+    "00a711ba5827129b": {
+      "experiment_id": "s0_gaussian_copy_n500_k3",
+      "status": "ok"
+    },
+    "0b0b218b28fd84e4": {
+      "experiment_id": "s0_gaussian_copy_n500_k4",
+      "status": "ok"
+    },
+    "b55e6c83fea7be53": {
+      "experiment_id": "s0_gaussian_samelaw_n500_k0",
+      "status": "ok"
+    },
+    "57d7d8917a3d3fb2": {
+      "experiment_id": "s0_gaussian_samelaw_n500_k1",
+      "status": "ok"
+    },
+    "85d0eaea96382f0e": {
+      "experiment_id": "s0_gaussian_samelaw_n500_k2",
+      "status": "ok"
+    },
+    "e85692fd75f45cea": {
+      "experiment_id": "s0_gaussian_samelaw_n500_k3",
+      "status": "ok"
+    },
+    "9f292631bc90ec18": {
+      "experiment_id": "s0_gaussian_samelaw_n500_k4",
+      "status": "ok"
+    },
+    "76f56e20b1af60bc": {
+      "experiment_id": "s0_gaussian_copy_n1000_k0",
+      "status": "ok"
+    },
+    "bdddf4a4fe1bf650": {
+      "experiment_id": "s0_gaussian_copy_n1000_k1",
+      "status": "ok"
+    },
+    "f3d553d3a868175e": {
+      "experiment_id": "s0_gaussian_copy_n1000_k2",
+      "status": "ok"
+    },
+    "410ddceaa9c9633a": {
+      "experiment_id": "s0_gaussian_copy_n1000_k3",
+      "status": "ok"
+    },
+    "a554004eab23396c": {
+      "experiment_id": "s0_gaussian_copy_n1000_k4",
+      "status": "ok"
+    },
+    "a2b6ed1a5556900a": {
+      "experiment_id": "s0_gaussian_samelaw_n1000_k0",
+      "status": "ok"
+    },
+    "1617ee584081c96a": {
+      "experiment_id": "s0_gaussian_samelaw_n1000_k1",
+      "status": "ok"
+    },
+    "e80b01d3de559e09": {
+      "experiment_id": "s0_gaussian_samelaw_n1000_k2",
+      "status": "ok"
+    },
+    "671041d4baab1b6c": {
+      "experiment_id": "s0_gaussian_samelaw_n1000_k3",
+      "status": "ok"
+    },
+    "3b6c96471cf51bf4": {
+      "experiment_id": "s0_gaussian_samelaw_n1000_k4",
+      "status": "ok"
+    },
+    "a4117430f8dd0c25": {
+      "experiment_id": "s0_ring_copy_n250_k0",
+      "status": "ok"
+    },
+    "12ea8f30d3772d3d": {
+      "experiment_id": "s0_ring_copy_n250_k1",
+      "status": "ok"
+    },
+    "e023ed52af64e10e": {
+      "experiment_id": "s0_ring_copy_n250_k2",
+      "status": "ok"
+    },
+    "689293e8566dcc9d": {
+      "experiment_id": "s0_ring_copy_n250_k3",
+      "status": "ok"
+    },
+    "220a555b77d64bf3": {
+      "experiment_id": "s0_ring_copy_n250_k4",
+      "status": "ok"
+    },
+    "8bfc974949188335": {
+      "experiment_id": "s0_ring_samelaw_n250_k0",
+      "status": "ok"
+    },
+    "ca205faea015ce93": {
+      "experiment_id": "s0_ring_samelaw_n250_k1",
+      "status": "ok"
+    },
+    "79f0cd9a466bebb4": {
+      "experiment_id": "s0_ring_samelaw_n250_k2",
+      "status": "ok"
+    },
+    "b25d3b3d671c3806": {
+      "experiment_id": "s0_ring_samelaw_n250_k3",
+      "status": "ok"
+    },
+    "1507599372c65d08": {
+      "experiment_id": "s0_ring_samelaw_n250_k4",
+      "status": "ok"
+    },
+    "0099db716b7d9306": {
+      "experiment_id": "s0_ring_copy_n500_k0",
+      "status": "ok"
+    },
+    "6cf840816ead1312": {
+      "experiment_id": "s0_ring_copy_n500_k1",
+      "status": "ok"
+    },
+    "12c93ab218ea919a": {
+      "experiment_id": "s0_ring_copy_n500_k2",
+      "status": "ok"
+    },
+    "e459e4eda74ddb2d": {
+      "experiment_id": "s0_ring_copy_n500_k3",
+      "status": "ok"
+    },
+    "cb494b61ac2737cb": {
+      "experiment_id": "s0_ring_copy_n500_k4",
+      "status": "ok"
+    },
+    "ee68a5bd919eb293": {
+      "experiment_id": "s0_ring_samelaw_n500_k0",
+      "status": "ok"
+    },
+    "4c0ba27b0ae8bc04": {
+      "experiment_id": "s0_ring_samelaw_n500_k1",
+      "status": "ok"
+    },
+    "872ce691e2dd6a38": {
+      "experiment_id": "s0_ring_samelaw_n500_k2",
+      "status": "ok"
+    },
+    "06baa103e427ab8e": {
+      "experiment_id": "s0_ring_samelaw_n500_k3",
+      "status": "ok"
+    },
+    "89d426c6d274ff47": {
+      "experiment_id": "s0_ring_samelaw_n500_k4",
+      "status": "ok"
+    },
+    "92630c4e25d7bd53": {
+      "experiment_id": "s0_ring_copy_n1000_k0",
+      "status": "ok"
+    },
+    "4dc092db74b88542": {
+      "experiment_id": "s0_ring_copy_n1000_k1",
+      "status": "ok"
+    },
+    "73bcf8ee61a184c3": {
+      "experiment_id": "s0_ring_copy_n1000_k2",
+      "status": "ok"
+    },
+    "97dc316600ebec43": {
+      "experiment_id": "s0_ring_copy_n1000_k3",
+      "status": "ok"
+    },
+    "e10181f09e97ce1b": {
+      "experiment_id": "s0_ring_copy_n1000_k4",
+      "status": "ok"
+    },
+    "701416803d9009cf": {
+      "experiment_id": "s0_ring_samelaw_n1000_k0",
+      "status": "ok"
+    },
+    "1786d900edd9f803": {
+      "experiment_id": "s0_ring_samelaw_n1000_k1",
+      "status": "ok"
+    },
+    "57bd5e98d58a8725": {
+      "experiment_id": "s0_ring_samelaw_n1000_k2",
+      "status": "ok"
+    },
+    "8ca37a812854a1a5": {
+      "experiment_id": "s0_ring_samelaw_n1000_k3",
+      "status": "ok"
+    },
+    "dd843f37f35ef5c8": {
+      "experiment_id": "s0_ring_samelaw_n1000_k4",
+      "status": "ok"
+    },
+    "216beafd356f7509": {
+      "experiment_id": "s0_mixture_copy_n250_k0",
+      "status": "ok"
+    },
+    "4a2a3adf8ffe11f7": {
+      "experiment_id": "s0_mixture_copy_n250_k1",
+      "status": "ok"
+    },
+    "7a5c807c7834470e": {
+      "experiment_id": "s0_mixture_copy_n250_k2",
+      "status": "ok"
+    },
+    "116e165295723ec1": {
+      "experiment_id": "s0_mixture_copy_n250_k3",
+      "status": "ok"
+    },
+    "f03358abf8b82836": {
+      "experiment_id": "s0_mixture_copy_n250_k4",
+      "status": "ok"
+    },
+    "0e9bdb60ae00d577": {
+      "experiment_id": "s0_mixture_samelaw_n250_k0",
+      "status": "ok"
+    },
+    "0d01b8ce3459cd6e": {
+      "experiment_id": "s0_mixture_samelaw_n250_k1",
+      "status": "ok"
+    },
+    "4c8255fac014407e": {
+      "experiment_id": "s0_mixture_samelaw_n250_k2",
+      "status": "ok"
+    },
+    "5a27ddd089766194": {
+      "experiment_id": "s0_mixture_samelaw_n250_k3",
+      "status": "ok"
+    },
+    "1fc527117e7ccd04": {
+      "experiment_id": "s0_mixture_samelaw_n250_k4",
+      "status": "ok"
+    },
+    "24157a21d189a979": {
+      "experiment_id": "s0_mixture_copy_n500_k0",
+      "status": "ok"
+    },
+    "c1c24db0633351cd": {
+      "experiment_id": "s0_mixture_copy_n500_k1",
+      "status": "ok"
+    },
+    "2381f2f5b364479a": {
+      "experiment_id": "s0_mixture_copy_n500_k2",
+      "status": "ok"
+    },
+    "236fd03f3d776725": {
+      "experiment_id": "s0_mixture_copy_n500_k3",
+      "status": "ok"
+    },
+    "9595aad2efd8a737": {
+      "experiment_id": "s0_mixture_copy_n500_k4",
+      "status": "ok"
+    },
+    "21f6eea6386454d5": {
+      "experiment_id": "s0_mixture_samelaw_n500_k0",
+      "status": "ok"
+    },
+    "1dad6fb5a5d30b32": {
+      "experiment_id": "s0_mixture_samelaw_n500_k1",
+      "status": "ok"
+    },
+    "b3b5920142da2339": {
+      "experiment_id": "s0_mixture_samelaw_n500_k2",
+      "status": "ok"
+    },
+    "83822dc039d39881": {
+      "experiment_id": "s0_mixture_samelaw_n500_k3",
+      "status": "ok"
+    },
+    "46d37e2b5d6c4294": {
+      "experiment_id": "s0_mixture_samelaw_n500_k4",
+      "status": "ok"
+    },
+    "d49adad814e5fd15": {
+      "experiment_id": "s0_mixture_copy_n1000_k0",
+      "status": "ok"
+    },
+    "3ee8eeae4144d912": {
+      "experiment_id": "s0_mixture_copy_n1000_k1",
+      "status": "ok"
+    },
+    "3e7c4db228a0aa79": {
+      "experiment_id": "s0_mixture_copy_n1000_k2",
+      "status": "ok"
+    },
+    "478a1a1f24dda229": {
+      "experiment_id": "s0_mixture_copy_n1000_k3",
+      "status": "ok"
+    },
+    "3d56fa130c9942fe": {
+      "experiment_id": "s0_mixture_copy_n1000_k4",
+      "status": "ok"
+    },
+    "1c9ebff19a5fdd92": {
+      "experiment_id": "s0_mixture_samelaw_n1000_k0",
+      "status": "ok"
+    },
+    "fd87e389fd00f278": {
+      "experiment_id": "s0_mixture_samelaw_n1000_k1",
+      "status": "ok"
+    },
+    "1c53140d0d9e024b": {
+      "experiment_id": "s0_mixture_samelaw_n1000_k2",
+      "status": "ok"
+    },
+    "92b15d1e5b0d747d": {
+      "experiment_id": "s0_mixture_samelaw_n1000_k3",
+      "status": "ok"
+    },
+    "241ecda5b59c35db": {
+      "experiment_id": "s0_mixture_samelaw_n1000_k4",
+      "status": "ok"
+    },
+    "c4bb04064cd59710": {
+      "experiment_id": "s1samelaw_shift_k0",
+      "status": "ok"
+    },
+    "29caf2f602c3f111": {
+      "experiment_id": "s1samelaw_shift_k1",
+      "status": "ok"
+    },
+    "63026cb5bc4bdb8a": {
+      "experiment_id": "s1samelaw_shift_k2",
+      "status": "ok"
+    },
+    "8d688acbb6fc6593": {
+      "experiment_id": "s1samelaw_shift_k3",
+      "status": "ok"
+    },
+    "64818b941e040870": {
+      "experiment_id": "s1samelaw_shift_k4",
+      "status": "ok"
+    },
+    "8b4142dfa4ae97a9": {
+      "experiment_id": "s1samelaw_rotation_k0",
+      "status": "ok"
+    },
+    "469a38140368f983": {
+      "experiment_id": "s1samelaw_rotation_k1",
+      "status": "ok"
+    },
+    "03d81e04c8da6d23": {
+      "experiment_id": "s1samelaw_rotation_k2",
+      "status": "ok"
+    },
+    "a5f6a8d4fe52ba30": {
+      "experiment_id": "s1samelaw_rotation_k3",
+      "status": "ok"
+    },
+    "e40462a555d4a5a5": {
+      "experiment_id": "s1samelaw_rotation_k4",
+      "status": "ok"
+    },
+    "a44fc89f01983e6f": {
+      "experiment_id": "s1samelaw_reflection_k0",
+      "status": "ok"
+    },
+    "c5db3a4052d0e9de": {
+      "experiment_id": "s1samelaw_reflection_k1",
+      "status": "ok"
+    },
+    "af1517e2209e7d1e": {
+      "experiment_id": "s1samelaw_reflection_k2",
+      "status": "ok"
+    },
+    "f98a96bef13acffe": {
+      "experiment_id": "s1samelaw_reflection_k3",
+      "status": "ok"
+    },
+    "96d07e78c561a4d8": {
+      "experiment_id": "s1samelaw_reflection_k4",
+      "status": "ok"
+    },
+    "187d1b226e022c52": {
+      "experiment_id": "s1samelaw_scale_k0",
+      "status": "ok"
+    },
+    "44a9f168a697c657": {
+      "experiment_id": "s1samelaw_scale_k1",
+      "status": "ok"
+    },
+    "44469c959520e606": {
+      "experiment_id": "s1samelaw_scale_k2",
+      "status": "ok"
+    },
+    "41f6e7d3d427d93e": {
+      "experiment_id": "s1samelaw_scale_k3",
+      "status": "ok"
+    },
+    "8d0f558b3e3836c7": {
+      "experiment_id": "s1samelaw_scale_k4",
+      "status": "ok"
+    },
+    "f07346e0fe005517": {
+      "experiment_id": "s1samelaw_thickness_k0",
+      "status": "ok"
+    },
+    "6750ee4771d559d2": {
+      "experiment_id": "s1samelaw_thickness_k1",
+      "status": "ok"
+    },
+    "8723907116533857": {
+      "experiment_id": "s1samelaw_thickness_k2",
+      "status": "ok"
+    },
+    "c60e06de6cb1a588": {
+      "experiment_id": "s1samelaw_thickness_k3",
+      "status": "ok"
+    },
+    "0dacfd5c20485242": {
+      "experiment_id": "s1samelaw_thickness_k4",
+      "status": "ok"
+    },
+    "4227b4f5f159332e": {
+      "experiment_id": "s1samelaw_anisotropy_k0",
+      "status": "ok"
+    },
+    "881fcb34caa491e2": {
+      "experiment_id": "s1samelaw_anisotropy_k1",
+      "status": "ok"
+    },
+    "c2cf60bde3c8015e": {
+      "experiment_id": "s1samelaw_anisotropy_k2",
+      "status": "ok"
+    },
+    "1979868688c8623b": {
+      "experiment_id": "s1samelaw_anisotropy_k3",
+      "status": "ok"
+    },
+    "93c9a4bcb4ba946f": {
+      "experiment_id": "s1samelaw_anisotropy_k4",
+      "status": "ok"
+    },
+    "fafeed05e5de983f": {
+      "experiment_id": "s1_shift_l0.0_k0",
+      "status": "ok"
+    },
+    "2aa0d6616f018470": {
+      "experiment_id": "s1_shift_l0.0_k1",
+      "status": "ok"
+    },
+    "1e3d88d653f6fa4a": {
+      "experiment_id": "s1_shift_l0.0_k2",
+      "status": "ok"
+    },
+    "fa59b508c7bbc1c9": {
+      "experiment_id": "s1_shift_l0.0_k3",
+      "status": "ok"
+    },
+    "cafbbca5dc9fe8b3": {
+      "experiment_id": "s1_shift_l0.0_k4",
+      "status": "ok"
+    },
+    "a563a4e71ae6b430": {
+      "experiment_id": "s1_shift_l0.3_k0",
+      "status": "ok"
+    },
+    "ed1ce2659ac3da62": {
+      "experiment_id": "s1_shift_l0.3_k1",
+      "status": "ok"
+    },
+    "19b167681c8c1d1c": {
+      "experiment_id": "s1_shift_l0.3_k2",
+      "status": "ok"
+    },
+    "f91ae13ae91364e7": {
+      "experiment_id": "s1_shift_l0.3_k3",
+      "status": "ok"
+    },
+    "bb28a53f1c43122d": {
+      "experiment_id": "s1_shift_l0.3_k4",
+      "status": "ok"
+    },
+    "6d3e53c3966c9ef2": {
+      "experiment_id": "s1_shift_l0.6_k0",
+      "status": "ok"
+    },
+    "15cdc238e0d41395": {
+      "experiment_id": "s1_shift_l0.6_k1",
+      "status": "ok"
+    },
+    "ad5381d8ddb1d8c2": {
+      "experiment_id": "s1_shift_l0.6_k2",
+      "status": "ok"
+    },
+    "266d5f28a918169a": {
+      "experiment_id": "s1_shift_l0.6_k3",
+      "status": "ok"
+    },
+    "94226f071ae22284": {
+      "experiment_id": "s1_shift_l0.6_k4",
+      "status": "ok"
+    },
+    "31a244eae06a7eb9": {
+      "experiment_id": "s1_shift_l1.2_k0",
+      "status": "ok"
+    },
+    "3d452014d01564fa": {
+      "experiment_id": "s1_shift_l1.2_k1",
+      "status": "ok"
+    },
+    "24c753eec1fab0a4": {
+      "experiment_id": "s1_shift_l1.2_k2",
+      "status": "ok"
+    },
+    "951d3ac9eec4e202": {
+      "experiment_id": "s1_shift_l1.2_k3",
+      "status": "ok"
+    },
+    "f31f969becfdb395": {
+      "experiment_id": "s1_shift_l1.2_k4",
+      "status": "ok"
+    },
+    "be11c83948ce79d6": {
+      "experiment_id": "s1_shift_l1.8_k0",
+      "status": "ok"
+    },
+    "e129d2d2f5cad50a": {
+      "experiment_id": "s1_shift_l1.8_k1",
+      "status": "ok"
+    },
+    "b44d96bb53adfd72": {
+      "experiment_id": "s1_shift_l1.8_k2",
+      "status": "ok"
+    },
+    "e74eaee12a1de634": {
+      "experiment_id": "s1_shift_l1.8_k3",
+      "status": "ok"
+    },
+    "54c21345919b5c24": {
+      "experiment_id": "s1_shift_l1.8_k4",
+      "status": "ok"
+    },
+    "3ccad757296451a1": {
+      "experiment_id": "s1_shift_l2.4_k0",
+      "status": "ok"
+    },
+    "0dd63ae0c247cf7b": {
+      "experiment_id": "s1_shift_l2.4_k1",
+      "status": "ok"
+    },
+    "9ebcf88a2333d380": {
+      "experiment_id": "s1_shift_l2.4_k2",
+      "status": "ok"
+    },
+    "9313863077864c42": {
+      "experiment_id": "s1_shift_l2.4_k3",
+      "status": "ok"
+    },
+    "bf14b153d9b66e61": {
+      "experiment_id": "s1_shift_l2.4_k4",
+      "status": "ok"
+    },
+    "992e75c4c38bfc45": {
+      "experiment_id": "s1_shift_l3.0_k0",
+      "status": "ok"
+    },
+    "db865cc16501c576": {
+      "experiment_id": "s1_shift_l3.0_k1",
+      "status": "ok"
+    },
+    "eb9a297756ec1b21": {
+      "experiment_id": "s1_shift_l3.0_k2",
+      "status": "ok"
+    },
+    "893a8f45b4577dff": {
+      "experiment_id": "s1_shift_l3.0_k3",
+      "status": "ok"
+    },
+    "bc711c2123b85545": {
+      "experiment_id": "s1_shift_l3.0_k4",
+      "status": "ok"
+    },
+    "9a8d6964e02449ab": {
+      "experiment_id": "s1_rotation_l0.0_k0",
+      "status": "ok"
+    },
+    "24ccafdcd90e1c10": {
+      "experiment_id": "s1_rotation_l0.0_k1",
+      "status": "ok"
+    },
+    "943a48afa38cd871": {
+      "experiment_id": "s1_rotation_l0.0_k2",
+      "status": "ok"
+    },
+    "e7bd4277df7ee4e0": {
+      "experiment_id": "s1_rotation_l0.0_k3",
+      "status": "ok"
+    },
+    "440228a1d26237a9": {
+      "experiment_id": "s1_rotation_l0.0_k4",
+      "status": "ok"
+    },
+    "4048d8772e88b325": {
+      "experiment_id": "s1_rotation_l15.0_k0",
+      "status": "ok"
+    },
+    "d61586aa443d29a0": {
+      "experiment_id": "s1_rotation_l15.0_k1",
+      "status": "ok"
+    },
+    "4bbff6cb317033ef": {
+      "experiment_id": "s1_rotation_l15.0_k2",
+      "status": "ok"
+    },
+    "429ec29898488456": {
+      "experiment_id": "s1_rotation_l15.0_k3",
+      "status": "ok"
+    },
+    "90488c0cb535b2ca": {
+      "experiment_id": "s1_rotation_l15.0_k4",
+      "status": "ok"
+    },
+    "55c55e019de12112": {
+      "experiment_id": "s1_rotation_l30.0_k0",
+      "status": "ok"
+    },
+    "6f75af6b24be4980": {
+      "experiment_id": "s1_rotation_l30.0_k1",
+      "status": "ok"
+    },
+    "2d45f16e0d95cc1c": {
+      "experiment_id": "s1_rotation_l30.0_k2",
+      "status": "ok"
+    },
+    "a79c384776c9d923": {
+      "experiment_id": "s1_rotation_l30.0_k3",
+      "status": "ok"
+    },
+    "c5ee25e9ddbc4bf0": {
+      "experiment_id": "s1_rotation_l30.0_k4",
+      "status": "ok"
+    },
+    "04e73c49b6d90948": {
+      "experiment_id": "s1_rotation_l60.0_k0",
+      "status": "ok"
+    },
+    "0c37ecd5ff2b7418": {
+      "experiment_id": "s1_rotation_l60.0_k1",
+      "status": "ok"
+    },
+    "41c4fdf290693a1c": {
+      "experiment_id": "s1_rotation_l60.0_k2",
+      "status": "ok"
+    },
+    "5c6babcd6652496b": {
+      "experiment_id": "s1_rotation_l60.0_k3",
+      "status": "ok"
+    },
+    "640d17b005321c2f": {
+      "experiment_id": "s1_rotation_l60.0_k4",
+      "status": "ok"
+    },
+    "6c1072b45e6f6e94": {
+      "experiment_id": "s1_rotation_l120.0_k0",
+      "status": "ok"
+    },
+    "b6e96d2d213614e0": {
+      "experiment_id": "s1_rotation_l120.0_k1",
+      "status": "ok"
+    },
+    "4951deae2bdf854b": {
+      "experiment_id": "s1_rotation_l120.0_k2",
+      "status": "ok"
+    },
+    "6d52e3282b7c6f74": {
+      "experiment_id": "s1_rotation_l120.0_k3",
+      "status": "ok"
+    },
+    "0f8f4fe22ced2d72": {
+      "experiment_id": "s1_rotation_l120.0_k4",
+      "status": "ok"
+    },
+    "1d65713ad3510e29": {
+      "experiment_id": "s1_rotation_l180.0_k0",
+      "status": "ok"
+    },
+    "830a1f10e445dbaa": {
+      "experiment_id": "s1_rotation_l180.0_k1",
+      "status": "ok"
+    },
+    "d1c2d320bf56181e": {
+      "experiment_id": "s1_rotation_l180.0_k2",
+      "status": "ok"
+    },
+    "86628bdd957c1aa1": {
+      "experiment_id": "s1_rotation_l180.0_k3",
+      "status": "ok"
+    },
+    "8b3c9b7fd9a869e7": {
+      "experiment_id": "s1_rotation_l180.0_k4",
+      "status": "ok"
+    },
+    "a1e7438565bfca15": {
+      "experiment_id": "s1_rotation_l270.0_k0",
+      "status": "ok"
+    },
+    "44900e0c3174b468": {
+      "experiment_id": "s1_rotation_l270.0_k1",
+      "status": "ok"
+    },
+    "254579c3779980f8": {
+      "experiment_id": "s1_rotation_l270.0_k2",
+      "status": "ok"
+    },
+    "57ca2ee6a6504a4b": {
+      "experiment_id": "s1_rotation_l270.0_k3",
+      "status": "ok"
+    },
+    "d2f48cbab0286e48": {
+      "experiment_id": "s1_rotation_l270.0_k4",
+      "status": "ok"
+    },
+    "321af42ca29646f3": {
+      "experiment_id": "s1_reflection_l0_k0",
+      "status": "ok"
+    },
+    "f761672510fb7ae3": {
+      "experiment_id": "s1_reflection_l0_k1",
+      "status": "ok"
+    },
+    "c00473de38f400ef": {
+      "experiment_id": "s1_reflection_l0_k2",
+      "status": "ok"
+    },
+    "881b746276afbc77": {
+      "experiment_id": "s1_reflection_l0_k3",
+      "status": "ok"
+    },
+    "68f0fafe9b56a87c": {
+      "experiment_id": "s1_reflection_l0_k4",
+      "status": "ok"
+    },
+    "8afe4e5886ce0ec3": {
+      "experiment_id": "s1_reflection_l1_k0",
+      "status": "ok"
+    },
+    "11fc7d049dd7b8a5": {
+      "experiment_id": "s1_reflection_l1_k1",
+      "status": "ok"
+    },
+    "2e81d8bb8e9720a9": {
+      "experiment_id": "s1_reflection_l1_k2",
+      "status": "ok"
+    },
+    "6f6dd7993d2118b4": {
+      "experiment_id": "s1_reflection_l1_k3",
+      "status": "ok"
+    },
+    "de2d191dbee6e0b9": {
+      "experiment_id": "s1_reflection_l1_k4",
+      "status": "ok"
+    },
+    "95353d4ee510bf2e": {
+      "experiment_id": "s1_scale_l0.6_k0",
+      "status": "ok"
+    },
+    "664088d392392993": {
+      "experiment_id": "s1_scale_l0.6_k1",
+      "status": "ok"
+    },
+    "6a6e81cea579d6df": {
+      "experiment_id": "s1_scale_l0.6_k2",
+      "status": "ok"
+    },
+    "f88c7d4b8933cbd6": {
+      "experiment_id": "s1_scale_l0.6_k3",
+      "status": "ok"
+    },
+    "eb1b45501d4fbbbd": {
+      "experiment_id": "s1_scale_l0.6_k4",
+      "status": "ok"
+    },
+    "080c0a85a62ee116": {
+      "experiment_id": "s1_scale_l0.8_k0",
+      "status": "ok"
+    },
+    "64c6dfcdb03d4fcf": {
+      "experiment_id": "s1_scale_l0.8_k1",
+      "status": "ok"
+    },
+    "0b31deee4d05d7a1": {
+      "experiment_id": "s1_scale_l0.8_k2",
+      "status": "ok"
+    },
+    "f152bb18499d4e5d": {
+      "experiment_id": "s1_scale_l0.8_k3",
+      "status": "ok"
+    },
+    "822d94b160d3e61c": {
+      "experiment_id": "s1_scale_l0.8_k4",
+      "status": "ok"
+    },
+    "556f46a8a45e5a7a": {
+      "experiment_id": "s1_scale_l0.9_k0",
+      "status": "ok"
+    },
+    "0a96e2ff40cfe5d8": {
+      "experiment_id": "s1_scale_l0.9_k1",
+      "status": "ok"
+    },
+    "b14099d1596494dc": {
+      "experiment_id": "s1_scale_l0.9_k2",
+      "status": "ok"
+    },
+    "14c6e6498e90a9dc": {
+      "experiment_id": "s1_scale_l0.9_k3",
+      "status": "ok"
+    },
+    "0f215404591e93cd": {
+      "experiment_id": "s1_scale_l0.9_k4",
+      "status": "ok"
+    },
+    "e83d83bb4012a830": {
+      "experiment_id": "s1_scale_l1.0_k0",
+      "status": "ok"
+    },
+    "8250b1f1ad0f347e": {
+      "experiment_id": "s1_scale_l1.0_k1",
+      "status": "ok"
+    },
+    "0f413b857ee87fe2": {
+      "experiment_id": "s1_scale_l1.0_k2",
+      "status": "ok"
+    },
+    "5ac23e03c8ce279e": {
+      "experiment_id": "s1_scale_l1.0_k3",
+      "status": "ok"
+    },
+    "952a71cfa9aaf98f": {
+      "experiment_id": "s1_scale_l1.0_k4",
+      "status": "ok"
+    },
+    "244597de113d6da5": {
+      "experiment_id": "s1_scale_l1.1_k0",
+      "status": "ok"
+    },
+    "3377814ad4ca2f80": {
+      "experiment_id": "s1_scale_l1.1_k1",
+      "status": "ok"
+    },
+    "73779f7a96c71389": {
+      "experiment_id": "s1_scale_l1.1_k2",
+      "status": "ok"
+    },
+    "3a19fe2ab0dcd2fd": {
+      "experiment_id": "s1_scale_l1.1_k3",
+      "status": "ok"
+    },
+    "d135808aed986731": {
+      "experiment_id": "s1_scale_l1.1_k4",
+      "status": "ok"
+    },
+    "5e02638369b8f751": {
+      "experiment_id": "s1_scale_l1.25_k0",
+      "status": "ok"
+    },
+    "368c12f81d10839e": {
+      "experiment_id": "s1_scale_l1.25_k1",
+      "status": "ok"
+    },
+    "e15b38c3ddad74aa": {
+      "experiment_id": "s1_scale_l1.25_k2",
+      "status": "ok"
+    },
+    "d005443fc508b468": {
+      "experiment_id": "s1_scale_l1.25_k3",
+      "status": "ok"
+    },
+    "6476e93496cbe640": {
+      "experiment_id": "s1_scale_l1.25_k4",
+      "status": "ok"
+    },
+    "f44c65e4a634197e": {
+      "experiment_id": "s1_scale_l1.5_k0",
+      "status": "ok"
+    },
+    "04613121852387de": {
+      "experiment_id": "s1_scale_l1.5_k1",
+      "status": "ok"
+    },
+    "d0f3ac4fa18697d1": {
+      "experiment_id": "s1_scale_l1.5_k2",
+      "status": "ok"
+    },
+    "30950fd84e4f6948": {
+      "experiment_id": "s1_scale_l1.5_k3",
+      "status": "ok"
+    },
+    "ccd6b42081418324": {
+      "experiment_id": "s1_scale_l1.5_k4",
+      "status": "ok"
+    },
+    "f90e8bd98c0013b4": {
+      "experiment_id": "s1_thickness_l0.25_k0",
+      "status": "ok"
+    },
+    "8232916f02a0d094": {
+      "experiment_id": "s1_thickness_l0.25_k1",
+      "status": "ok"
+    },
+    "1cef9d8f7f5be095": {
+      "experiment_id": "s1_thickness_l0.25_k2",
+      "status": "ok"
+    },
+    "508fd7c430590a17": {
+      "experiment_id": "s1_thickness_l0.25_k3",
+      "status": "ok"
+    },
+    "a67021beaba65f92": {
+      "experiment_id": "s1_thickness_l0.25_k4",
+      "status": "ok"
+    },
+    "f78c67a1a68bae72": {
+      "experiment_id": "s1_thickness_l0.5_k0",
+      "status": "ok"
+    },
+    "d84121480e84661b": {
+      "experiment_id": "s1_thickness_l0.5_k1",
+      "status": "ok"
+    },
+    "784cac988c4e77e0": {
+      "experiment_id": "s1_thickness_l0.5_k2",
+      "status": "ok"
+    },
+    "c04377ae12165e00": {
+      "experiment_id": "s1_thickness_l0.5_k3",
+      "status": "ok"
+    },
+    "c93176a961c798e1": {
+      "experiment_id": "s1_thickness_l0.5_k4",
+      "status": "ok"
+    },
+    "041eb8c398df5e00": {
+      "experiment_id": "s1_thickness_l0.75_k0",
+      "status": "ok"
+    },
+    "07fdea160bf0799c": {
+      "experiment_id": "s1_thickness_l0.75_k1",
+      "status": "ok"
+    },
+    "482b5612823e9b4c": {
+      "experiment_id": "s1_thickness_l0.75_k2",
+      "status": "ok"
+    },
+    "9ca63390304779b9": {
+      "experiment_id": "s1_thickness_l0.75_k3",
+      "status": "ok"
+    },
+    "ba6dd4ea2f1f28d9": {
+      "experiment_id": "s1_thickness_l0.75_k4",
+      "status": "ok"
+    },
+    "fa378cfcfdca33a0": {
+      "experiment_id": "s1_thickness_l1.0_k0",
+      "status": "ok"
+    },
+    "98f713e05059a833": {
+      "experiment_id": "s1_thickness_l1.0_k1",
+      "status": "ok"
+    },
+    "d63ff9a67e2e250e": {
+      "experiment_id": "s1_thickness_l1.0_k2",
+      "status": "ok"
+    },
+    "d5f9311b2662b58b": {
+      "experiment_id": "s1_thickness_l1.0_k3",
+      "status": "ok"
+    },
+    "6dbf385b3dd60de3": {
+      "experiment_id": "s1_thickness_l1.0_k4",
+      "status": "ok"
+    },
+    "3340ad793d9f5a41": {
+      "experiment_id": "s1_thickness_l1.25_k0",
+      "status": "ok"
+    },
+    "38c17d05d3ec0037": {
+      "experiment_id": "s1_thickness_l1.25_k1",
+      "status": "ok"
+    },
+    "90e6f83c8586f6ed": {
+      "experiment_id": "s1_thickness_l1.25_k2",
+      "status": "ok"
+    },
+    "eb16014ffca38293": {
+      "experiment_id": "s1_thickness_l1.25_k3",
+      "status": "ok"
+    },
+    "d0b6c67f66a8bbdd": {
+      "experiment_id": "s1_thickness_l1.25_k4",
+      "status": "ok"
+    },
+    "ca7d086e105ce0f3": {
+      "experiment_id": "s1_thickness_l1.5_k0",
+      "status": "ok"
+    },
+    "7ad893a80e83a0f3": {
+      "experiment_id": "s1_thickness_l1.5_k1",
+      "status": "ok"
+    },
+    "685a46581cac4a64": {
+      "experiment_id": "s1_thickness_l1.5_k2",
+      "status": "ok"
+    },
+    "713d51f4fbd38693": {
+      "experiment_id": "s1_thickness_l1.5_k3",
+      "status": "ok"
+    },
+    "8fe4458f7facb5ac": {
+      "experiment_id": "s1_thickness_l1.5_k4",
+      "status": "ok"
+    },
+    "85e693364e75116d": {
+      "experiment_id": "s1_thickness_l1.75_k0",
+      "status": "ok"
+    },
+    "0de2121b9a21e6cc": {
+      "experiment_id": "s1_thickness_l1.75_k1",
+      "status": "ok"
+    },
+    "502d42054207256a": {
+      "experiment_id": "s1_thickness_l1.75_k2",
+      "status": "ok"
+    },
+    "14363d808d302fe0": {
+      "experiment_id": "s1_thickness_l1.75_k3",
+      "status": "ok"
+    },
+    "7700efebec83effd": {
+      "experiment_id": "s1_thickness_l1.75_k4",
+      "status": "ok"
+    },
+    "226e97247ddceae1": {
+      "experiment_id": "s1_anisotropy_l1.0_k0",
+      "status": "ok"
+    },
+    "6f02279c4512fae3": {
+      "experiment_id": "s1_anisotropy_l1.0_k1",
+      "status": "ok"
+    },
+    "1a149abc974c6150": {
+      "experiment_id": "s1_anisotropy_l1.0_k2",
+      "status": "ok"
+    },
+    "41e6bc19e71372ae": {
+      "experiment_id": "s1_anisotropy_l1.0_k3",
+      "status": "ok"
+    },
+    "20f919e4e94e6fa8": {
+      "experiment_id": "s1_anisotropy_l1.0_k4",
+      "status": "ok"
+    },
+    "78eae15dd5b52c10": {
+      "experiment_id": "s1_anisotropy_l1.1_k0",
+      "status": "ok"
+    },
+    "5220ce144ae4cb8f": {
+      "experiment_id": "s1_anisotropy_l1.1_k1",
+      "status": "ok"
+    },
+    "d27054f2d7ff59d5": {
+      "experiment_id": "s1_anisotropy_l1.1_k2",
+      "status": "ok"
+    },
+    "8050f3b6753fa228": {
+      "experiment_id": "s1_anisotropy_l1.1_k3",
+      "status": "ok"
+    },
+    "0c348ab7797c07b8": {
+      "experiment_id": "s1_anisotropy_l1.1_k4",
+      "status": "ok"
+    },
+    "04a19b00def04feb": {
+      "experiment_id": "s1_anisotropy_l1.25_k0",
+      "status": "ok"
+    },
+    "54a8f47b7b06646b": {
+      "experiment_id": "s1_anisotropy_l1.25_k1",
+      "status": "ok"
+    },
+    "731c4f9aea2be96f": {
+      "experiment_id": "s1_anisotropy_l1.25_k2",
+      "status": "ok"
+    },
+    "97e37997a3670b47": {
+      "experiment_id": "s1_anisotropy_l1.25_k3",
+      "status": "ok"
+    },
+    "a357e64451dc9047": {
+      "experiment_id": "s1_anisotropy_l1.25_k4",
+      "status": "ok"
+    },
+    "c87462b5ca36d37d": {
+      "experiment_id": "s1_anisotropy_l1.5_k0",
+      "status": "ok"
+    },
+    "d0c3a76f98fa813d": {
+      "experiment_id": "s1_anisotropy_l1.5_k1",
+      "status": "ok"
+    },
+    "88c20de84d9b67af": {
+      "experiment_id": "s1_anisotropy_l1.5_k2",
+      "status": "ok"
+    },
+    "89034ce92471e1a0": {
+      "experiment_id": "s1_anisotropy_l1.5_k3",
+      "status": "ok"
+    },
+    "2c99ad9047120756": {
+      "experiment_id": "s1_anisotropy_l1.5_k4",
+      "status": "ok"
+    },
+    "1f09dbcbb63a779f": {
+      "experiment_id": "s1_anisotropy_l2.0_k0",
+      "status": "ok"
+    },
+    "aa7c49276b639064": {
+      "experiment_id": "s1_anisotropy_l2.0_k1",
+      "status": "ok"
+    },
+    "35a3bcb7a65552ce": {
+      "experiment_id": "s1_anisotropy_l2.0_k2",
+      "status": "ok"
+    },
+    "89c8d62c9085046a": {
+      "experiment_id": "s1_anisotropy_l2.0_k3",
+      "status": "ok"
+    },
+    "faccc90122c1fcb4": {
+      "experiment_id": "s1_anisotropy_l2.0_k4",
+      "status": "ok"
+    },
+    "3dd08e640c91db94": {
+      "experiment_id": "s1_anisotropy_l2.75_k0",
+      "status": "ok"
+    },
+    "49f72d6c99463912": {
+      "experiment_id": "s1_anisotropy_l2.75_k1",
+      "status": "ok"
+    },
+    "f2d8b5988a7bd634": {
+      "experiment_id": "s1_anisotropy_l2.75_k2",
+      "status": "ok"
+    },
+    "9acb76a81bd44a3f": {
+      "experiment_id": "s1_anisotropy_l2.75_k3",
+      "status": "ok"
+    },
+    "5331c6fcc671d70b": {
+      "experiment_id": "s1_anisotropy_l2.75_k4",
+      "status": "ok"
+    },
+    "75afb3066529a431": {
+      "experiment_id": "s1_anisotropy_l4.0_k0",
+      "status": "ok"
+    },
+    "39d37973fa53b4c8": {
+      "experiment_id": "s1_anisotropy_l4.0_k1",
+      "status": "ok"
+    },
+    "ed35228d163ac906": {
+      "experiment_id": "s1_anisotropy_l4.0_k2",
+      "status": "ok"
+    },
+    "4daf1767890a32eb": {
+      "experiment_id": "s1_anisotropy_l4.0_k3",
+      "status": "ok"
+    },
+    "926c12a282967c50": {
+      "experiment_id": "s1_anisotropy_l4.0_k4",
+      "status": "ok"
+    },
+    "f7b33705ade19d98": {
+      "experiment_id": "s3_d0.0_i0.0_k0",
+      "status": "ok"
+    },
+    "55ca93fee39f0aa9": {
+      "experiment_id": "s3_d0.0_i0.0_k1",
+      "status": "ok"
+    },
+    "0275382cd2e91021": {
+      "experiment_id": "s3_d0.0_i0.0_k2",
+      "status": "ok"
+    },
+    "d343374a56d19e7e": {
+      "experiment_id": "s3_d0.0_i0.0_k3",
+      "status": "ok"
+    },
+    "f153ecd5e76cd7ec": {
+      "experiment_id": "s3_d0.0_i0.0_k4",
+      "status": "ok"
+    },
+    "c1122d1a78ba2f07": {
+      "experiment_id": "s3_d0.0_i0.0_k5",
+      "status": "ok"
+    },
+    "2890ca2cc9896e3d": {
+      "experiment_id": "s3_d0.0_i0.0_k6",
+      "status": "ok"
+    },
+    "d48eeb357a498f82": {
+      "experiment_id": "s3_d0.0_i0.0_k7",
+      "status": "ok"
+    },
+    "7058e121011d5575": {
+      "experiment_id": "s3_d0.0_i0.0_k8",
+      "status": "ok"
+    },
+    "0072f503a84abdcb": {
+      "experiment_id": "s3_d0.0_i0.0_k9",
+      "status": "ok"
+    },
+    "f528ed2b137d5a37": {
+      "experiment_id": "s3_d0.0_i0.25_k0",
+      "status": "ok"
+    },
+    "0df74d583c291820": {
+      "experiment_id": "s3_d0.0_i0.25_k1",
+      "status": "ok"
+    },
+    "3853e088b011a58a": {
+      "experiment_id": "s3_d0.0_i0.25_k2",
+      "status": "ok"
+    },
+    "050af61a0e01aae3": {
+      "experiment_id": "s3_d0.0_i0.25_k3",
+      "status": "ok"
+    },
+    "563c8774a2b880d6": {
+      "experiment_id": "s3_d0.0_i0.25_k4",
+      "status": "ok"
+    },
+    "f6812042a4c3cd8d": {
+      "experiment_id": "s3_d0.0_i0.25_k5",
+      "status": "ok"
+    },
+    "e1066c9d705d4671": {
+      "experiment_id": "s3_d0.0_i0.25_k6",
+      "status": "ok"
+    },
+    "2a202aba80d88138": {
+      "experiment_id": "s3_d0.0_i0.25_k7",
+      "status": "ok"
+    },
+    "3492a8583f813677": {
+      "experiment_id": "s3_d0.0_i0.25_k8",
+      "status": "ok"
+    },
+    "3cee27adc2b750d4": {
+      "experiment_id": "s3_d0.0_i0.25_k9",
+      "status": "ok"
+    },
+    "d50e3efd1d8215ed": {
+      "experiment_id": "s3_d0.0_i0.5_k0",
+      "status": "ok"
+    },
+    "00817ea876070ebf": {
+      "experiment_id": "s3_d0.0_i0.5_k1",
+      "status": "ok"
+    },
+    "e237ab4890d863d7": {
+      "experiment_id": "s3_d0.0_i0.5_k2",
+      "status": "ok"
+    },
+    "37067a7f19cc9742": {
+      "experiment_id": "s3_d0.0_i0.5_k3",
+      "status": "ok"
+    },
+    "0317e04bd8aabfc4": {
+      "experiment_id": "s3_d0.0_i0.5_k4",
+      "status": "ok"
+    },
+    "ca85c4e8db4ea1e8": {
+      "experiment_id": "s3_d0.0_i0.5_k5",
+      "status": "ok"
+    },
+    "68367028a22a4883": {
+      "experiment_id": "s3_d0.0_i0.5_k6",
+      "status": "ok"
+    },
+    "9c18ee2d5705c419": {
+      "experiment_id": "s3_d0.0_i0.5_k7",
+      "status": "ok"
+    },
+    "045df35ce10d98f0": {
+      "experiment_id": "s3_d0.0_i0.5_k8",
+      "status": "ok"
+    },
+    "fdabf34c30ddaf36": {
+      "experiment_id": "s3_d0.0_i0.5_k9",
+      "status": "ok"
+    },
+    "a6bfb459837afd84": {
+      "experiment_id": "s3_d0.0_i0.75_k0",
+      "status": "ok"
+    },
+    "70f15b0117bfc2cf": {
+      "experiment_id": "s3_d0.0_i0.75_k1",
+      "status": "ok"
+    },
+    "188ec0e92c36bb3b": {
+      "experiment_id": "s3_d0.0_i0.75_k2",
+      "status": "ok"
+    },
+    "8ab7fb32f01bed39": {
+      "experiment_id": "s3_d0.0_i0.75_k3",
+      "status": "ok"
+    },
+    "fad0be062ac2a830": {
+      "experiment_id": "s3_d0.0_i0.75_k4",
+      "status": "ok"
+    },
+    "54f625c8e046e420": {
+      "experiment_id": "s3_d0.0_i0.75_k5",
+      "status": "ok"
+    },
+    "79ae8238025427f7": {
+      "experiment_id": "s3_d0.0_i0.75_k6",
+      "status": "ok"
+    },
+    "70f459e8f73f8f75": {
+      "experiment_id": "s3_d0.0_i0.75_k7",
+      "status": "ok"
+    },
+    "93ec5b50e0c38378": {
+      "experiment_id": "s3_d0.0_i0.75_k8",
+      "status": "ok"
+    },
+    "7ad3e05d61b28b27": {
+      "experiment_id": "s3_d0.0_i0.75_k9",
+      "status": "ok"
+    },
+    "290bf2ef74af00b1": {
+      "experiment_id": "s3_d0.25_i0.0_k0",
+      "status": "ok"
+    },
+    "6be5d78642bb7890": {
+      "experiment_id": "s3_d0.25_i0.0_k1",
+      "status": "ok"
+    },
+    "3f49056207fb4d59": {
+      "experiment_id": "s3_d0.25_i0.0_k2",
+      "status": "ok"
+    },
+    "fa7a3084b00275bf": {
+      "experiment_id": "s3_d0.25_i0.0_k3",
+      "status": "ok"
+    },
+    "2e280a04e5b3f5cf": {
+      "experiment_id": "s3_d0.25_i0.0_k4",
+      "status": "ok"
+    },
+    "214bf84c774de301": {
+      "experiment_id": "s3_d0.25_i0.0_k5",
+      "status": "ok"
+    },
+    "433aff88d9286c87": {
+      "experiment_id": "s3_d0.25_i0.0_k6",
+      "status": "ok"
+    },
+    "d556fe36f0d37722": {
+      "experiment_id": "s3_d0.25_i0.0_k7",
+      "status": "ok"
+    },
+    "e2324ae8fa0c5847": {
+      "experiment_id": "s3_d0.25_i0.0_k8",
+      "status": "ok"
+    },
+    "d17a657dda22d95e": {
+      "experiment_id": "s3_d0.25_i0.0_k9",
+      "status": "ok"
+    },
+    "2dbe5b19dafbf3ad": {
+      "experiment_id": "s3_d0.25_i0.25_k0",
+      "status": "ok"
+    },
+    "af1dee08d6b3ca3b": {
+      "experiment_id": "s3_d0.25_i0.25_k1",
+      "status": "ok"
+    },
+    "25363d841598d076": {
+      "experiment_id": "s3_d0.25_i0.25_k2",
+      "status": "ok"
+    },
+    "87a7a0536fbba0d8": {
+      "experiment_id": "s3_d0.25_i0.25_k3",
+      "status": "ok"
+    },
+    "83a89e0bd1bbfd12": {
+      "experiment_id": "s3_d0.25_i0.25_k4",
+      "status": "ok"
+    },
+    "e820749330dc2741": {
+      "experiment_id": "s3_d0.25_i0.25_k5",
+      "status": "ok"
+    },
+    "86155f4f2a5aff35": {
+      "experiment_id": "s3_d0.25_i0.25_k6",
+      "status": "ok"
+    },
+    "658f8f7cf213a60a": {
+      "experiment_id": "s3_d0.25_i0.25_k7",
+      "status": "ok"
+    },
+    "339cdd5a32aeae5f": {
+      "experiment_id": "s3_d0.25_i0.25_k8",
+      "status": "ok"
+    },
+    "36309dca1f784ffe": {
+      "experiment_id": "s3_d0.25_i0.25_k9",
+      "status": "ok"
+    },
+    "21a5064473f39f97": {
+      "experiment_id": "s3_d0.25_i0.5_k0",
+      "status": "ok"
+    },
+    "919f383c1fe1ab67": {
+      "experiment_id": "s3_d0.25_i0.5_k1",
+      "status": "ok"
+    },
+    "01ef4301113ec462": {
+      "experiment_id": "s3_d0.25_i0.5_k2",
+      "status": "ok"
+    },
+    "9cf9b1ae2a357376": {
+      "experiment_id": "s3_d0.25_i0.5_k3",
+      "status": "ok"
+    },
+    "ff7a59c179a1a59f": {
+      "experiment_id": "s3_d0.25_i0.5_k4",
+      "status": "ok"
+    },
+    "2bae8f3eba772125": {
+      "experiment_id": "s3_d0.25_i0.5_k5",
+      "status": "ok"
+    },
+    "022828e5c6c26405": {
+      "experiment_id": "s3_d0.25_i0.5_k6",
+      "status": "ok"
+    },
+    "55e6a11f1ecb11be": {
+      "experiment_id": "s3_d0.25_i0.5_k7",
+      "status": "ok"
+    },
+    "a8bfa30e566f7c35": {
+      "experiment_id": "s3_d0.25_i0.5_k8",
+      "status": "ok"
+    },
+    "973c7e6e446ebf8f": {
+      "experiment_id": "s3_d0.25_i0.5_k9",
+      "status": "ok"
+    },
+    "8a5c1c231ecbc1f4": {
+      "experiment_id": "s3_d0.25_i0.75_k0",
+      "status": "ok"
+    },
+    "a78694aa197e3095": {
+      "experiment_id": "s3_d0.25_i0.75_k1",
+      "status": "ok"
+    },
+    "ea7e40fea71a6f12": {
+      "experiment_id": "s3_d0.25_i0.75_k2",
+      "status": "ok"
+    },
+    "d65ea9c15f0a12df": {
+      "experiment_id": "s3_d0.25_i0.75_k3",
+      "status": "ok"
+    },
+    "492d6ad35f0feb73": {
+      "experiment_id": "s3_d0.25_i0.75_k4",
+      "status": "ok"
+    },
+    "c276cf8b9c861897": {
+      "experiment_id": "s3_d0.25_i0.75_k5",
+      "status": "ok"
+    },
+    "e3be37f495812dd0": {
+      "experiment_id": "s3_d0.25_i0.75_k6",
+      "status": "ok"
+    },
+    "5d82b182566b63c5": {
+      "experiment_id": "s3_d0.25_i0.75_k7",
+      "status": "ok"
+    },
+    "f664d2d6fec28c7d": {
+      "experiment_id": "s3_d0.25_i0.75_k8",
+      "status": "ok"
+    },
+    "b55dc7ed9590bf3e": {
+      "experiment_id": "s3_d0.25_i0.75_k9",
+      "status": "ok"
+    },
+    "91ef4bcb92519604": {
+      "experiment_id": "s3_d0.5_i0.0_k0",
+      "status": "ok"
+    },
+    "40145268b9e38f11": {
+      "experiment_id": "s3_d0.5_i0.0_k1",
+      "status": "ok"
+    },
+    "864602984de00f95": {
+      "experiment_id": "s3_d0.5_i0.0_k2",
+      "status": "ok"
+    },
+    "ef0b0cf3e016d79d": {
+      "experiment_id": "s3_d0.5_i0.0_k3",
+      "status": "ok"
+    },
+    "71a20b978413125f": {
+      "experiment_id": "s3_d0.5_i0.0_k4",
+      "status": "ok"
+    },
+    "8f7126025da9c00e": {
+      "experiment_id": "s3_d0.5_i0.0_k5",
+      "status": "ok"
+    },
+    "e93e7666ea0f80a9": {
+      "experiment_id": "s3_d0.5_i0.0_k6",
+      "status": "ok"
+    },
+    "7b340f5ad5bdbeaa": {
+      "experiment_id": "s3_d0.5_i0.0_k7",
+      "status": "ok"
+    },
+    "d9a6e02ea1bc403e": {
+      "experiment_id": "s3_d0.5_i0.0_k8",
+      "status": "ok"
+    },
+    "e59060f5f981da92": {
+      "experiment_id": "s3_d0.5_i0.0_k9",
+      "status": "ok"
+    },
+    "a803df822eb6c11f": {
+      "experiment_id": "s3_d0.5_i0.25_k0",
+      "status": "ok"
+    },
+    "3519e47745c0b97a": {
+      "experiment_id": "s3_d0.5_i0.25_k1",
+      "status": "ok"
+    },
+    "ab0dcce6c14315a5": {
+      "experiment_id": "s3_d0.5_i0.25_k2",
+      "status": "ok"
+    },
+    "deba38b4b2ce12f0": {
+      "experiment_id": "s3_d0.5_i0.25_k3",
+      "status": "ok"
+    },
+    "194462e6663afd25": {
+      "experiment_id": "s3_d0.5_i0.25_k4",
+      "status": "ok"
+    },
+    "4c3851ede38d20c2": {
+      "experiment_id": "s3_d0.5_i0.25_k5",
+      "status": "ok"
+    },
+    "10d7690af1690c38": {
+      "experiment_id": "s3_d0.5_i0.25_k6",
+      "status": "ok"
+    },
+    "f50f5f193ab0fd2d": {
+      "experiment_id": "s3_d0.5_i0.25_k7",
+      "status": "ok"
+    },
+    "8db3c3c176c491e1": {
+      "experiment_id": "s3_d0.5_i0.25_k8",
+      "status": "ok"
+    },
+    "4db8296aeaf1da98": {
+      "experiment_id": "s3_d0.5_i0.25_k9",
+      "status": "ok"
+    },
+    "d531fb0d3a037767": {
+      "experiment_id": "s3_d0.5_i0.5_k0",
+      "status": "ok"
+    },
+    "1ce82caeb09e0bbb": {
+      "experiment_id": "s3_d0.5_i0.5_k1",
+      "status": "ok"
+    },
+    "87143ce64db5bd3f": {
+      "experiment_id": "s3_d0.5_i0.5_k2",
+      "status": "ok"
+    },
+    "0e978dfbcbfbc077": {
+      "experiment_id": "s3_d0.5_i0.5_k3",
+      "status": "ok"
+    },
+    "deff0bea58fb9ddd": {
+      "experiment_id": "s3_d0.5_i0.5_k4",
+      "status": "ok"
+    },
+    "6618251cf3c9c0c8": {
+      "experiment_id": "s3_d0.5_i0.5_k5",
+      "status": "ok"
+    },
+    "9a82393b146881de": {
+      "experiment_id": "s3_d0.5_i0.5_k6",
+      "status": "ok"
+    },
+    "a9644587197e0a69": {
+      "experiment_id": "s3_d0.5_i0.5_k7",
+      "status": "ok"
+    },
+    "3a995084eef1b98b": {
+      "experiment_id": "s3_d0.5_i0.5_k8",
+      "status": "ok"
+    },
+    "defbc8dfe26eb630": {
+      "experiment_id": "s3_d0.5_i0.5_k9",
+      "status": "ok"
+    },
+    "b5dd8dc231085dcb": {
+      "experiment_id": "s3_d0.5_i0.75_k0",
+      "status": "ok"
+    },
+    "3ed9a2b03f0ee67b": {
+      "experiment_id": "s3_d0.5_i0.75_k1",
+      "status": "ok"
+    },
+    "fd5f6219fe17c8f5": {
+      "experiment_id": "s3_d0.5_i0.75_k2",
+      "status": "ok"
+    },
+    "2d5dfc2536117c7b": {
+      "experiment_id": "s3_d0.5_i0.75_k3",
+      "status": "ok"
+    },
+    "a5b147897341a422": {
+      "experiment_id": "s3_d0.5_i0.75_k4",
+      "status": "ok"
+    },
+    "52268015387364c7": {
+      "experiment_id": "s3_d0.5_i0.75_k5",
+      "status": "ok"
+    },
+    "2e9c216d71e9f502": {
+      "experiment_id": "s3_d0.5_i0.75_k6",
+      "status": "ok"
+    },
+    "e9b0f961d1f77e9b": {
+      "experiment_id": "s3_d0.5_i0.75_k7",
+      "status": "ok"
+    },
+    "e3591757eb10ff99": {
+      "experiment_id": "s3_d0.5_i0.75_k8",
+      "status": "ok"
+    },
+    "9a046c7d169d811f": {
+      "experiment_id": "s3_d0.5_i0.75_k9",
+      "status": "ok"
+    },
+    "3977d017dfd12efe": {
+      "experiment_id": "s3_d0.75_i0.0_k0",
+      "status": "ok"
+    },
+    "4de96c794f3a2ccb": {
+      "experiment_id": "s3_d0.75_i0.0_k1",
+      "status": "ok"
+    },
+    "2998e5f3dbf2e8c5": {
+      "experiment_id": "s3_d0.75_i0.0_k2",
+      "status": "ok"
+    },
+    "8bfc1111a4e730fa": {
+      "experiment_id": "s3_d0.75_i0.0_k3",
+      "status": "ok"
+    },
+    "464216b5e6434ba3": {
+      "experiment_id": "s3_d0.75_i0.0_k4",
+      "status": "ok"
+    },
+    "cd0527fa07151254": {
+      "experiment_id": "s3_d0.75_i0.0_k5",
+      "status": "ok"
+    },
+    "8f6a5f55f325be6a": {
+      "experiment_id": "s3_d0.75_i0.0_k6",
+      "status": "ok"
+    },
+    "8adbf1530a05d7d3": {
+      "experiment_id": "s3_d0.75_i0.0_k7",
+      "status": "ok"
+    },
+    "659770088b97856d": {
+      "experiment_id": "s3_d0.75_i0.0_k8",
+      "status": "ok"
+    },
+    "c6fa0c74cb580fda": {
+      "experiment_id": "s3_d0.75_i0.0_k9",
+      "status": "ok"
+    },
+    "64df4a7b8081325a": {
+      "experiment_id": "s3_d0.75_i0.25_k0",
+      "status": "ok"
+    },
+    "f16b9bbf882df367": {
+      "experiment_id": "s3_d0.75_i0.25_k1",
+      "status": "ok"
+    },
+    "80556166318b1fc6": {
+      "experiment_id": "s3_d0.75_i0.25_k2",
+      "status": "ok"
+    },
+    "ca55ba8db34ca798": {
+      "experiment_id": "s3_d0.75_i0.25_k3",
+      "status": "ok"
+    },
+    "0b98edf107e5bfb2": {
+      "experiment_id": "s3_d0.75_i0.25_k4",
+      "status": "ok"
+    },
+    "f31f48c21eaaeff2": {
+      "experiment_id": "s3_d0.75_i0.25_k5",
+      "status": "ok"
+    },
+    "72ae4353c7f4a4d5": {
+      "experiment_id": "s3_d0.75_i0.25_k6",
+      "status": "ok"
+    },
+    "4e34c1c2fe27edd5": {
+      "experiment_id": "s3_d0.75_i0.25_k7",
+      "status": "ok"
+    },
+    "6eb90a7da4ae431c": {
+      "experiment_id": "s3_d0.75_i0.25_k8",
+      "status": "ok"
+    },
+    "4c43d9811deeac06": {
+      "experiment_id": "s3_d0.75_i0.25_k9",
+      "status": "ok"
+    },
+    "9bc3468b92dcd10b": {
+      "experiment_id": "s3_d0.75_i0.5_k0",
+      "status": "ok"
+    },
+    "d2b22a1dce1f4809": {
+      "experiment_id": "s3_d0.75_i0.5_k1",
+      "status": "ok"
+    },
+    "22766865661c73c0": {
+      "experiment_id": "s3_d0.75_i0.5_k2",
+      "status": "ok"
+    },
+    "00fadf21f86749a5": {
+      "experiment_id": "s3_d0.75_i0.5_k3",
+      "status": "ok"
+    },
+    "408ccd509c302bbd": {
+      "experiment_id": "s3_d0.75_i0.5_k4",
+      "status": "ok"
+    },
+    "8b86329941e04fcb": {
+      "experiment_id": "s3_d0.75_i0.5_k5",
+      "status": "ok"
+    },
+    "fba1c9ef93b60dac": {
+      "experiment_id": "s3_d0.75_i0.5_k6",
+      "status": "ok"
+    },
+    "ede3b04e3122239a": {
+      "experiment_id": "s3_d0.75_i0.5_k7",
+      "status": "ok"
+    },
+    "e5eff332a72e78e1": {
+      "experiment_id": "s3_d0.75_i0.5_k8",
+      "status": "ok"
+    },
+    "0e87ef5ba6e031cc": {
+      "experiment_id": "s3_d0.75_i0.5_k9",
+      "status": "ok"
+    },
+    "4100610eb161b83b": {
+      "experiment_id": "s3_d0.75_i0.75_k0",
+      "status": "ok"
+    },
+    "f88a167d534c06d1": {
+      "experiment_id": "s3_d0.75_i0.75_k1",
+      "status": "ok"
+    },
+    "a5ae6ab9068405a6": {
+      "experiment_id": "s3_d0.75_i0.75_k2",
+      "status": "ok"
+    },
+    "637c85d094c68282": {
+      "experiment_id": "s3_d0.75_i0.75_k3",
+      "status": "ok"
+    },
+    "a2edb47bfb762949": {
+      "experiment_id": "s3_d0.75_i0.75_k4",
+      "status": "ok"
+    },
+    "4db61b4e9bcaeeeb": {
+      "experiment_id": "s3_d0.75_i0.75_k5",
+      "status": "ok"
+    },
+    "f6308163beacac9d": {
+      "experiment_id": "s3_d0.75_i0.75_k6",
+      "status": "ok"
+    },
+    "7afdca56ccda52b3": {
+      "experiment_id": "s3_d0.75_i0.75_k7",
+      "status": "ok"
+    },
+    "ba84594db6dac2c4": {
+      "experiment_id": "s3_d0.75_i0.75_k8",
+      "status": "ok"
+    },
+    "f42b47a0de5e21d8": {
+      "experiment_id": "s3_d0.75_i0.75_k9",
+      "status": "ok"
+    },
+    "a94a72b697f27e0e": {
+      "experiment_id": "s4_drop_l0.0_k0",
+      "status": "ok"
+    },
+    "884d567b63e1ac4b": {
+      "experiment_id": "s4_drop_l0.0_k1",
+      "status": "ok"
+    },
+    "ed1f575c8c68bbe1": {
+      "experiment_id": "s4_drop_l0.0_k2",
+      "status": "ok"
+    },
+    "b7d1cefcab582af8": {
+      "experiment_id": "s4_drop_l0.0_k3",
+      "status": "ok"
+    },
+    "7f9e9394ba72b045": {
+      "experiment_id": "s4_drop_l0.0_k4",
+      "status": "ok"
+    },
+    "64d69596454a67e2": {
+      "experiment_id": "s4_drop_l0.0_k5",
+      "status": "ok"
+    },
+    "d9f6a3c3625d5559": {
+      "experiment_id": "s4_drop_l0.0_k6",
+      "status": "ok"
+    },
+    "e8f83ac24a8b4af8": {
+      "experiment_id": "s4_drop_l0.0_k7",
+      "status": "ok"
+    },
+    "73f7b2c90237d3e7": {
+      "experiment_id": "s4_drop_l0.0_k8",
+      "status": "ok"
+    },
+    "359bebdf6df59462": {
+      "experiment_id": "s4_drop_l0.0_k9",
+      "status": "ok"
+    },
+    "701ffc1159f7db21": {
+      "experiment_id": "s4_drop_l0.05_k0",
+      "status": "ok"
+    },
+    "bd85bf9c53fb6e09": {
+      "experiment_id": "s4_drop_l0.05_k1",
+      "status": "ok"
+    },
+    "0a706a25e7094617": {
+      "experiment_id": "s4_drop_l0.05_k2",
+      "status": "ok"
+    },
+    "d8b99ec95934faae": {
+      "experiment_id": "s4_drop_l0.05_k3",
+      "status": "ok"
+    },
+    "5e2457f3b5276148": {
+      "experiment_id": "s4_drop_l0.05_k4",
+      "status": "ok"
+    },
+    "29236d9fe7d62e6c": {
+      "experiment_id": "s4_drop_l0.05_k5",
+      "status": "ok"
+    },
+    "9a634ee09273c8d0": {
+      "experiment_id": "s4_drop_l0.05_k6",
+      "status": "ok"
+    },
+    "c88b59e0342d6c96": {
+      "experiment_id": "s4_drop_l0.05_k7",
+      "status": "ok"
+    },
+    "08924df66e7a2ab1": {
+      "experiment_id": "s4_drop_l0.05_k8",
+      "status": "ok"
+    },
+    "2160b3f7ee8e94f9": {
+      "experiment_id": "s4_drop_l0.05_k9",
+      "status": "ok"
+    },
+    "b227916ebc33fa85": {
+      "experiment_id": "s4_drop_l0.1_k0",
+      "status": "ok"
+    },
+    "a3682854a3844946": {
+      "experiment_id": "s4_drop_l0.1_k1",
+      "status": "ok"
+    },
+    "aeec93e55377e4bc": {
+      "experiment_id": "s4_drop_l0.1_k2",
+      "status": "ok"
+    },
+    "dc52b7eeddf3a58a": {
+      "experiment_id": "s4_drop_l0.1_k3",
+      "status": "ok"
+    },
+    "cd6d314eaf1ad4f2": {
+      "experiment_id": "s4_drop_l0.1_k4",
+      "status": "ok"
+    },
+    "c2eec22f5ee9601f": {
+      "experiment_id": "s4_drop_l0.1_k5",
+      "status": "ok"
+    },
+    "d186ee53a4c02b0f": {
+      "experiment_id": "s4_drop_l0.1_k6",
+      "status": "ok"
+    },
+    "77e1cbd722ca1dc8": {
+      "experiment_id": "s4_drop_l0.1_k7",
+      "status": "ok"
+    },
+    "9fab2ca923a229a1": {
+      "experiment_id": "s4_drop_l0.1_k8",
+      "status": "ok"
+    },
+    "59d518778765fde6": {
+      "experiment_id": "s4_drop_l0.1_k9",
+      "status": "ok"
+    },
+    "3fa2830a18a328c6": {
+      "experiment_id": "s4_drop_l0.15_k0",
+      "status": "ok"
+    },
+    "d13b722576f75db4": {
+      "experiment_id": "s4_drop_l0.15_k1",
+      "status": "ok"
+    },
+    "8d6aafe22d64259b": {
+      "experiment_id": "s4_drop_l0.15_k2",
+      "status": "ok"
+    },
+    "83016c8cd10cde0b": {
+      "experiment_id": "s4_drop_l0.15_k3",
+      "status": "ok"
+    },
+    "a3b67e2cfd7a055e": {
+      "experiment_id": "s4_drop_l0.15_k4",
+      "status": "ok"
+    },
+    "12ec02317d19cffb": {
+      "experiment_id": "s4_drop_l0.15_k5",
+      "status": "ok"
+    },
+    "db7c4157ec1de259": {
+      "experiment_id": "s4_drop_l0.15_k6",
+      "status": "ok"
+    },
+    "bdc455f767c4b9cd": {
+      "experiment_id": "s4_drop_l0.15_k7",
+      "status": "ok"
+    },
+    "36596ee83104ac9f": {
+      "experiment_id": "s4_drop_l0.15_k8",
+      "status": "ok"
+    },
+    "38ad7c05b112fd5c": {
+      "experiment_id": "s4_drop_l0.15_k9",
+      "status": "ok"
+    },
+    "6dc01459a2450011": {
+      "experiment_id": "s4_drop_l0.2_k0",
+      "status": "ok"
+    },
+    "6f401e1e989b8b35": {
+      "experiment_id": "s4_drop_l0.2_k1",
+      "status": "ok"
+    },
+    "4994f7f676503995": {
+      "experiment_id": "s4_drop_l0.2_k2",
+      "status": "ok"
+    },
+    "7c41c072c7e1c3c9": {
+      "experiment_id": "s4_drop_l0.2_k3",
+      "status": "ok"
+    },
+    "f3114128c4503ae9": {
+      "experiment_id": "s4_drop_l0.2_k4",
+      "status": "ok"
+    },
+    "a8a472c758de254b": {
+      "experiment_id": "s4_drop_l0.2_k5",
+      "status": "ok"
+    },
+    "260d1d468663de25": {
+      "experiment_id": "s4_drop_l0.2_k6",
+      "status": "ok"
+    },
+    "aa341bc8c8943ec4": {
+      "experiment_id": "s4_drop_l0.2_k7",
+      "status": "ok"
+    },
+    "974e6733359e90e5": {
+      "experiment_id": "s4_drop_l0.2_k8",
+      "status": "ok"
+    },
+    "0a0073b9c11182f0": {
+      "experiment_id": "s4_drop_l0.2_k9",
+      "status": "ok"
+    },
+    "7e2dc81dddb84aa3": {
+      "experiment_id": "s4_drop_l0.3_k0",
+      "status": "ok"
+    },
+    "504be0767e88db66": {
+      "experiment_id": "s4_drop_l0.3_k1",
+      "status": "ok"
+    },
+    "550fe6a75c7eddff": {
+      "experiment_id": "s4_drop_l0.3_k2",
+      "status": "ok"
+    },
+    "6bfe50f9bad22575": {
+      "experiment_id": "s4_drop_l0.3_k3",
+      "status": "ok"
+    },
+    "efdeacbf8398e13d": {
+      "experiment_id": "s4_drop_l0.3_k4",
+      "status": "ok"
+    },
+    "19d27d0433e65969": {
+      "experiment_id": "s4_drop_l0.3_k5",
+      "status": "ok"
+    },
+    "1648a0816e2c540a": {
+      "experiment_id": "s4_drop_l0.3_k6",
+      "status": "ok"
+    },
+    "8d70e5e888970097": {
+      "experiment_id": "s4_drop_l0.3_k7",
+      "status": "ok"
+    },
+    "98af93ee4240385c": {
+      "experiment_id": "s4_drop_l0.3_k8",
+      "status": "ok"
+    },
+    "6e24646be06262b3": {
+      "experiment_id": "s4_drop_l0.3_k9",
+      "status": "ok"
+    },
+    "bf684b2e9ba15823": {
+      "experiment_id": "s4_drop_l0.5_k0",
+      "status": "ok"
+    },
+    "c160523cfeb2a2b5": {
+      "experiment_id": "s4_drop_l0.5_k1",
+      "status": "ok"
+    },
+    "1201e7c34c5f4b40": {
+      "experiment_id": "s4_drop_l0.5_k2",
+      "status": "ok"
+    },
+    "b0465f3ee663717b": {
+      "experiment_id": "s4_drop_l0.5_k3",
+      "status": "ok"
+    },
+    "4d4713a8a26d3afa": {
+      "experiment_id": "s4_drop_l0.5_k4",
+      "status": "ok"
+    },
+    "410411d9476319ce": {
+      "experiment_id": "s4_drop_l0.5_k5",
+      "status": "ok"
+    },
+    "411c16d6f3c1a14e": {
+      "experiment_id": "s4_drop_l0.5_k6",
+      "status": "ok"
+    },
+    "db3094129caba901": {
+      "experiment_id": "s4_drop_l0.5_k7",
+      "status": "ok"
+    },
+    "05732bcb2eba2efd": {
+      "experiment_id": "s4_drop_l0.5_k8",
+      "status": "ok"
+    },
+    "17c31775a11028d5": {
+      "experiment_id": "s4_drop_l0.5_k9",
+      "status": "ok"
+    },
+    "5cf9a427d2ab0f30": {
+      "experiment_id": "s4_drop_l0.75_k0",
+      "status": "ok"
+    },
+    "f78377af08279c6d": {
+      "experiment_id": "s4_drop_l0.75_k1",
+      "status": "ok"
+    },
+    "fb4575ddb748760f": {
+      "experiment_id": "s4_drop_l0.75_k2",
+      "status": "ok"
+    },
+    "9bc8a3ea74dd14ee": {
+      "experiment_id": "s4_drop_l0.75_k3",
+      "status": "ok"
+    },
+    "9e2042322375a236": {
+      "experiment_id": "s4_drop_l0.75_k4",
+      "status": "ok"
+    },
+    "00c74eb6a56497d0": {
+      "experiment_id": "s4_drop_l0.75_k5",
+      "status": "ok"
+    },
+    "9748cdeb401c66a8": {
+      "experiment_id": "s4_drop_l0.75_k6",
+      "status": "ok"
+    },
+    "00424c3576d757b6": {
+      "experiment_id": "s4_drop_l0.75_k7",
+      "status": "ok"
+    },
+    "142a2e28e0e8874d": {
+      "experiment_id": "s4_drop_l0.75_k8",
+      "status": "ok"
+    },
+    "f5678ddd659b5fb0": {
+      "experiment_id": "s4_drop_l0.75_k9",
+      "status": "ok"
+    },
+    "021786dfae0a8d80": {
+      "experiment_id": "s4_invent_l0.0_k0",
+      "status": "ok"
+    },
+    "eb132853d407e121": {
+      "experiment_id": "s4_invent_l0.0_k1",
+      "status": "ok"
+    },
+    "eccafa73e99f1f27": {
+      "experiment_id": "s4_invent_l0.0_k2",
+      "status": "ok"
+    },
+    "aeaec8375b1f27f9": {
+      "experiment_id": "s4_invent_l0.0_k3",
+      "status": "ok"
+    },
+    "7beb8a6272edccf9": {
+      "experiment_id": "s4_invent_l0.0_k4",
+      "status": "ok"
+    },
+    "a552560323c426a0": {
+      "experiment_id": "s4_invent_l0.0_k5",
+      "status": "ok"
+    },
+    "897f6ee4d7c32e87": {
+      "experiment_id": "s4_invent_l0.0_k6",
+      "status": "ok"
+    },
+    "0219954f2936c3cc": {
+      "experiment_id": "s4_invent_l0.0_k7",
+      "status": "ok"
+    },
+    "79d528fbbc2f644d": {
+      "experiment_id": "s4_invent_l0.0_k8",
+      "status": "ok"
+    },
+    "6de73e8e2408a3b8": {
+      "experiment_id": "s4_invent_l0.0_k9",
+      "status": "ok"
+    },
+    "aec7463d44c3ecab": {
+      "experiment_id": "s4_invent_l0.05_k0",
+      "status": "ok"
+    },
+    "e10a1dae2ceb2683": {
+      "experiment_id": "s4_invent_l0.05_k1",
+      "status": "ok"
+    },
+    "b1831a8988d6894d": {
+      "experiment_id": "s4_invent_l0.05_k2",
+      "status": "ok"
+    },
+    "67e5d6ed2cb2cf38": {
+      "experiment_id": "s4_invent_l0.05_k3",
+      "status": "ok"
+    },
+    "ad287ac36d64b4c5": {
+      "experiment_id": "s4_invent_l0.05_k4",
+      "status": "ok"
+    },
+    "7aafafa046ca665e": {
+      "experiment_id": "s4_invent_l0.05_k5",
+      "status": "ok"
+    },
+    "d8ecbb96c5c4b9fb": {
+      "experiment_id": "s4_invent_l0.05_k6",
+      "status": "ok"
+    },
+    "b7b96079e209821f": {
+      "experiment_id": "s4_invent_l0.05_k7",
+      "status": "ok"
+    },
+    "eb08bf9c6305ef27": {
+      "experiment_id": "s4_invent_l0.05_k8",
+      "status": "ok"
+    },
+    "b03fe01a8eb1ce65": {
+      "experiment_id": "s4_invent_l0.05_k9",
+      "status": "ok"
+    },
+    "ebb1e7d321b189be": {
+      "experiment_id": "s4_invent_l0.1_k0",
+      "status": "ok"
+    },
+    "abfc82565c5ac8ef": {
+      "experiment_id": "s4_invent_l0.1_k1",
+      "status": "ok"
+    },
+    "26e2a2600847eadf": {
+      "experiment_id": "s4_invent_l0.1_k2",
+      "status": "ok"
+    },
+    "a9b086a7122cd787": {
+      "experiment_id": "s4_invent_l0.1_k3",
+      "status": "ok"
+    },
+    "409072f1da11c974": {
+      "experiment_id": "s4_invent_l0.1_k4",
+      "status": "ok"
+    },
+    "d3b7e1c2d3e71156": {
+      "experiment_id": "s4_invent_l0.1_k5",
+      "status": "ok"
+    },
+    "2229bafbd648967a": {
+      "experiment_id": "s4_invent_l0.1_k6",
+      "status": "ok"
+    },
+    "4d14c7960d9eb885": {
+      "experiment_id": "s4_invent_l0.1_k7",
+      "status": "ok"
+    },
+    "8198474b811350e0": {
+      "experiment_id": "s4_invent_l0.1_k8",
+      "status": "ok"
+    },
+    "bc3e727c55d74f5e": {
+      "experiment_id": "s4_invent_l0.1_k9",
+      "status": "ok"
+    },
+    "93abe1246d3910be": {
+      "experiment_id": "s4_invent_l0.15_k0",
+      "status": "ok"
+    },
+    "6f3d2797d71933c8": {
+      "experiment_id": "s4_invent_l0.15_k1",
+      "status": "ok"
+    },
+    "3286f50aec5649ba": {
+      "experiment_id": "s4_invent_l0.15_k2",
+      "status": "ok"
+    },
+    "ec73d34209234b2a": {
+      "experiment_id": "s4_invent_l0.15_k3",
+      "status": "ok"
+    },
+    "16ff510d2ff9fbee": {
+      "experiment_id": "s4_invent_l0.15_k4",
+      "status": "ok"
+    },
+    "570a6b73e2660876": {
+      "experiment_id": "s4_invent_l0.15_k5",
+      "status": "ok"
+    },
+    "cb4f585a3d36addf": {
+      "experiment_id": "s4_invent_l0.15_k6",
+      "status": "ok"
+    },
+    "de690db9ca51b698": {
+      "experiment_id": "s4_invent_l0.15_k7",
+      "status": "ok"
+    },
+    "6a5cf705ad094092": {
+      "experiment_id": "s4_invent_l0.15_k8",
+      "status": "ok"
+    },
+    "108cce5ccb6a09f4": {
+      "experiment_id": "s4_invent_l0.15_k9",
+      "status": "ok"
+    },
+    "6909d827c9ceac14": {
+      "experiment_id": "s4_invent_l0.2_k0",
+      "status": "ok"
+    },
+    "b1355b3c52132838": {
+      "experiment_id": "s4_invent_l0.2_k1",
+      "status": "ok"
+    },
+    "794768854aac22ce": {
+      "experiment_id": "s4_invent_l0.2_k2",
+      "status": "ok"
+    },
+    "727fc32df88b79ca": {
+      "experiment_id": "s4_invent_l0.2_k3",
+      "status": "ok"
+    },
+    "a74860646c7aaffe": {
+      "experiment_id": "s4_invent_l0.2_k4",
+      "status": "ok"
+    },
+    "2faa9abcd4d5a659": {
+      "experiment_id": "s4_invent_l0.2_k5",
+      "status": "ok"
+    },
+    "f2ef8fddc1ca0321": {
+      "experiment_id": "s4_invent_l0.2_k6",
+      "status": "ok"
+    },
+    "e2802bf4124f19e7": {
+      "experiment_id": "s4_invent_l0.2_k7",
+      "status": "ok"
+    },
+    "13908dc13e42d7f4": {
+      "experiment_id": "s4_invent_l0.2_k8",
+      "status": "ok"
+    },
+    "b2dcbc4705f78d5e": {
+      "experiment_id": "s4_invent_l0.2_k9",
+      "status": "ok"
+    },
+    "642275381d5a3864": {
+      "experiment_id": "s4_invent_l0.3_k0",
+      "status": "ok"
+    },
+    "d5b054f57bbbe115": {
+      "experiment_id": "s4_invent_l0.3_k1",
+      "status": "ok"
+    },
+    "a3655674635dcca4": {
+      "experiment_id": "s4_invent_l0.3_k2",
+      "status": "ok"
+    },
+    "bf6e6099c86c028b": {
+      "experiment_id": "s4_invent_l0.3_k3",
+      "status": "ok"
+    },
+    "401a4ef9306420ad": {
+      "experiment_id": "s4_invent_l0.3_k4",
+      "status": "ok"
+    },
+    "8e0b823664d5147e": {
+      "experiment_id": "s4_invent_l0.3_k5",
+      "status": "ok"
+    },
+    "d55a65fa71e5b645": {
+      "experiment_id": "s4_invent_l0.3_k6",
+      "status": "ok"
+    },
+    "bd2817025b0c4b14": {
+      "experiment_id": "s4_invent_l0.3_k7",
+      "status": "ok"
+    },
+    "3c8f00d3439cfd6f": {
+      "experiment_id": "s4_invent_l0.3_k8",
+      "status": "ok"
+    },
+    "35fc74c20546ec98": {
+      "experiment_id": "s4_invent_l0.3_k9",
+      "status": "ok"
+    },
+    "d7bc8063c4c7b2b2": {
+      "experiment_id": "s4_invent_l0.5_k0",
+      "status": "ok"
+    },
+    "3bdfa026f42a7397": {
+      "experiment_id": "s4_invent_l0.5_k1",
+      "status": "ok"
+    },
+    "3b1bcf55720bc7b2": {
+      "experiment_id": "s4_invent_l0.5_k2",
+      "status": "ok"
+    },
+    "36c38cadf0cbfceb": {
+      "experiment_id": "s4_invent_l0.5_k3",
+      "status": "ok"
+    },
+    "95dc58da2c1c1140": {
+      "experiment_id": "s4_invent_l0.5_k4",
+      "status": "ok"
+    },
+    "dd2c144696ed18fd": {
+      "experiment_id": "s4_invent_l0.5_k5",
+      "status": "ok"
+    },
+    "6dd214d7e0a5f7ee": {
+      "experiment_id": "s4_invent_l0.5_k6",
+      "status": "ok"
+    },
+    "9b83bdcabe9c1d30": {
+      "experiment_id": "s4_invent_l0.5_k7",
+      "status": "ok"
+    },
+    "74a401f1658a1629": {
+      "experiment_id": "s4_invent_l0.5_k8",
+      "status": "ok"
+    },
+    "6408ce42dbae6a5f": {
+      "experiment_id": "s4_invent_l0.5_k9",
+      "status": "ok"
+    },
+    "485ec200c3c3ddd9": {
+      "experiment_id": "s4_invent_l0.75_k0",
+      "status": "ok"
+    },
+    "82417cfc4d56835d": {
+      "experiment_id": "s4_invent_l0.75_k1",
+      "status": "ok"
+    },
+    "4fee07542945f87f": {
+      "experiment_id": "s4_invent_l0.75_k2",
+      "status": "ok"
+    },
+    "5369b21cc94e975c": {
+      "experiment_id": "s4_invent_l0.75_k3",
+      "status": "ok"
+    },
+    "c85de3e232df0e4f": {
+      "experiment_id": "s4_invent_l0.75_k4",
+      "status": "ok"
+    },
+    "27211ddb9bcaf7e0": {
+      "experiment_id": "s4_invent_l0.75_k5",
+      "status": "ok"
+    },
+    "c15e0660d21fae7e": {
+      "experiment_id": "s4_invent_l0.75_k6",
+      "status": "ok"
+    },
+    "69ddfcf5dc098c19": {
+      "experiment_id": "s4_invent_l0.75_k7",
+      "status": "ok"
+    },
+    "a005253c32de7466": {
+      "experiment_id": "s4_invent_l0.75_k8",
+      "status": "ok"
+    },
+    "a088380da867640d": {
+      "experiment_id": "s4_invent_l0.75_k9",
+      "status": "ok"
+    }
+  },
+  "updated_utc": "2026-10-05T09:42:40+00:00"
+}

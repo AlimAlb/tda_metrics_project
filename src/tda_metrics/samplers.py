@@ -11,6 +11,11 @@ __all__ = [
     'sample_ball',
     'sample_ring',
     'sample_gaussian_mixture',
+    'translate_cloud',
+    'rotate_cloud',
+    'reflect_cloud',
+    'scale_cloud',
+    'stretch_cloud',
 ]
 
 
@@ -95,3 +100,53 @@ def sample_gaussian_mixture(n, radius=0.0, n_components=4, mean=(0.0, 0.0), cov=
 
     transform = np.linalg.cholesky(cov)
     return mean + z @ transform.T
+
+
+def translate_cloud(X, shift):
+    """Перенос облака на вектор shift (изометрия: внутренние расстояния не меняются)."""
+    X = np.asarray(X, dtype=float)
+    shift = np.asarray(shift, dtype=float)
+    if shift.shape != X.shape[1:]:
+        raise ValueError('shift должен иметь форму (dim,)')
+    return X + shift
+
+
+def rotate_cloud(X, angle_deg):
+    """Поворот облака вокруг нуля на angle_deg градусов (изометрия)."""
+    X = np.asarray(X, dtype=float)
+    angle = np.deg2rad(angle_deg)
+    rotation = np.array([
+        [np.cos(angle), -np.sin(angle)],
+        [np.sin(angle), np.cos(angle)],
+    ])
+    return X @ rotation.T
+
+
+def reflect_cloud(X, axis='x'):
+    """Отражение облака относительно оси: 'x' — знак y-координаты, 'y' — знак x-координаты."""
+    X = np.asarray(X, dtype=float)
+    if axis not in ('x', 'y'):
+        raise ValueError("axis должен быть 'x' или 'y'")
+    reflected = X.copy()
+    if axis == 'x':
+        reflected[:, 1] = -reflected[:, 1]
+    else:
+        reflected[:, 0] = -reflected[:, 0]
+    return reflected
+
+
+def scale_cloud(X, factor):
+    """Равномерное масштабирование облака вокруг нуля (внутренние расстояния умножаются на factor)."""
+    X = np.asarray(X, dtype=float)
+    if factor <= 0:
+        raise ValueError('factor должен быть положительным')
+    return X * float(factor)
+
+
+def stretch_cloud(X, factor_x, factor_y=1.0):
+    """Анизотропное растяжение облака по осям (не изометрия: меняет внутренние расстояния)."""
+    X = np.asarray(X, dtype=float)
+    scale = np.array([float(factor_x), float(factor_y)])
+    if np.any(scale <= 0):
+        raise ValueError('факторы растяжения должны быть положительными')
+    return X * scale
