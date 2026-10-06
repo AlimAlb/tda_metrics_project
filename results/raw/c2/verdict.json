@@ -1,0 +1,190 @@
+{
+  "stage": "c2_rotation_cycle",
+  "criteria": {
+    "a_cycle_visible_pixels_vae": {
+      "per_space": {
+        "pixels_pca16": {
+          "arc_z": {
+            "rtd": 7.360841888848013,
+            "ntd_PQ": 8.088514584576728
+          },
+          "floor_n": 8,
+          "cycle_visible": true
+        },
+        "vae_latent16": {
+          "arc_z": {
+            "rtd": 6.356223835454147,
+            "ntd_PQ": 8.357992807498379
+          },
+          "floor_n": 8,
+          "cycle_visible": true
+        }
+      },
+      "passed": true
+    },
+    "b_clip_dino_blind": {
+      "per_space": {
+        "clip_pca16": {
+          "arc_z": {
+            "rtd": 1.2332454253800016,
+            "ntd_PQ": 12.079068546593485
+          },
+          "floor_n": 8,
+          "blind": false
+        },
+        "dino_pca16": {
+          "arc_z": {
+            "rtd": 4.070796640929756,
+            "ntd_PQ": 9.331423387676546
+          },
+          "floor_n": 8,
+          "blind": false
+        }
+      },
+      "passed": false
+    },
+    "c_scan_monotone_to_floor": {
+      "rho_threshold": -0.7,
+      "per_space": {
+        "pixels_pca16": {
+          "metrics": {
+            "mtd_PQ": {
+              "rho_distance_to_floor": 0.42857142857142866,
+              "p_value": 0.337368311085824,
+              "n_alphas": 7,
+              "monotone": false
+            },
+            "mtd_QP": {
+              "rho_distance_to_floor": -0.03571428571428572,
+              "p_value": 0.9394082054712856,
+              "n_alphas": 7,
+              "monotone": false
+            },
+            "ntd_PQ": {
+              "rho_distance_to_floor": -0.642857142857143,
+              "p_value": 0.11939237342741094,
+              "n_alphas": 7,
+              "monotone": false
+            },
+            "ntd_QP": {
+              "rho_distance_to_floor": 0.9642857142857145,
+              "p_value": 0.0004541491691941689,
+              "n_alphas": 7,
+              "monotone": false
+            },
+            "rtd": {
+              "rho_distance_to_floor": -0.8571428571428573,
+              "p_value": 0.01369732661532562,
+              "n_alphas": 7,
+              "monotone": true
+            }
+          },
+          "monotone_metrics": [
+            "rtd"
+          ]
+        },
+        "vae_latent16": {
+          "metrics": {
+            "mtd_PQ": {
+              "rho_distance_to_floor": -1.0,
+              "p_value": 0.0,
+              "n_alphas": 7,
+              "monotone": true
+            },
+            "mtd_QP": {
+              "rho_distance_to_floor": -0.7857142857142859,
+              "p_value": 0.03623846267982713,
+              "n_alphas": 7,
+              "monotone": true
+            },
+            "ntd_PQ": {
+              "rho_distance_to_floor": -0.28571428571428575,
+              "p_value": 0.5345092286010406,
+              "n_alphas": 7,
+              "monotone": false
+            },
+            "ntd_QP": {
+              "rho_distance_to_floor": 0.6785714285714287,
+              "p_value": 0.0937502539598313,
+              "n_alphas": 7,
+              "monotone": false
+            },
+            "rtd": {
+              "rho_distance_to_floor": -0.39285714285714296,
+              "p_value": 0.38331687042697266,
+              "n_alphas": 7,
+              "monotone": false
+            }
+          },
+          "monotone_metrics": [
+            "mtd_PQ",
+            "mtd_QP"
+          ]
+        }
+      },
+      "passed": true
+    },
+    "d_scan_a360_within_floor_3sd": {
+      "per_space": {
+        "pixels_pca16": {
+          "rtd": {
+            "z_at_360": 0.7390403333400529,
+            "within": true
+          },
+          "ntd_PQ": {
+            "z_at_360": -0.3387090100287906,
+            "within": true
+          }
+        },
+        "vae_latent16": {
+          "rtd": {
+            "z_at_360": 0.09091973772039409,
+            "within": true
+          },
+          "ntd_PQ": {
+            "z_at_360": -0.8188031886676846,
+            "within": true
+          }
+        },
+        "clip_pca16": {
+          "rtd": {
+            "z_at_360": 0.4248854548154462,
+            "within": true
+          },
+          "ntd_PQ": {
+            "z_at_360": 0.1311556186899558,
+            "within": true
+          }
+        },
+        "dino_pca16": {
+          "rtd": {
+            "z_at_360": 0.06559372136615514,
+            "within": true
+          },
+          "ntd_PQ": {
+            "z_at_360": -0.4862769744473106,
+            "within": true
+          }
+        }
+      },
+      "passed": true
+    }
+  },
+  "thresholds": {
+    "abs_z_detection": 3.0,
+    "spearman_rho_monotone": -0.7,
+    "floor_sd_within": 3.0
+  },
+  "headline_metrics": [
+    "rtd",
+    "ntd_PQ"
+  ],
+  "topological_metrics": [
+    "mtd_PQ",
+    "mtd_QP",
+    "ntd_PQ",
+    "ntd_QP",
+    "rtd"
+  ],
+  "note": "полы cc и их sd оценены по 8 независимым ресемплам исходных цифр; скан — 3 ресемпла на точку; z = (mean - floor_mean) / floor_sd"
+}

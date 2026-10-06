@@ -1,0 +1,6 @@
+group,auroc,auprc,balanced_accuracy
+topology,0.9985714285714287,0.999796988508647,0.85
+coverage,1.0,1.0,0.5
+statistics,1.0,0.9999999999999999,0.5
+llm_confidence,1.0,1.0,0.725
+combined,1.0,0.9999999999999998,1.0

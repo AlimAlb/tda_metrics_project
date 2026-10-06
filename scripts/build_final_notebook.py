@@ -91,18 +91,38 @@ EXPECTED = [
     'tables/cv_samelaw_floors.csv',
     'tables/cv_c1_contrasts.csv',
     'tables/cv_c1_sensitivity.csv',
+    'tables/c2_resample_contrasts.csv',
+    'tables/c2_scan.csv',
     'tables/power_min_n.csv',
     'tables/power_summary.csv',
     'tables/power_notes.json',
     'tables/w3_c3_matched.csv',
     'tables/w3_llm_controls.csv',
     'tables/llm_extraction_manifest.csv',
+    'tables/l9_task_a.csv',
+    'tables/l9_task_b.csv',
+    'tables/l9_per_alpha.csv',
+    'tables/s2_ring_disc.csv',
+    'tables/c4_contrasts.csv',
+    'tables/llm_barcodes_stats.csv',
+    'raw/l9/predictions.parquet',
     'raw/wave5/test_summary.json',
     'raw/wave5/verdict.json',
     'raw/wave5/layerwise_summary.json',
     'raw/wave5/test.parquet',
     'raw/llm/results.parquet',
     'raw/llm_cache/manifest.json',
+    'raw/bc/synth_bars.csv',
+    'figures/bc_synth_clouds.png',
+    'figures/bc_synth_barcodes.png',
+    'figures/bc_synth_mixture.png',
+    'figures/s2_cross_barcode.png',
+    'figures/c4_pca2.png',
+    'figures/qual_mnist_rotations.png',
+    'figures/qual_cifar_corruptions.png',
+    'figures/cifar_pca2.png',
+    'figures/llm_pca2.png',
+    'figures/llm_mixture_pca2.png',
 ]
 present = {rel: os.path.isfile(os.path.join(DATA, rel)) for rel in EXPECTED}
 for rel, ok in present.items():
@@ -185,6 +205,63 @@ plt.show()""", 'sec02-code'),
 - RTD-пол высокий (36-50 raw в CV; растёт с n в синтетике) и геометрически/n-зависим — raw-RTD сравнима только внутри серии при равном n.
 
 Ограничения (рядом с результатом): raw-значения MTD (4.4-58236) и Fréchet (0.013-238) несравнимы между пространствами — в таблице они приведены только как справочные полы своих пространств; «полоса NTD около 1.2» валидна при n>=500 (артефакт n=250 завышен); P/Q в CV — конечные подвыборки одного датасета (ожидаемое пересечение около 1.5-3% облака), а не идеализированные независимые выборки закона (MUST-оговорка F-1, отчёт wave2-3-5 §14).""", 'sec02-answer'),
+
+    md("""## §2b. Что видит топология: облака и баркоды
+
+**Вопрос.** Как выглядят сами облака и их баркоды — что именно «видит» топологическая метрика?""", 'sec02b-question'),
+
+    code("""from IPython.display import Image, display
+
+path = f'{DATA}/raw/bc/synth_bars.csv'
+bars = pd.read_csv(path)
+bars['length'] = bars['death'] - bars['birth']
+bc_stats = bars.groupby(['cloud', 'level'])['length'].agg(['count', 'max', 'sum'])
+bc_stats.columns = ['bars', 'longest', 'total']
+print('BC: баркоды синтетики — кольцо (radius 1.5, thickness 1.0), дуга [0, pi), диск; n=500')
+print(bc_stats.round(3).to_string())
+long_h1 = bars[(bars['level'] == 1) & (bars['length'] > 0.75)]
+print(f'\\nH1-бары длиннее 0.75 (половина радиуса): {len(long_h1)}')
+print(long_h1[['cloud', 'birth', 'death', 'length']].round(3).to_string(index=False))
+
+path = f'{DATA}/tables/s2_ring_disc.csv'
+s2 = pd.read_csv(path)
+s2_cols = ['mtd_PQ', 'mtd_QP', 'ntd_PQ', 'ntd_QP']
+pair_labels = {'rr': 'кольцо-кольцо (same-law пол)', 'dd': 'диск-диск (same-law пол)',
+               'rd': 'P:кольцо, Q:диск', 'dr': 'P:диск, Q:кольцо'}
+print('\\nS2, кольцо vs диск (n=500, 5 повторов): mean ± sd')
+for pair in ['rr', 'dd', 'rd', 'dr']:
+    sub = s2[s2['pair'] == pair]
+    parts = [f'{m} {sub[m].mean():.2f}±{sub[m].std():.2f}' for m in s2_cols]
+    print(f'  {pair} ({pair_labels[pair]}): ' + '; '.join(parts))
+
+display(Image(filename=f'{DATA}/figures/bc_synth_clouds.png'))
+display(Image(filename=f'{DATA}/figures/bc_synth_barcodes.png'))
+display(Image(filename=f'{DATA}/figures/s2_cross_barcode.png'))""", 'sec02b-code-synth'),
+
+    code("""path = f'{DATA}/tables/c4_contrasts.csv'
+c4 = pd.read_csv(path)
+metrics_c4 = ['rtd', 'ntd_PQ']
+order_c4 = ['pixels_pca16', 'vae_latent16', 'dino_pca16', 'clip_pca16']
+z_tab = c4[c4['metric'].isin(metrics_c4)].pivot(index='space', columns='metric', values='z')
+floor_tab = c4[c4['metric'].isin(metrics_c4)].pivot(index='space', columns='metric',
+                                                    values='floor_mean')
+print('C4: поворотная аугментация против естественной изменчивости (MNIST digit 3)')
+print('rot: P=raw, Q=поворотное облако (25 цифр × 18 углов); пол — raw-vs-raw')
+print('n=450/сторона, 6 повторов; |z| >= 3 — детекция')
+print(z_tab.loc[order_c4, metrics_c4].round(1).to_string())
+print('\\nполы raw-vs-raw (floor_mean):')
+print(floor_tab.loc[order_c4, metrics_c4].round(3).to_string())
+
+display(Image(filename=f'{DATA}/figures/c4_pca2.png'))
+display(Image(filename=f'{DATA}/figures/qual_mnist_rotations.png'))""", 'sec02b-code-c4'),
+
+    md("""**Ответ.**
+- **Механика**: mtd — сумма длин H1-баров кросс-баркода (зелёные отрезки на фигурах), ntd — H0-merge-расходимость, нормированная на шумовой пол референса. Кольцо имеет ровно один длинный H1-бар (1.31 > 0.75 = половина радиуса), дуга и диск — ни одного (longest 0.11/0.16): удаление части цикла убивает H1 — именно это детектируют mtd/ntd.
+- **Кросс-баркод кольцо-дуга**: H1-бары умирают на стыке облаков (total 3.98, longest 1.16) — это «расхождение» и есть скор mtd; кросс-баркод кольцо->диск (фигура выше) даёт H1-сумму 3.69 — это mtd_PQ одного повтора пары rd, у пола rr (3.27±0.07).
+- **S2, асимметрия направлений**: полы rr/dd mtd_PQ 3.27±0.07 / 3.15±0.32; в смешанных парах mtd(кольцо->диск) ≈ 3.5-3.7, mtd(диск->кольцо) ≈ 5.2-5.3: rd — mtd_PQ 3.5±0.4 против mtd_QP 5.3±0.3, dr — зеркально (5.2±0.3 против 3.7±0.2), асимметрия колонки mtd_PQ между rd и dr — 1.70 (около 23σ пола rr). Направление кодирует, у какой стороны циклическая структура: цикл кольца «умирает» о диск мгновенно (диск заполняет дыру), внутренние структуры диска подключаются к кольцу через большое расстояние — кольцо-«модель» (dr, mtd_QP 3.7) теряет меньше, чем диск-«модель» (rd, mtd_QP 5.3).
+- **C4, цикл из аугментации**: поворотная аугментация создаёт цикл, отсутствующий в естественной изменчивости: ntd_PQ z = +22.3 (pixels), +4.1 (VAE), +9.9 (DINO), +2.2 (CLIP — слеп, |z| < 3; rtd +2.8 тоже); rtd в pixels даже ниже пола (−3.4), в VAE/DINO видит цикл (+6.0/+5.4). На PCA-2: в pixels/VAE поворотное облако замыкается в кольцо вокруг raw, в CLIP сливается с ним.
+
+Ограничения: баркоды — VR-фильтрация (ripser++), фигуры и PCA-2 — качественные иллюстрации к уже посчитанным контрастам (числа — в таблицах S2/C4/LLM), не новые эксперименты; C4: n=450/сторона, 6 повторов, пол raw-vs-raw, z — эффект-сайзы относительно пола, не p-значения; PCA-2 — только отображение (рабочее пространство — PCA-16): двумерная проекция может и прятать, и создавать видимые структуры; порог «длинного» H1-бара 0.75 = половина радиуса — критерий вердикта c_synth (`raw/bc/verdict.json`), не универсальная константа, а кросс-баркоды кольцо-дуга/кольцо-диск — по одной фиксированной паре выборок (без повторов); H0-часть (merge-дистанции single-linkage, основа mtd0/ntd) здесь не рисуется — только числами в `llm_barcodes_stats.csv` (§7b).""", 'sec02b-answer'),
 
     md("""## §3. Направленные ошибки: dropping × invention
 
@@ -335,7 +412,7 @@ print(sub[['family', 'metric', 'level_classes', 'mean', 'floor_mean', 'signed_z_
 
 > «На 512-мерных CLIP-эмбеддингах improved PR почти слеп (precision@10 около 0.003) — PCA-16 ремонтирует (0.34; на CIFAR-деградации до 1.00), внутренний оптимум d около 16».
 
-Именно из-за этой зависимости выбор пространств новой фазы зафиксирован как clip_raw / clip_pca16 / dino_pca16 / vae_latent16 / pixels_pca16 (+ cifar_pixels_pca16 для C0); C2-ротация в новой фазе не исполнялась (сжатые сроки, задокументировано в PROJECT_STATE).""", 'sec05-context-phase1'),
+Именно из-за этой зависимости выбор пространств новой фазы зафиксирован как clip_raw / clip_pca16 / dino_pca16 / vae_latent16 / pixels_pca16 (+ cifar_pixels_pca16 для C0); C2-ротация исполнена позже отдельным живым прогоном — результаты в двух ячейках ниже.""", 'sec05-context-phase1'),
 
     md("""**Ответ.** Зеркальная сигнатура S3 **воспроизводится на реальных классах во всех 5 C1-пространствах** (грид 250 конфигов, 5 повторов, n=1000, |P|=|Q|, класс-сбалансированные квоты):
 - drop-ось: recall-семейство детектирует (recall@10 z до +78.9 в VAE; в clip_pca16 recall@1 +26.8), ntd_PQ растёт (до +5.4), ntd_QP уходит вниз (−2.0); precision@k слепы (|z| <= 2.7);
@@ -343,6 +420,76 @@ print(sub[['family', 'metric', 'level_classes', 'mean', 'floor_mean', 'signed_z_
 - «класс = топологическая мода» — подтверждённая рабочая гипотеза (проверяемая самим экспериментом, не предпосылка).
 
 Ограничения: 6-е пространство (cifar_pixels_pca16) имеет C0-пол, но в C1-грид не входит (CIFAR фигурирует в matched-порчах, §6); drop_fraction (база P = 10 классов) и invent_fraction (знаменатель /10 при базе P = 5 классов) — несопоставимые по смыслу доли, ось X подписана числом классов (MUST-оговорка F-3); PCA fit на полном пуле до выбора P/Q — структурно без утечки, но P/Q — подвыборки конечного датасета (F-1); первые уровни |z|>=3: recall- и precision-метрики 0.1-0.2, ntd_PQ 0.3-0.5, ntd_QP 0.1-0.3 — см. таблицу выше.""", 'sec05-answer'),
+
+    code("""path = f'{DATA}/tables/c2_resample_contrasts.csv'
+c2c = pd.read_csv(path)
+c2s = pd.read_csv(f'{DATA}/tables/c2_scan.csv')
+floors_c2 = c2c[['space', 'metric', 'floor_mean']].drop_duplicates(['space', 'metric'])
+
+spaces_c2 = ['pixels_pca16', 'vae_latent16', 'clip_pca16', 'dino_pca16']
+short_c2 = {'pixels_pca16': 'pixels', 'vae_latent16': 'VAE',
+            'clip_pca16': 'CLIP', 'dino_pca16': 'DINO'}
+print('C2, цикл вращения MNIST (digit 3): z-контрасты arc (дуга vs круг) и zoom')
+print('относительно same-law пола; n=450/сторона, пол — 8 независимых ресемплов')
+for metric in ['rtd', 'ntd_PQ']:
+    sub = c2c[c2c['metric'] == metric].set_index(['space', 'comp'])['z']
+    print(f'\\n{metric}:')
+    for space in spaces_c2:
+        print(f'  {short_c2[space]:8s}  arc z={sub[(space, "arc")]:+6.1f}   zoom z={sub[(space, "zoom")]:+6.1f}')
+
+fig, axes = plt.subplots(1, 2, figsize=(12.5, 4.4))
+for ax, metric in zip(axes, ['rtd', 'ntd_PQ']):
+    sub = c2c[c2c['metric'] == metric].set_index(['space', 'comp'])
+    x = np.arange(len(spaces_c2))
+    ax.bar(x - 0.2, [sub.loc[(s, 'arc'), 'z'] for s in spaces_c2], 0.4,
+           label='arc (дуга vs круг)')
+    ax.bar(x + 0.2, [sub.loc[(s, 'zoom'), 'z'] for s in spaces_c2], 0.4,
+           label='zoom (масштабная деформация)')
+    ax.axhline(0.0, color='black', linestyle='--', lw=1.2)
+    ax.axhline(3.0, color='grey', linestyle=':', lw=0.8)
+    ax.axhline(-3.0, color='grey', linestyle=':', lw=0.8)
+    ax.set_xticks(x)
+    ax.set_xticklabels([short_c2[s] for s in spaces_c2])
+    ax.set_xlabel('пространство (PCA-16)')
+    ax.set_title(metric)
+    ax.legend(fontsize=7.5)
+axes[0].set_ylabel('z относительно same-law пола')
+fig.suptitle('C2: z-контрасты по 4 пространствам; |z| >= 3 — детекция', y=1.02)
+fig.tight_layout()
+plt.show()
+
+fig, axes = plt.subplots(1, 2, figsize=(12.5, 4.4))
+for ax, metric in zip(axes, ['rtd', 'ntd_PQ']):
+    for space, color in [('pixels_pca16', 'tab:blue'), ('vae_latent16', 'tab:green')]:
+        sub = c2s[(c2s['space'] == space) & (c2s['metric'] == metric)].sort_values('alpha_max')
+        ax.plot(sub['alpha_max'], sub['mean'], marker='o', ms=3.5, color=color,
+                label=f'{short_c2[space]}: скан (3 повтора)')
+        floor = floors_c2[(floors_c2['space'] == space)
+                          & (floors_c2['metric'] == metric)]['floor_mean'].iloc[0]
+        ax.axhline(floor, linestyle='--', lw=1.1, color=color, alpha=0.7)
+    for space, color, marker in [('clip_pca16', 'tab:red', 'o'),
+                                 ('dino_pca16', 'tab:purple', 's')]:
+        sub = c2s[(c2s['space'] == space) & (c2s['metric'] == metric)].sort_values('alpha_max')
+        ax.plot(sub['alpha_max'], sub['mean'], linestyle='none', marker=marker, ms=4,
+                color=color, label=f'{short_c2[space]}: alpha 180/330/360')
+        floor = floors_c2[(floors_c2['space'] == space)
+                          & (floors_c2['metric'] == metric)]['floor_mean'].iloc[0]
+        ax.axhline(floor, linestyle=':', lw=0.9, color=color, alpha=0.55)
+    ax.set_xlabel('alpha_max цикла, градусы (360 = полный круг)')
+    ax.set_title(metric)
+    ax.legend(fontsize=7)
+axes[0].set_ylabel('raw значение')
+fig.suptitle('C2: замыкание цикла — возврат к same-law полу (пунктир) при alpha_max -> 360', y=1.02)
+fig.tight_layout()
+plt.show()""", 'sec05b-code'),
+
+    md("""**Ответ (C2: цикл вращения, живой прогон).**
+- Круг видим в пикселях и VAE-латенте — теперь с оценкой дисперсии пола (8 независимых ресемплов): pixels — rtd z = +7.4, ntd_PQ z = +8.1; VAE — rtd z = +6.4, ntd_PQ z = +8.4 (фаза 1 — одна фиксированная выборка без дисперсии пола).
+- Скан замыкания монотонен к same-law полу: pixels — rtd rho = -0.86; VAE — mtd_PQ rho = -1.00, mtd_QP rho = -0.79; точка alpha_max = 360 в пределах пола во всех парах (z от -0.82 до +0.74, критерий |z| < 3SD выполнен с запасом).
+- Главное уточнение старого тезиса «слепота CLIP/DINO к повороту»: слепота — свойство ПАРЫ (эмбеддер × метрика), а не эмбеддера. RTD в CLIP слеп к дуге vs круг (z = +1.2), но NTD видит её и в CLIP (z = +12.1), и в DINO (z = +9.3): критерий «CLIP/DINO слепы» (все |z| < 3) опровергнут.
+- Zoom-контрасты сильнее arc-контрастов во всех пространствах (ntd_PQ: z = +48.1 в CLIP, +44.1 в DINO, +21.4 в pixels; rtd: z = +10.7 в VAE) — слепота специфична именно к вращению, а не к деформациям вообще.
+
+Ограничения: n = 450/сторона фиксирован (RTD между разными n несравним); облако = 18 углов × 25 изображений digit 3; PCA-16 строится на P-стороне каждой пары; DINO использует CLIP-препроцесс (сравнимость с фазой 1); скан — 3 повтора на точку при поле из 8 ресемплов, z-контрасты — эффект-сайзы относительно этого пола, не p-значения; старые результаты цикла (900 точек, фиксированная выборка) — в executed-артефакте фазы 1 `results/topology_metrics_output.ipynb`. C4 (§2b): та же слепота воспроизводится в постановке «аугментация против естественной изменчивости» — CLIP не отличает поворотное облако от raw (|z| < 3), pixels/VAE/DINO отличают (z до +22).""", 'sec05b-answer'),
 
     md("""## §6. CV: matched-shift порчи
 
@@ -376,6 +523,12 @@ plt.show()""", 'sec06-code'),
 - clean-контроль идеален: ntd 1.078, precision@3 = recall@3 = 1.000, rtd около 0.
 
 Ограничения: matched-MMD выравнивание **частичное** — пересечение диапазонов MMD вырождено (brightness/contrast <= 0.15, blur/noise >= 0.25), конфаунд величины сдвига остался; тем не менее асимметрия blur (recall много меньше precision) к MMD не сводится и указывает именно на тип порчи; rtd здесь exploratory random-coupling; CRN-дизайн: P и Q из одного balanced-набора индексов, Q = corrupt(P), n=1000.""", 'sec06-answer'),
+
+    code("""display(Image(filename=f'{DATA}/figures/qual_cifar_corruptions.png'))
+display(Image(filename=f'{DATA}/figures/cifar_pca2.png'))
+print('порчи на matched-уровнях Wave 3: brightness s0.5, contrast s0.75, blur/noise s0.05')""", 'sec06b-code'),
+
+    md("""**Качественная картина (C3).** В CLIP PCA-2 облака разных порчей смещаются по-разному при сопоставимом MMD — визуальная параллель к выводу §6: профиль метрик по типу порчи (recall@3: noise 0.468, blur 0.644 против >= 0.88 у brightness/contrast; ntd_PQ 1.559 у noise против 1.29-1.35) не сводится к величине сдвига. Сверху — сами порчи на matched-уровнях (brightness 0.5, contrast 0.75, blur 0.05, noise 0.05).""", 'sec06b-answer'),
 
     md("""## §7. LLM pipeline и контроли
 
@@ -426,6 +579,10 @@ plt.show()""", 'sec07-code-controls'),
 - **Контроли (L3)**: сигнал **выживает после length-matched контроля** — l3d сохраняет отклонение от shuffled-пола на всех слоях (ntd_PQ 1.52-1.80 при поле l3e 1.38-1.41; precision@3 0.58-0.86 при поле около 0.9): различие correct/hallucinated не сводится к длине ответа (главный конфаунд). **Метка решает**: разрушение меток (l3e) возвращает всё на same-law пол — эффект именно в paired-различии ответов, не в маргинальных распределениях. l3e-пол ntd 1.38-1.41 при n=500 согласуется со скейлингом пола (1.22-1.27 при n=1000).
 
 Ограничения: **слой-9 l3e-контроль отсутствует** (5 failed убитого цикла до фикса) — выводы по слою 9 не опираются на shuffled-контроль (MUST-оговорка §14-17 отчёта wave2-3-5); l3d снимает конфаунд длины, но не стиля ответа; хвост шаблона (`<|im_end|>` + перевод строки) входит в answer_span — константный в абсолютных токенах, но с разной относительной примесью для коротких correct и длинных hallucinated (оговорка §14-5); `chat_knowledge_v1` тестирует расхождение ответа с предоставленным knowledge-контекстом, не внутреннюю уверенность модели без опоры (оговорка §14-8).""", 'sec07-answer'),
+
+    code("""display(Image(filename=f'{DATA}/figures/llm_pca2.png'))""", 'sec07b-code'),
+
+    md("""**Качественная картина (dev, слой 18, PCA-2).** Облака correct (синие) и hallucinated (красные) перекрываются с локальным смещением; покраска по длине ответа (правая панель) даёт градиент вдоль главной оси — наглядная мотивация length-matched контроля l3d (§7). Same-law выборка correct2 (зелёная) ложится на correct — смещение correct/hallucinated фактическое, не шум подвыборки. Баркоды (`llm_barcodes_stats.csv`): галлюцинированное облако компактнее (mean pairwise 13.4 против 22.2; same-law correct2 22.2, merge mean 5.75 против 6.30) — к механизму «cross-RTD ниже пола» (§9).""", 'sec07b-answer'),
 
     md("""## §8. Доля галлюцинаций
 
@@ -510,6 +667,10 @@ for j, metric in enumerate(metrics):
 
 Ограничения: пороги обнаружения перенесены из синтетического power-артефакта — NTD кросс-сравнима по построению, для PR перенос условный (caveat в verdict.json, MUST-оговорка §14-14); alpha_eval = 0.25 — ближайшая верхняя точка сетки l4a к alpha* = 0.15, а не оценка минимальной обнаруживаемой доли; bootstrap-CI по 5 повторам отражает только межповторную дисперсию данной конфигурации (модель, слой, PCA зафиксированы), не полную неопределённость; идентичность l4a@1.0 и l3_direct — сани-чек, не независимая репликация (§14-15).""", 'sec08-answer'),
 
+    code("""display(Image(filename=f'{DATA}/figures/llm_mixture_pca2.png'))""", 'sec08b-code'),
+
+    md("""**Геометрия дозы (PCA-2, слой 18).** Красные (галлюцинированные) точки вкрапляются в синие (correct) по мере роста alpha (0.25 -> 1.0) — геометрическая картинка монотонной дозозависимости §8.""", 'sec08b-answer'),
+
     md("""## §9. Слои и paired RTD
 
 **Вопрос.** Как сигнал correct vs hallucinated устроен по глубине сети (слои 9/18/27/36): держится ли cross-RTD ниже same-law пола, где максимален CKA, и как выглядит heatmap layer × metric по семействам L3/L4 на dev?""", 'sec09-question'),
@@ -589,13 +750,57 @@ plt.show()""", 'sec09-code-heatmap'),
 - **CKA**: cross 0.76-0.92 против identity-нуля около 0.99 — общая линейная структура скрытых представлений сохранна; **минимум CKA-дистанции в середине сети (слои 18/27)**.
 - Heatmap family × layer: l3/l3d отклоняются от l3e-пола на всех слоях (кроме отсутствующей ячейки l3e/9); l4a/l4b усреднены по alpha — дозовые кривые в §8.
 
-Ограничения: слой 18 — primary по пре-регистрации D-010 (выбор сделан до данных); «оптимальный слой» не формулируем — сетка грубая (4 слоя = 25/50/75/100% глубины, mean-pooling; MUST-оговорка G-3/§14-7 wave2-3-5); layerwise RTD на независимых облаках — exploratory random-coupling (trials=2); механика «cross ниже пола» (концентрация против меньшего разброса hallucinated) этими данными не различается — вопрос к баркодам (Next phase).""", 'sec09-answer'),
+Ограничения: слой 18 — primary по пре-регистрации D-010 (выбор сделан до данных); «оптимальный слой» не формулируем — сетка грубая (4 слоя = 25/50/75/100% глубины, mean-pooling; MUST-оговорка G-3/§14-7 wave2-3-5); layerwise RTD на независимых облаках — exploratory random-coupling (trials=2); механика «cross ниже пола» проясняется баркодами (§7b/§2b): галлюцинированное облако компактнее корректного (mean pairwise 13.4 против 22.2 при same-law 22.2; merge mean 5.75 против 6.30) — свидетельство в пользу концентрации/меньшего разброса (exploratory).""", 'sec09-answer'),
 
     md("""## §10. Практическая batch-level задача
 
-**Вопрос.** Решена ли практическая batch-level задача обнаружения (L9: ridge/logistic на feature groups)?
+**Вопрос.** Решена ли задача L9 — бинарное обнаружение пакета с галлюцинациями и оценка его доли по группам признаков (topology / coverage / statistics / llm_confidence / combined) при GroupKFold по `prompt_id`?""", 'sec10-question'),
 
-**Ответ. Не исполнено — Next phase.** Batch-level задача (L9: бинарное обнаружение батча с галлюцинациями и оценка доли по векторизованным метрикам/feature groups, качество feature groups — 12-я headline-фигура мастер-плана §15) в испытательную дугу Wave 2/3/5 не входила. Всё описанное выше — метрики несходства облаков; детектор на их основе — отдельный шаг с собственными контролями утечки (сплиты по `prompt_id`, обучение только на train). Связанное ограничение мастер-плана §16-1: batch-level обнаружение не является индивидуальным детектором галлюцинаций.""", 'sec10-stub'),
+    code("""ta = pd.read_csv(f'{DATA}/tables/l9_task_a.csv')
+tb = pd.read_csv(f'{DATA}/tables/l9_task_b.csv')
+pav = pd.read_csv(f'{DATA}/tables/l9_per_alpha.csv')
+pred = pd.read_parquet(f'{DATA}/raw/l9/predictions.parquet')
+
+print('L9, задача A: бинарное обнаружение пакета (logistic; GroupKFold-5 по prompt_id;')
+print('160 пакетов n=500: 20 чистых / 140 с галлюцинациями)')
+print(ta.round(4).to_string(index=False))
+print('\\nL9, задача B: оценка доли галлюцинаций (ridge)')
+print(tb.round(4).to_string(index=False))
+print('\\nL9, combined-модель по alpha: детекция и MAE')
+print(pav.round(4).to_string(index=False))
+
+fig, axes = plt.subplots(1, 2, figsize=(12.5, 4.4))
+ax = axes[0]
+x = np.arange(len(ta))
+ax.bar(x - 0.2, ta['auroc'], 0.4, label='AUROC')
+ax.bar(x + 0.2, ta['auprc'], 0.4, label='AUPRC')
+ax.axhline(0.5, color='red', linestyle='--', lw=1.2, label='уровень шанса (0.5)')
+ax.set_xticks(x)
+ax.set_xticklabels(ta['group'], rotation=20, ha='right')
+ax.set_ylim(0.5, 1.05)
+ax.set_ylabel('качество')
+ax.set_title('Задача A: группы признаков')
+ax.legend(fontsize=8)
+ax = axes[1]
+for fold, grp in pred.groupby('fold'):
+    ax.scatter(grp['alpha'], grp['pred_alpha'], s=14, label=f'фолд {fold}')
+lo = float(pred['alpha'].min())
+hi = float(pred['alpha'].max())
+ax.plot([lo, hi], [lo, hi], 'k--', lw=1, label='y = x')
+ax.set_xlabel('истинная доля alpha')
+ax.set_ylabel('предсказанная доля (ridge, combined)')
+ax.set_title('Задача B: оценка доли')
+ax.legend(fontsize=7)
+fig.suptitle('L9: пакетная задача на HaluEval dev (hidden-представления, слой 18, PCA-16)', y=1.02)
+fig.tight_layout()
+plt.show()""", 'sec10-code'),
+
+    md("""**Ответ.**
+- **Задача A (обнаружение пакета)**: все группы признаков дают AUROC 0.999-1.000 (topology 0.999, coverage 1.000, statistics 1.000, llm_confidence 1.000, combined 1.000); balanced accuracy combined 1.000; у coverage и statistics balanced accuracy 0.5 — порог 0.5 вырожден при дисбалансе 20/140 (модель относит всё к классу большинства), основная метрика — AUROC/AUPRC.
+- **Задача B (оценка доли)**: combined-ridge MAE 0.0077, R² 0.999, Spearman 0.992; все группы MAE 0.011-0.048 (statistics 0.011, coverage 0.048); пакеты с alpha = 0.05 (25 галлюцинаций из 500) детектируются на 100%, ложных срабатываний на чистых пакетах нет.
+- **Интерпретация (мастер-план §12-8)**: confidence-baseline (NLL / perplexity / entropy / длина) не хуже топологии по AUROC (1.000 vs 0.999) — топологические признаки информативны, но НЕ превосходят NLL; их ценность — black-box / пост-хок постановка (эмбеддинги без логитов) и направленная диагностика типа ошибки.
+
+Ограничения: пакеты n = 500 из dev-сплита, alpha >= 0.05 — при 25 галлюцинациях из 500 задача почти тривиальна для всех семейств признаков (минимальные обнаруживаемые доли — предмет §8 и power-скана §11, не этой задачи); batch-level-детектор — не индивидуальный детектор галлюцинаций (мастер-план §16-1); пакеты одного (фолд, k) с разными alpha делят базовую выборку — вложенные замены (осознанный дизайн, оговорка); обучение и тест не делят prompt_id (GroupKFold-5), но все пакеты — из одного корпуса HaluEval (внешней репликации нет); модели ограничены логистической регрессией и ridge; RTD среди признаков — off-label random-coupling (trials = 2, exploratory).""", 'sec10-answer'),
 
     md("""## §11. Надёжность, power и стоимость
 
@@ -654,10 +859,13 @@ plt.show()""", 'sec11-code'),
 3. **Геометрия скрытых состояний Qwen2.5-3B различает correct/hallucinated** (HaluEval QA): precision@3 0.758 ± 0.034 на held-out test при same-law пороге 0.957 — единственная подтверждённая по пре-регистрации D-010 primary-метрика; монотонная дозозависимость по всем шести рядам (paired RTD 6.9 -> 47.1, CKA 0.14 -> 0.76); сигнал выживает после length-matched контроля и умирает при shuffled-метках; послойно cross-RTD ниже same-law пола на всех слоях, CKA-минимум в середине сети.
 4. **Тип CV-порчи различается топологически при (частично) matched-MMD**: noise бьёт по обеим осям PR, blur асимметричен (recall много меньше precision), brightness/contrast слабы — профиль метрик несводим к величине сдвига.
 5. **Отрицательные результаты зафиксированы как результаты**: ntd_QP не детектируется на val при порогах синтетического power (слабый согласованный сдвиг около 1.1σ); recall@3 — только с alpha = 0.5; precision@k слепы к drop, recall@k — к invent; RTD в power — только invent0.5.
+6. **Практическая пакетная задача решена** (L9): все группы признаков дают AUROC >= 0.999 при GroupKFold по prompt_id; ridge оценивает долю галлюцинаций с MAE 0.008; топология не превосходит confidence-baseline (1.000 vs 0.999) — ценность в black-box и направленности.
+7. **C2: слепота представления — свойство пары (эмбеддер × метрика)**: RTD слеп к циклу вращения в CLIP (z = +1.2), NTD видит его везде (z до +12); цикл замыкается монотонно (rho до -1.00), a360 = same-law.
+8. **Механика метрик продемонстрирована на баркодах (§2b)**: H1-цикл кольца умирает на дуге, кросс-баркод даёт mtd; C4: аугментация создаёт цикл (z до +22), LLM: галлюцинированные компактнее (exploratory).
 
 **Финальные ограничения мастер-плана §16** (обязательные к явному написанию): batch-level обнаружение — не индивидуальный детектор галлюцинаций; различие hidden-state распределений не доказывает причинную связь с фактической корректностью; возможен style/source-конфаунд датасета; длина и тема ответов должны контролироваться; результаты зависят от LLM, слоя, pooling и PCA; MTD/RTD имеют геометрически зависимый шумовой пол; RTD на независимых облаках — случайная связка (paired методологически естественнее); improved PR зависит от k и размерности; JS может быть нестабилен при малом n×d; значимость на повторных подвыборках одного корпуса не равна независимой внешней репликации; CV-порча — не прямая модель языковой галлюцинации (методическая валидация); отрицательные результаты сохраняются и обсуждаются, а не скрываются.
 
-**Полные MUST-оговорки**: `docs/orchestration/reports/synthetic/REPORT.md` §14 (10 пунктов) и `docs/orchestration/reports/wave2-3-5/REPORT.md` §14 (17 пунктов) — обязательный минимум текста курсовой; сырые данные: `results/raw/{synthetic, cv, power, llm, llm_cache, c3, wave5}`.""", 'sec12-answer'),
+**Полные MUST-оговорки**: `docs/orchestration/reports/synthetic/REPORT.md` §14 (10 пунктов) и `docs/orchestration/reports/wave2-3-5/REPORT.md` §14 (17 пунктов) — обязательный минимум текста курсовой; сырые данные: `results/raw/{synthetic, cv, c2, power, llm, llm_cache, l9, c3, wave5}`.""", 'sec12-answer'),
 
     md(FINAL_MARKER, 'final-marker'),
 ]

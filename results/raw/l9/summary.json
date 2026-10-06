@@ -1,0 +1,131 @@
+{
+  "task_a": {
+    "topology": {
+      "auroc": 0.9985714285714287,
+      "auprc": 0.999796988508647,
+      "balanced_accuracy": 0.85
+    },
+    "coverage": {
+      "auroc": 1.0,
+      "auprc": 1.0,
+      "balanced_accuracy": 0.5
+    },
+    "statistics": {
+      "auroc": 1.0,
+      "auprc": 0.9999999999999999,
+      "balanced_accuracy": 0.5
+    },
+    "llm_confidence": {
+      "auroc": 1.0,
+      "auprc": 1.0,
+      "balanced_accuracy": 0.725
+    },
+    "combined": {
+      "auroc": 1.0,
+      "auprc": 0.9999999999999998,
+      "balanced_accuracy": 1.0
+    },
+    "per_alpha_accuracy": {
+      "0.05": 1.0,
+      "0.1": 1.0,
+      "0.15": 1.0,
+      "0.25": 1.0,
+      "0.5": 1.0,
+      "0.75": 1.0,
+      "1.0": 1.0
+    },
+    "alpha0_false_positive_rate": 0.0
+  },
+  "task_b": {
+    "topology": {
+      "mae": 0.015390521716408085,
+      "r2": 0.9957639232088265,
+      "spearman": 0.9919989459711245
+    },
+    "coverage": {
+      "mae": 0.04746457300014584,
+      "r2": 0.9540081881811947,
+      "spearman": 0.9885507218154705
+    },
+    "statistics": {
+      "mae": 0.010836921118843486,
+      "r2": 0.9983859289478039,
+      "spearman": 0.9922037367868125
+    },
+    "llm_confidence": {
+      "mae": 0.014131037909659324,
+      "r2": 0.9966476397989423,
+      "spearman": 0.9918217716639319
+    },
+    "combined": {
+      "mae": 0.007698142254210569,
+      "r2": 0.9991375463300621,
+      "spearman": 0.992176120278317,
+      "per_alpha_mae": {
+        "0.0": 0.0031726242670514575,
+        "0.05": 0.004256656180177211,
+        "0.1": 0.007086521970412339,
+        "0.15": 0.00659888502066649,
+        "0.25": 0.007496607301202605,
+        "0.5": 0.010783417644867862,
+        "0.75": 0.01086155627410768,
+        "1.0": 0.011328869375198902
+      }
+    }
+  },
+  "n_packets": 160,
+  "feature_groups": {
+    "topology": [
+      "mtd_PQ",
+      "mtd_QP",
+      "ntd_PQ",
+      "ntd_QP",
+      "rtd"
+    ],
+    "coverage": [
+      "precision@1",
+      "recall@1",
+      "precision@3",
+      "recall@3",
+      "precision@10",
+      "recall@10"
+    ],
+    "statistics": [
+      "mmd",
+      "frechet",
+      "js"
+    ],
+    "llm_confidence": [
+      "q_nll_mean",
+      "q_nll_std",
+      "q_entropy_mean",
+      "q_len_mean",
+      "p_nll_mean",
+      "p_entropy_mean",
+      "p_len_mean"
+    ],
+    "combined": [
+      "mtd_PQ",
+      "mtd_QP",
+      "ntd_PQ",
+      "ntd_QP",
+      "rtd",
+      "precision@1",
+      "recall@1",
+      "precision@3",
+      "recall@3",
+      "precision@10",
+      "recall@10",
+      "mmd",
+      "frechet",
+      "js",
+      "q_nll_mean",
+      "q_nll_std",
+      "q_entropy_mean",
+      "q_len_mean",
+      "p_nll_mean",
+      "p_entropy_mean",
+      "p_len_mean"
+    ]
+  }
+}

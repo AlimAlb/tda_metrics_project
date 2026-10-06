@@ -1,0 +1,52 @@
+{
+  "stage": "bc_barcodes",
+  "thresholds": {
+    "abs_z_detection": 3.0
+  },
+  "criteria": {
+    "a_c4_cycle_visible_pixels_vae_clip_blind_rtd": {
+      "abs_z_detection": 3.0,
+      "per_space": {
+        "pixels_pca16": {
+          "z_rtd": -3.43529206246733,
+          "z_ntd_PQ": 22.306762371400353,
+          "cycle_visible": true
+        },
+        "vae_latent16": {
+          "z_rtd": 6.010229749372687,
+          "z_ntd_PQ": 4.0827084166087,
+          "cycle_visible": true
+        }
+      },
+      "passed": true,
+      "clip_pca16": {
+        "z_rtd": 2.785876384323867,
+        "blind_by_rtd": true
+      }
+    },
+    "b_s2_mtd_asymmetry_rd_vs_dr": {
+      "passed": true,
+      "mtd_PQ_rd": 3.5161559104919435,
+      "mtd_PQ_dr": 5.2155311584472654,
+      "abs_diff": 1.699375247955322,
+      "rr_floor_sd": 0.07444364841339222,
+      "z_vs_rr_floor": 22.82767279914251,
+      "note": "z = |mtd_PQ(rd) - mtd_PQ(dr)| / sd пола rr; порог |z| >= 3 — конвенция детекции проекта"
+    },
+    "c_synth_ring_one_long_h1_arc_zero": {
+      "passed": true,
+      "threshold_half_radius": 0.75,
+      "ring_h1_longest": 1.307205855846405,
+      "ring_h1_count": 1,
+      "arc_h1_longest": 0.1132856160402298,
+      "arc_h1_count": 0
+    },
+    "d_llm_barcodes_table_computed": {
+      "passed": true,
+      "table": "/content/tda_metrics_repo/results/tables/llm_barcodes_stats.csv",
+      "n_cloud_rows": 3,
+      "n_cross_rows": 2,
+      "note": "exploratory: merge-масштабы correct/hallucinated/same-law — наблюдение, не вердикт"
+    }
+  }
+}

@@ -1,0 +1,632 @@
+{
+  "schema_version": 1,
+  "format": "parquet",
+  "n_rows": 156,
+  "rows": {
+    "a1e09ad21f5938c5": {
+      "experiment_id": "c2r/pixels_pca16/cc/r0",
+      "status": "ok"
+    },
+    "8a855309e8cf8bad": {
+      "experiment_id": "c2r/pixels_pca16/cc/r1",
+      "status": "ok"
+    },
+    "de6b4f7e6a9f71d8": {
+      "experiment_id": "c2r/pixels_pca16/cc/r2",
+      "status": "ok"
+    },
+    "1712db236d29f51d": {
+      "experiment_id": "c2r/pixels_pca16/cc/r3",
+      "status": "ok"
+    },
+    "811f6e96c68745bd": {
+      "experiment_id": "c2r/pixels_pca16/cc/r4",
+      "status": "ok"
+    },
+    "5782a1292f672ef1": {
+      "experiment_id": "c2r/pixels_pca16/cc/r5",
+      "status": "ok"
+    },
+    "5996817ddd6a46dd": {
+      "experiment_id": "c2r/pixels_pca16/cc/r6",
+      "status": "ok"
+    },
+    "09d0346e64306865": {
+      "experiment_id": "c2r/pixels_pca16/cc/r7",
+      "status": "ok"
+    },
+    "fdeea03f3b8f67ce": {
+      "experiment_id": "c2r/pixels_pca16/arc/r0",
+      "status": "ok"
+    },
+    "b414959d7ada3eb9": {
+      "experiment_id": "c2r/pixels_pca16/arc/r1",
+      "status": "ok"
+    },
+    "f2b83a6a1baca73b": {
+      "experiment_id": "c2r/pixels_pca16/arc/r2",
+      "status": "ok"
+    },
+    "7a11f592ece85ea2": {
+      "experiment_id": "c2r/pixels_pca16/arc/r3",
+      "status": "ok"
+    },
+    "5282f07e9b03cb9d": {
+      "experiment_id": "c2r/pixels_pca16/arc/r4",
+      "status": "ok"
+    },
+    "c5ff7122343506e8": {
+      "experiment_id": "c2r/pixels_pca16/arc/r5",
+      "status": "ok"
+    },
+    "b7531e2e28359255": {
+      "experiment_id": "c2r/pixels_pca16/arc/r6",
+      "status": "ok"
+    },
+    "122398b9580138cf": {
+      "experiment_id": "c2r/pixels_pca16/arc/r7",
+      "status": "ok"
+    },
+    "bbdeefe765165505": {
+      "experiment_id": "c2r/pixels_pca16/zoom/r0",
+      "status": "ok"
+    },
+    "22126ad09d8cac1c": {
+      "experiment_id": "c2r/pixels_pca16/zoom/r1",
+      "status": "ok"
+    },
+    "5d2b55a8e4437302": {
+      "experiment_id": "c2r/pixels_pca16/zoom/r2",
+      "status": "ok"
+    },
+    "bc9453744892cf89": {
+      "experiment_id": "c2r/pixels_pca16/zoom/r3",
+      "status": "ok"
+    },
+    "8f27ae9d995d13e5": {
+      "experiment_id": "c2r/pixels_pca16/zoom/r4",
+      "status": "ok"
+    },
+    "0347839d87aa68e8": {
+      "experiment_id": "c2r/pixels_pca16/zoom/r5",
+      "status": "ok"
+    },
+    "e6acdcb6a1c9d7bd": {
+      "experiment_id": "c2r/pixels_pca16/zoom/r6",
+      "status": "ok"
+    },
+    "13676d7f395ce03f": {
+      "experiment_id": "c2r/pixels_pca16/zoom/r7",
+      "status": "ok"
+    },
+    "4d4ec1d6e84ef6d7": {
+      "experiment_id": "c2r/clip_pca16/cc/r0",
+      "status": "ok"
+    },
+    "94f75e4babb0f473": {
+      "experiment_id": "c2r/clip_pca16/cc/r1",
+      "status": "ok"
+    },
+    "7b8c4ccb765b44ee": {
+      "experiment_id": "c2r/clip_pca16/cc/r2",
+      "status": "ok"
+    },
+    "e6388a3a8ad1abb0": {
+      "experiment_id": "c2r/clip_pca16/cc/r3",
+      "status": "ok"
+    },
+    "8d1279db433c8f56": {
+      "experiment_id": "c2r/clip_pca16/cc/r4",
+      "status": "ok"
+    },
+    "d49b692c26cc0c3e": {
+      "experiment_id": "c2r/clip_pca16/cc/r5",
+      "status": "ok"
+    },
+    "b39cc408e6f9a447": {
+      "experiment_id": "c2r/clip_pca16/cc/r6",
+      "status": "ok"
+    },
+    "481409f7cae1d2d1": {
+      "experiment_id": "c2r/clip_pca16/cc/r7",
+      "status": "ok"
+    },
+    "9478e5c0428f3ccc": {
+      "experiment_id": "c2r/clip_pca16/arc/r0",
+      "status": "ok"
+    },
+    "ba67279770ea61d4": {
+      "experiment_id": "c2r/clip_pca16/arc/r1",
+      "status": "ok"
+    },
+    "6952e97388627de5": {
+      "experiment_id": "c2r/clip_pca16/arc/r2",
+      "status": "ok"
+    },
+    "bfdc9c638c772ee2": {
+      "experiment_id": "c2r/clip_pca16/arc/r3",
+      "status": "ok"
+    },
+    "645eda9d0ee7f1a1": {
+      "experiment_id": "c2r/clip_pca16/arc/r4",
+      "status": "ok"
+    },
+    "b5ca7f433d3dc4e0": {
+      "experiment_id": "c2r/clip_pca16/arc/r5",
+      "status": "ok"
+    },
+    "93eb91884db18c33": {
+      "experiment_id": "c2r/clip_pca16/arc/r6",
+      "status": "ok"
+    },
+    "153b484ad134e44d": {
+      "experiment_id": "c2r/clip_pca16/arc/r7",
+      "status": "ok"
+    },
+    "01f47c646cdf8505": {
+      "experiment_id": "c2r/clip_pca16/zoom/r0",
+      "status": "ok"
+    },
+    "97c06ab2c1659f97": {
+      "experiment_id": "c2r/clip_pca16/zoom/r1",
+      "status": "ok"
+    },
+    "c89912079b3ecbda": {
+      "experiment_id": "c2r/clip_pca16/zoom/r2",
+      "status": "ok"
+    },
+    "f8eb81e336224899": {
+      "experiment_id": "c2r/clip_pca16/zoom/r3",
+      "status": "ok"
+    },
+    "6773589810c2a981": {
+      "experiment_id": "c2r/clip_pca16/zoom/r4",
+      "status": "ok"
+    },
+    "68aa845e8e0ec115": {
+      "experiment_id": "c2r/clip_pca16/zoom/r5",
+      "status": "ok"
+    },
+    "cfe76e6a371f0c65": {
+      "experiment_id": "c2r/clip_pca16/zoom/r6",
+      "status": "ok"
+    },
+    "f86c12d744b6e5e7": {
+      "experiment_id": "c2r/clip_pca16/zoom/r7",
+      "status": "ok"
+    },
+    "02e703063c78163b": {
+      "experiment_id": "c2r/dino_pca16/cc/r0",
+      "status": "ok"
+    },
+    "643d5497472d4ab2": {
+      "experiment_id": "c2r/dino_pca16/cc/r1",
+      "status": "ok"
+    },
+    "5c2f428d7b261b6f": {
+      "experiment_id": "c2r/dino_pca16/cc/r2",
+      "status": "ok"
+    },
+    "447c5fa311d95c05": {
+      "experiment_id": "c2r/dino_pca16/cc/r3",
+      "status": "ok"
+    },
+    "c1eceba2cdb2a250": {
+      "experiment_id": "c2r/dino_pca16/cc/r4",
+      "status": "ok"
+    },
+    "77be60f3a7765f1c": {
+      "experiment_id": "c2r/dino_pca16/cc/r5",
+      "status": "ok"
+    },
+    "5acebd2de3e4d718": {
+      "experiment_id": "c2r/dino_pca16/cc/r6",
+      "status": "ok"
+    },
+    "69d557929bf9fce1": {
+      "experiment_id": "c2r/dino_pca16/cc/r7",
+      "status": "ok"
+    },
+    "5aa64fd5b020c4c5": {
+      "experiment_id": "c2r/dino_pca16/arc/r0",
+      "status": "ok"
+    },
+    "ab94a62742c488be": {
+      "experiment_id": "c2r/dino_pca16/arc/r1",
+      "status": "ok"
+    },
+    "cf7c1d9df7072056": {
+      "experiment_id": "c2r/dino_pca16/arc/r2",
+      "status": "ok"
+    },
+    "2fa923da497a781f": {
+      "experiment_id": "c2r/dino_pca16/arc/r3",
+      "status": "ok"
+    },
+    "d2a936ef7f1b3997": {
+      "experiment_id": "c2r/dino_pca16/arc/r4",
+      "status": "ok"
+    },
+    "0e79985647446c15": {
+      "experiment_id": "c2r/dino_pca16/arc/r5",
+      "status": "ok"
+    },
+    "efb7418756818ac2": {
+      "experiment_id": "c2r/dino_pca16/arc/r6",
+      "status": "ok"
+    },
+    "d304d6f907a23ce5": {
+      "experiment_id": "c2r/dino_pca16/arc/r7",
+      "status": "ok"
+    },
+    "6dc3bf3bf7f22666": {
+      "experiment_id": "c2r/dino_pca16/zoom/r0",
+      "status": "ok"
+    },
+    "e3e60ed50a007576": {
+      "experiment_id": "c2r/dino_pca16/zoom/r1",
+      "status": "ok"
+    },
+    "b504c0aba3733d4b": {
+      "experiment_id": "c2r/dino_pca16/zoom/r2",
+      "status": "ok"
+    },
+    "084746cad796b9a7": {
+      "experiment_id": "c2r/dino_pca16/zoom/r3",
+      "status": "ok"
+    },
+    "1f8513e0455f98dc": {
+      "experiment_id": "c2r/dino_pca16/zoom/r4",
+      "status": "ok"
+    },
+    "4d0372d6f3b4d1ce": {
+      "experiment_id": "c2r/dino_pca16/zoom/r5",
+      "status": "ok"
+    },
+    "082cc3b293f233e4": {
+      "experiment_id": "c2r/dino_pca16/zoom/r6",
+      "status": "ok"
+    },
+    "3addde46f6d41baa": {
+      "experiment_id": "c2r/dino_pca16/zoom/r7",
+      "status": "ok"
+    },
+    "be4f1a8b9496e028": {
+      "experiment_id": "c2r/vae_latent16/cc/r0",
+      "status": "ok"
+    },
+    "00238a1d97536ff4": {
+      "experiment_id": "c2r/vae_latent16/cc/r1",
+      "status": "ok"
+    },
+    "18bec81027cb4ee9": {
+      "experiment_id": "c2r/vae_latent16/cc/r2",
+      "status": "ok"
+    },
+    "7403c928410e89d0": {
+      "experiment_id": "c2r/vae_latent16/cc/r3",
+      "status": "ok"
+    },
+    "7565f2f69ed1bb63": {
+      "experiment_id": "c2r/vae_latent16/cc/r4",
+      "status": "ok"
+    },
+    "43a2dc73e4a59fe4": {
+      "experiment_id": "c2r/vae_latent16/cc/r5",
+      "status": "ok"
+    },
+    "07e3c54393239db7": {
+      "experiment_id": "c2r/vae_latent16/cc/r6",
+      "status": "ok"
+    },
+    "2c8d3831630d069b": {
+      "experiment_id": "c2r/vae_latent16/cc/r7",
+      "status": "ok"
+    },
+    "756739a5a8ba812a": {
+      "experiment_id": "c2r/vae_latent16/arc/r0",
+      "status": "ok"
+    },
+    "991d0d69ce8a2e7a": {
+      "experiment_id": "c2r/vae_latent16/arc/r1",
+      "status": "ok"
+    },
+    "afb8051f6632c067": {
+      "experiment_id": "c2r/vae_latent16/arc/r2",
+      "status": "ok"
+    },
+    "0157c1a8c438f0a0": {
+      "experiment_id": "c2r/vae_latent16/arc/r3",
+      "status": "ok"
+    },
+    "808da53b71b3a177": {
+      "experiment_id": "c2r/vae_latent16/arc/r4",
+      "status": "ok"
+    },
+    "a0cd96d452f2a980": {
+      "experiment_id": "c2r/vae_latent16/arc/r5",
+      "status": "ok"
+    },
+    "d699906c29d59e6e": {
+      "experiment_id": "c2r/vae_latent16/arc/r6",
+      "status": "ok"
+    },
+    "1cfb257a3626a0a1": {
+      "experiment_id": "c2r/vae_latent16/arc/r7",
+      "status": "ok"
+    },
+    "3f83f8445645dcbe": {
+      "experiment_id": "c2r/vae_latent16/zoom/r0",
+      "status": "ok"
+    },
+    "8c0e74844772af19": {
+      "experiment_id": "c2r/vae_latent16/zoom/r1",
+      "status": "ok"
+    },
+    "96521cdd708e2a64": {
+      "experiment_id": "c2r/vae_latent16/zoom/r2",
+      "status": "ok"
+    },
+    "ebfe5bd14a0b522e": {
+      "experiment_id": "c2r/vae_latent16/zoom/r3",
+      "status": "ok"
+    },
+    "6b32036260ef3f83": {
+      "experiment_id": "c2r/vae_latent16/zoom/r4",
+      "status": "ok"
+    },
+    "4c7fd62ffeb8b9f4": {
+      "experiment_id": "c2r/vae_latent16/zoom/r5",
+      "status": "ok"
+    },
+    "60244bb71040e43e": {
+      "experiment_id": "c2r/vae_latent16/zoom/r6",
+      "status": "ok"
+    },
+    "48a6577181e812fa": {
+      "experiment_id": "c2r/vae_latent16/zoom/r7",
+      "status": "ok"
+    },
+    "9b394895607fd10e": {
+      "experiment_id": "c2s/pixels_pca16/a180/r0",
+      "status": "ok"
+    },
+    "b5e365197328615b": {
+      "experiment_id": "c2s/pixels_pca16/a180/r1",
+      "status": "ok"
+    },
+    "b4ad7af37ad372d7": {
+      "experiment_id": "c2s/pixels_pca16/a180/r2",
+      "status": "ok"
+    },
+    "a332e27013327807": {
+      "experiment_id": "c2s/pixels_pca16/a270/r0",
+      "status": "ok"
+    },
+    "51259fa742a6bd44": {
+      "experiment_id": "c2s/pixels_pca16/a270/r1",
+      "status": "ok"
+    },
+    "f302b207291955fd": {
+      "experiment_id": "c2s/pixels_pca16/a270/r2",
+      "status": "ok"
+    },
+    "82279050a8abd8bf": {
+      "experiment_id": "c2s/pixels_pca16/a315/r0",
+      "status": "ok"
+    },
+    "eb827e212febbc19": {
+      "experiment_id": "c2s/pixels_pca16/a315/r1",
+      "status": "ok"
+    },
+    "6af0648d9b2d10c0": {
+      "experiment_id": "c2s/pixels_pca16/a315/r2",
+      "status": "ok"
+    },
+    "917c753e78b9797a": {
+      "experiment_id": "c2s/pixels_pca16/a330/r0",
+      "status": "ok"
+    },
+    "83636be8dd19d040": {
+      "experiment_id": "c2s/pixels_pca16/a330/r1",
+      "status": "ok"
+    },
+    "4a6060918438dbcf": {
+      "experiment_id": "c2s/pixels_pca16/a330/r2",
+      "status": "ok"
+    },
+    "0039725f621179d6": {
+      "experiment_id": "c2s/pixels_pca16/a345/r0",
+      "status": "ok"
+    },
+    "71a7b488362e90a4": {
+      "experiment_id": "c2s/pixels_pca16/a345/r1",
+      "status": "ok"
+    },
+    "407a816060823007": {
+      "experiment_id": "c2s/pixels_pca16/a345/r2",
+      "status": "ok"
+    },
+    "740c4b226b04a71d": {
+      "experiment_id": "c2s/pixels_pca16/a350/r0",
+      "status": "ok"
+    },
+    "956d369c38a5c9c3": {
+      "experiment_id": "c2s/pixels_pca16/a350/r1",
+      "status": "ok"
+    },
+    "2d2bbba2719432cf": {
+      "experiment_id": "c2s/pixels_pca16/a350/r2",
+      "status": "ok"
+    },
+    "9d2f268d5944ce6e": {
+      "experiment_id": "c2s/pixels_pca16/a360/r0",
+      "status": "ok"
+    },
+    "d0a5715d3cc4df40": {
+      "experiment_id": "c2s/pixels_pca16/a360/r1",
+      "status": "ok"
+    },
+    "8558b5ea51c7373f": {
+      "experiment_id": "c2s/pixels_pca16/a360/r2",
+      "status": "ok"
+    },
+    "616342bfef3386d0": {
+      "experiment_id": "c2s/clip_pca16/a180/r0",
+      "status": "ok"
+    },
+    "a6a2e43930067cea": {
+      "experiment_id": "c2s/clip_pca16/a180/r1",
+      "status": "ok"
+    },
+    "bc4609c679b74c43": {
+      "experiment_id": "c2s/clip_pca16/a180/r2",
+      "status": "ok"
+    },
+    "e4496d7b349782a0": {
+      "experiment_id": "c2s/clip_pca16/a330/r0",
+      "status": "ok"
+    },
+    "6954fd2c234ed208": {
+      "experiment_id": "c2s/clip_pca16/a330/r1",
+      "status": "ok"
+    },
+    "158e1993ca0bff32": {
+      "experiment_id": "c2s/clip_pca16/a330/r2",
+      "status": "ok"
+    },
+    "ae7b0aa8ccf796a2": {
+      "experiment_id": "c2s/clip_pca16/a360/r0",
+      "status": "ok"
+    },
+    "5e94cd5003eb4aa9": {
+      "experiment_id": "c2s/clip_pca16/a360/r1",
+      "status": "ok"
+    },
+    "f3105c24f9599b14": {
+      "experiment_id": "c2s/clip_pca16/a360/r2",
+      "status": "ok"
+    },
+    "28836f3fcf93fb4f": {
+      "experiment_id": "c2s/dino_pca16/a180/r0",
+      "status": "ok"
+    },
+    "18589ebdc294e91f": {
+      "experiment_id": "c2s/dino_pca16/a180/r1",
+      "status": "ok"
+    },
+    "e1a5083381485d3f": {
+      "experiment_id": "c2s/dino_pca16/a180/r2",
+      "status": "ok"
+    },
+    "1e18dee9edc322a9": {
+      "experiment_id": "c2s/dino_pca16/a330/r0",
+      "status": "ok"
+    },
+    "d52f467fd3e2de58": {
+      "experiment_id": "c2s/dino_pca16/a330/r1",
+      "status": "ok"
+    },
+    "84ac6f6396af4693": {
+      "experiment_id": "c2s/dino_pca16/a330/r2",
+      "status": "ok"
+    },
+    "c273b35a112f16f2": {
+      "experiment_id": "c2s/dino_pca16/a360/r0",
+      "status": "ok"
+    },
+    "ef21b62460d4c413": {
+      "experiment_id": "c2s/dino_pca16/a360/r1",
+      "status": "ok"
+    },
+    "fec1ad7a777a2716": {
+      "experiment_id": "c2s/dino_pca16/a360/r2",
+      "status": "ok"
+    },
+    "d25c2873c95f0415": {
+      "experiment_id": "c2s/vae_latent16/a180/r0",
+      "status": "ok"
+    },
+    "d85b4dad9420f1ae": {
+      "experiment_id": "c2s/vae_latent16/a180/r1",
+      "status": "ok"
+    },
+    "70fbb43cc7839239": {
+      "experiment_id": "c2s/vae_latent16/a180/r2",
+      "status": "ok"
+    },
+    "ec14e063d58e37f1": {
+      "experiment_id": "c2s/vae_latent16/a270/r0",
+      "status": "ok"
+    },
+    "5debe93f9d475123": {
+      "experiment_id": "c2s/vae_latent16/a270/r1",
+      "status": "ok"
+    },
+    "eedc49303a057dcb": {
+      "experiment_id": "c2s/vae_latent16/a270/r2",
+      "status": "ok"
+    },
+    "acdc3b9a81bed120": {
+      "experiment_id": "c2s/vae_latent16/a315/r0",
+      "status": "ok"
+    },
+    "238c1a3ee647cdf6": {
+      "experiment_id": "c2s/vae_latent16/a315/r1",
+      "status": "ok"
+    },
+    "df24a02789fac8f8": {
+      "experiment_id": "c2s/vae_latent16/a315/r2",
+      "status": "ok"
+    },
+    "8b57e344d13728fb": {
+      "experiment_id": "c2s/vae_latent16/a330/r0",
+      "status": "ok"
+    },
+    "2c0715824f33df8a": {
+      "experiment_id": "c2s/vae_latent16/a330/r1",
+      "status": "ok"
+    },
+    "10d56b6998fdf930": {
+      "experiment_id": "c2s/vae_latent16/a330/r2",
+      "status": "ok"
+    },
+    "a7fe46d4e42dcc8b": {
+      "experiment_id": "c2s/vae_latent16/a345/r0",
+      "status": "ok"
+    },
+    "c1de50112afda451": {
+      "experiment_id": "c2s/vae_latent16/a345/r1",
+      "status": "ok"
+    },
+    "0de899ffd40587c7": {
+      "experiment_id": "c2s/vae_latent16/a345/r2",
+      "status": "ok"
+    },
+    "31bb82a530dc985e": {
+      "experiment_id": "c2s/vae_latent16/a350/r0",
+      "status": "ok"
+    },
+    "1155f3ee148d96b2": {
+      "experiment_id": "c2s/vae_latent16/a350/r1",
+      "status": "ok"
+    },
+    "f28ba1ba4b87d5bc": {
+      "experiment_id": "c2s/vae_latent16/a350/r2",
+      "status": "ok"
+    },
+    "079ac4c7f65eb688": {
+      "experiment_id": "c2s/vae_latent16/a360/r0",
+      "status": "ok"
+    },
+    "c1aae0c956a616f6": {
+      "experiment_id": "c2s/vae_latent16/a360/r1",
+      "status": "ok"
+    },
+    "c8daae2bed3f6107": {
+      "experiment_id": "c2s/vae_latent16/a360/r2",
+      "status": "ok"
+    }
+  },
+  "updated_utc": "2026-10-06T01:24:39+00:00"
+}

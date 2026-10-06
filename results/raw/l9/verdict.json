@@ -1,0 +1,71 @@
+{
+  "stage": "l9_packet_task",
+  "task_a_combined": {
+    "auroc": 1.0,
+    "auprc": 0.9999999999999998,
+    "balanced_accuracy": 1.0
+  },
+  "task_b_combined": {
+    "mae": 0.007698142254210569,
+    "r2": 0.9991375463300621,
+    "spearman": 0.992176120278317,
+    "per_alpha_mae": {
+      "0.0": 0.0031726242670514575,
+      "0.05": 0.004256656180177211,
+      "0.1": 0.007086521970412339,
+      "0.15": 0.00659888502066649,
+      "0.25": 0.007496607301202605,
+      "0.5": 0.010783417644867862,
+      "0.75": 0.01086155627410768,
+      "1.0": 0.011328869375198902
+    }
+  },
+  "best_single_group": {
+    "group": "coverage",
+    "auroc": 1.0
+  },
+  "llm_confidence_baseline": {
+    "llm_confidence_auroc": 1.0,
+    "topology_auroc": 0.9985714285714287,
+    "auroc_gap_topology_minus_confidence": -0.0014285714285713347,
+    "note": "AUROC confidence-признаков — baseline информативности (мастер-план §12-8): превышение топологии над confidence указывает на добавленную ценность топологии сверх NLL/perplexity/entropy/length"
+  },
+  "config": {
+    "dataset": "halueval_qa",
+    "model": "qwen2.5-3b-instruct",
+    "representation": "hidden",
+    "layer": 18,
+    "pooling": "mean_answer",
+    "pca_dim": 16,
+    "pca_fit": "dev-correct",
+    "n_cloud": 500,
+    "split_id": "dev",
+    "prompt_ids_hash": "debfc629f24af648526470f23db8fe2d837ea40e06eeaea8b24d32c54559a3cf",
+    "alphas": [
+      0.0,
+      0.05,
+      0.1,
+      0.15,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "n_folds": 5,
+    "k_per_fold": 4,
+    "n_packets": 160,
+    "fold_seed": 500,
+    "metric_params": {
+      "js_k": 5,
+      "nhood_sizes": [
+        1,
+        3,
+        10
+      ],
+      "ntd_repeats": 5,
+      "rtd_batch": 500,
+      "rtd_mode": "random-coupling-exploratory",
+      "rtd_trials": 2
+    }
+  }
+}
