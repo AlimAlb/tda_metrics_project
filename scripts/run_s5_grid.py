@@ -27,6 +27,8 @@ CSV_PATH = os.path.join(RAW, 'results.csv')
 PROTOCOL_PATH = 'protocols/s5_protocol.json'
 
 SMOKE = os.environ.get('S5_SMOKE') == '1'
+ONLY_N = os.environ.get('S5_ONLY_N')
+GRID_ONLY = os.environ.get('S5_GRID_ONLY') == '1'
 
 FULL_N_GRID = [100, 250, 500, 1000]
 FULL_REPS = 30
@@ -136,10 +138,13 @@ def section(name):
 
 
 def grid_spec():
-    """Сетка конфигураций: full или smoke."""
-    n_grid = [100] if SMOKE else FULL_N_GRID
-    reps = range(2) if SMOKE else range(FULL_REPS)
-    s5b_alphas = [0.0, 0.5] if SMOKE else FULL_S5B_ALPHAS
+    """Сетка конфигураций: full, smoke или ONLY_N-подмножество одного n."""
+    if SMOKE:
+        n_grid, reps, s5b_alphas = [100], range(2), [0.0, 0.5]
+    elif ONLY_N is not None:
+        n_grid, reps, s5b_alphas = [int(ONLY_N)], range(FULL_REPS), FULL_S5B_ALPHAS
+    else:
+        n_grid, reps, s5b_alphas = FULL_N_GRID, range(FULL_REPS), FULL_S5B_ALPHAS
     return n_grid, reps, s5b_alphas
 
 
@@ -706,6 +711,9 @@ def main():
         figures_result = section_figures(None)
         deps['figures'] = figures_result
     deps.update({'grid': grid_result, 'analysis': analysis_result, 'figures': figures_result})
+    if GRID_ONLY:
+        print(f'S5 GRID-ONLY DONE (ok={grid_result.get("ok") if grid_result else 0})')
+        return
     summary = section_summary(deps)
     grid_ok = grid_result is not None and grid_result.get('failed', 1) == 0 and grid_result.get('ok', 0) > 0
     tables_ok = analysis_result is not None and (analysis_result.get('effect_rows', 0) > 0)
