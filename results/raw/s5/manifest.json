@@ -1,0 +1,87 @@
+{
+  "created": "2026-10-07T15:31:16.430807+00:00",
+  "smoke": false,
+  "protocol_path": "protocols/s5_protocol.json",
+  "protocol_sha256": "56484a41d3b08db1f9f884683ffecc84b49a2ed7651e016d80b63ffb840e2142",
+  "versions": {
+    "python": "3.13.15",
+    "numpy": "2.1.3",
+    "pandas": "2.2.3",
+    "scipy": "1.16.3",
+    "matplotlib": "3.10.0",
+    "torch": "2.11.0+cu130",
+    "pot": null
+  },
+  "grids": {
+    "n_grid": [
+      100,
+      250,
+      500,
+      1000
+    ],
+    "n_reps": 30,
+    "s5a_pairs": {
+      "0": [],
+      "1": [
+        [
+          0,
+          4
+        ]
+      ],
+      "2": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          5
+        ]
+      ],
+      "3": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          2,
+          6
+        ]
+      ]
+    },
+    "s5b_alphas": [
+      0.0,
+      0.01,
+      0.05,
+      0.125,
+      0.25,
+      0.5
+    ],
+    "s5c_directions": [
+      "p8q4",
+      "p4q8",
+      "p8p8",
+      "q4q4"
+    ],
+    "seeds": {
+      "P": 42,
+      "Q": 7
+    },
+    "moment_gate": {
+      "tol_mean": "4*sqrt(33/n)",
+      "tol_cov": "4*33*sqrt(2/n)",
+      "max_attempts": 100
+    }
+  },
+  "sections": {
+    "pytest_light": "ok",
+    "grid": "ok",
+    "analysis": "ok",
+    "figures": "ok"
+  },
+  "runtime_seconds": 49.5268839649998
+}
