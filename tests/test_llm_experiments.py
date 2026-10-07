@@ -66,10 +66,9 @@ def test_prompt_id_split_group_integrity_and_determinism():
     assert sorted(all_ids) == sorted(pd.unique(meta['prompt_id']).tolist())
     assert not (set(split['dev']) & set(split['val']))
     assert not (set(split['dev']) & set(split['test']))
-    assert not (set(split['val']) & set(split['test'])
-                ) or True
+    assert not (set(split['val']) & set(split['test']))
     assert prompt_id_split(meta, seed=0) == split
-    assert prompt_id_split(meta, seed=1) != split or True
+    assert prompt_id_split(meta, seed=1) != split
 
 
 def test_prompt_id_split_pairs_stay_together():
