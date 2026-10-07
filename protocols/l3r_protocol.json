@@ -1,0 +1,65 @@
+{
+  "wave": "l3r",
+  "title": "LLM-native калибровка и настоящий length-matched контроль (исправление L3d)",
+  "status": "locked internal protocol",
+  "locked_at": "2026-10-07T17:45:00+03:00",
+  "note_on_prereg": "Это зафиксированный внутренний протокол (committed до запуска), а не внешняя пре-регистрация. Формулировка в отчётах: locked internal protocol",
+  "code_sha": "0f7e59f",
+  "code_ref": "scripts/run_l3r_chain.py, src/tda_metrics/llm_experiments.py (sample_length_matched_pair), scripts/extract_llm_embeddings.py, tests/test_sample_length_matched_pair.py",
+  "data": {
+    "dataset": "HaluEval QA canonical (sha256-проверка при загрузке)",
+    "model": "Qwen/Qwen2.5-3B-Instruct",
+    "input_format": "chat_knowledge_v1",
+    "pooling": "mean_answer",
+    "max_length": 1024,
+    "dtype": "float16",
+    "layer": 18,
+    "pca": "PCA-16, fit на reference-стороне каждого сравнения (pca_reduce), transform обеих сторон",
+    "splits": "prompt_id_split(seed=0, 0.6/0.2/0.2) по уникальным prompt_id; хэши сплитов пишутся в manifest"
+  },
+  "design": {
+    "null": {
+      "pairs": "correct-vs-correct same-law, dev-сплит; стороны — непересекающиеся половины dev-промптов (чётный/нечётный индекс); каждая пара — свежий выбор n промптов без возвращения из своей половины (rng 1000+i)",
+      "n_grid": [50, 100, 250, 500, 1000],
+      "n_pairs_per_n": 500,
+      "rtd_policy": "RTD считается только при n<=500 и на первых 200 парах каждого n (бюджет времени: RTD ~17 c/вызов); rtd-null по 200 пар",
+      "note": "абсолютные пороги 2D-синтетики НЕ переносятся: пороги калибруются только по этому null"
+    },
+    "val_null": {
+      "pairs_per_n": 200,
+      "purpose": "observed FPR с binomial 95% CI против порогов, выбранных на dev"
+    },
+    "contrast": {
+      "what": "length-matched correct-vs-hallucinated (L3d) и correct-vs-alpha-микс (L3-доза)",
+      "n_cloud": 500,
+      "splits": ["dev", "val", "test"],
+      "alpha_grid": [0.0, 0.01, 0.02, 0.05, 0.1, 0.25, 0.5, 1.0],
+      "reps_per_alpha": 30,
+      "resampling": "sample_length_matched_pair(seed=2000+rep) — независимые стратифицированные повторы; общий seed по alpha внутри rep (метод общих случайных чисел: соседние alpha различаются только долей замен через общую перестановку)",
+      "mixture": "independent_mixture(correct, hallucinated, alpha, permutation) — Q = correct с round(alpha*n) заменами; alpha=1.0 эквивалентен L3d; alpha=0.0 — same-law контроль мощности"
+    },
+    "permutation": {
+      "design": "500 перестановок меток внутри prompt-пар канонического dev L3d-ресэмпла (rep=0, n=500); shuffled_label_pair",
+      "purpose": "perm-p-value L3d-контраста, стратифицировано по prompt"
+    }
+  },
+  "metrics": {
+    "primary": "precision@3 (endpoint D-010 подтверждения)",
+    "secondary": ["ntd_QP", "ntd_PQ", "mtd_QP", "mtd_PQ", "recall@3", "mmd", "frechet"],
+    "js_note": "js — деградирует при малых n*d (оговорка AGENTS): n=50/100 при PCA-16 может давать вырожденные значения — сообщается как caveat, не исключается молча",
+    "battery": "TopologyMetrics.compute_all на PCA-16-облаках"
+  },
+  "threshold_rule": {
+    "dev": "для каждого (n, metric): z_crit = 95-й перцентиль |z_null|, где z_null = (value - null_mean)/null_sd; принятое решение — |z_obs| > z_crit",
+    "val": "FPR_val = доля |z| > z_crit на val-null; binomial 95% CI (Wilson); приёмка: CI совместим с 0.05",
+    "power": "по alpha-сетке на val/test: доля повторов с |z| > z_crit(n=500); CI — cluster bootstrap по prompt (1000 ресэмплов, seed 0)"
+  },
+  "endpoint_primary": "L3d (alpha=1.0, n=500, layer 18, PCA-16): primary = precision@3; подтверждение = power_test >= 0.8 при FPR_val CI, накрывающем 0.05, и направлении эффекта, согласованном с dev",
+  "multiple_comparisons": "primary объявлен заранее; secondary-семейство — BH q по (metric x alpha x split) в отчёте, exploratory",
+  "old_artifacts_policy": "results/raw/llm и results/raw/wave5 не модифицируются; всё новое — results/raw/l3r; старый D-010 НЕ ретроактивно переименовывается в verified pre-registration",
+  "artifacts": {
+    "raw": "results/raw/l3r/{manifest.json, summary.json, rows.jsonl, protocol_ref.json}",
+    "tables": ["results/tables/l3r_null_power.csv", "results/tables/l3r_length_balance.csv"],
+    "figures": ["results/figures/l3r_power_curves.png", "results/figures/l3r_length_balance.png"]
+  }
+}
