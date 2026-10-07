@@ -277,7 +277,7 @@ def run_row(cfg, ref, pops, metrics_obj):
     started = time.perf_counter()
     P, Q, extra = sample_pair(cfg, ref, pops)
     diag = moment_diagnostics(P, Q)
-    skip = ('rtd',) if cfg['n'] == 1000 else ()
+    skip = ('rtd',) if cfg['n'] >= 500 else ()
     result = metrics_obj.compute_all(P, Q, skip=skip)
     row = {
         'experiment_id': cfg['experiment_id'],

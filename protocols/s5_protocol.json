@@ -96,7 +96,7 @@
   },
   "metrics": {
     "battery": "TopologyMetrics.compute_all (mtd_PQ, mtd_QP, ntd_PQ, ntd_QP, rtd, precision@{1,3,10}, recall@{1,3,10}, mmd, frechet, js)",
-    "rtd_policy": "rtd не вычисляется при n=1000 (решение по бюджету времени: RTD ~17 c/вызов; в s5 — secondary); при n<=1000 строки rtd=NaN исключаются из анализа",
+    "rtd_policy": "rtd вычисляется только при n<=250; при n>=500 пропускается (бюджет времени: RTD 9-21 с/вызов; RTD не входит в primary/secondary задачи S5). Поправка внесена ДО расчёта строк n>=500, задокументирована в git",
     "extras": {
       "energy": "energy distance: 2*mean(d_PQ) - mean(d_PP) - mean(d_QQ), cap 1000 точек (смещённая состоятельная оценка)",
       "sinkhorn": "POT sinkhorn2, cost=dist^2/median, reg=0.1, подвыборка 500; при недоступности POT — None"
@@ -134,5 +134,11 @@
     "direction_reproduces": "CI от bootstrap по 30 повторам; отрицательный результат принимается без post-hoc изменений дизайна",
     "artifacts_immutable": "S3/S4 артефакты не модифицируются; s5 — отдельная серия results/raw/s5"
   },
-  "code_sha": "c31bd502ada57ac4343c7d5775c1ef6277790b6c"
+  "code_sha": "c31bd502ada57ac4343c7d5775c1ef6277790b6c",
+  "amendments": [
+    {
+      "at": "2026-10-07T17:05:00+03:00",
+      "change": "rtd_policy: было «только n=1000», стало «n>=500» (бюджет; не влияет на hypotheses/endpoint; строки n<=250 уже посчитаны с rtd и не пересчитываются)"
+    }
+  ]
 }
