@@ -1,0 +1,130 @@
+{
+  "protocol": "l9m",
+  "title": "Wave L9M — length-matched packet dose response без confidence-признаков",
+  "status": "locked internal protocol (не pre-registration)",
+  "created": "2026-10-08",
+  "code_sha": "b5744bb9e75356f8fd76ff4b636d9d2fd159961b",
+  "code_note": "src/tda_metrics/l9m_pools.py + scripts/run_l9m_chain.py; build_packet-фикс alpha=0 — коммит 1da090b (main)",
+  "packet": "tasks/wave_l9m_length_matched_packets.md",
+
+  "cache": {
+    "source": "results/raw/llm_cache (экстракция wave2-llm, Qwen2.5-3B fp16, 20000 пунктов)",
+    "model": "Qwen/Qwen2.5-3B-Instruct",
+    "input_format": "chat_knowledge_v1",
+    "pooling": "mean_answer",
+    "layer_indices": [9, 18, 27, 36],
+    "layer": 18,
+    "vectors_provenance": "vectors.npy (328 МБ, вне git) доставляется на VM частями; манифест кэша свериется load_cache(expect=...)"
+  },
+
+  "splits": {
+    "rule": "prompt_id_split(meta[layer18], seed=0, fractions=[0.6, 0.2, 0.2]) — тот же сплит, что в L3R",
+    "expected_hashes": {
+      "dev": "debfc629f24af648526470f23db8fe2d837ea40e06eeaea8b24d32c54559a3cf",
+      "val": "98c55b0de59675e6f9ba8ccc33e0d0a3ac79f71069345b5cf2a71371b3b1a1a4",
+      "test": "f4145eb02aa948656c9ce44adfd4f10dcc7ba51a568ee24e454add962708d5f7"
+    },
+    "folds": "prompt_folds(dev, n_folds=5, seed=500) — как в исходном L9"
+  },
+
+  "representation": {
+    "layer": 18,
+    "pooling": "mean_answer",
+    "pca": {
+      "rule": "PCA-16 обучается ОДИН раз на всех dev-correct пунктах слоя 18 (весь dev-сплит), применяется ко всем сплитам/фолдам без рефита",
+      "n_components": 16,
+      "implementation": "tda_metrics.reduction.pca_fit/pca_transform"
+    }
+  },
+
+  "sampling": {
+    "module": "tda_metrics.l9m_pools.sample_length_matched_pools",
+    "n_cloud_target": 500,
+    "n_cloud_floor": 250,
+    "bin_rule": "квантильные бины по объединению длин n_pooled трёх пулов (A-correct, B-correct, H); ±inf-концы; дубликаты квантилей схлопываются",
+    "bin_quota_rule": "cap_бина = min(count_A, count_QB, count_H); квоты — level-fill (максимально равное заполнение, детерминированно)",
+    "prompt_halving": "rng(seed_half).permutation уникальных промптов; half_A = первые floor(n/2) — сторона P; half_B = остальные (при нечётном на 1 больше) — стороны Q_correct и H; P и Q_correct не пересекаются ни по item, ни по prompt",
+    "H_side": "hallucinated-пул берётся только из half_B — состав Q_alpha целиком в prompt-половине B",
+    "pilot_lock": "до основного прогона: по всем 928 запланированным базисам для каждого rung лестницы (10,8,6,5,4,3,2; вызов с bin_ladder=()) считается min(n_cloud_actual); LOCK = первый rung с min==500; если такого нет — rung с максимальным min и n_cloud=min; если n_cloud<250 — прогон падает (дизайн невыполним); LOCK фиксируется одинаково для dev/val/test (ослабление баланса на val/test запрещено)",
+    "seeds": {
+      "dev_packet": "seed_half=100000+1000*fold+repeat, seed_sample=200000+1000*fold+repeat, seed_mix=300000+1000*fold+repeat",
+      "dev_null": "seed_half=400000+1000*fold+pair, seed_sample=500000+1000*fold+pair (pair=0..99)",
+      "val_packet": "seed_half=700000+repeat, seed_sample=800000+repeat, seed_mix=900000+repeat",
+      "val_null": "seed_half=1000000+pair, seed_sample=1100000+pair (pair=0..199)",
+      "test_packet": "seed_half=1200000+repeat, seed_sample=1300000+repeat, seed_mix=1400000+repeat",
+      "test_null": "seed_half=1500000+pair, seed_sample=1600000+pair (pair=0..199)"
+    }
+  },
+
+  "design": {
+    "alpha_grid": [0.0, 0.05, 0.1, 0.15, 0.25, 0.5, 0.75, 1.0],
+    "dev": "5 фолдов x 4 повтора x 8 alpha = 160 пакетов; все alpha одного (fold, repeat) — общий базис, вложенные замены (dose-response кривые, НЕ независимые пакеты, НЕ headline deployment validation)",
+    "val": "без фолдов, 4 повтора x 8 alpha = 32 пакета (пул — весь val-сплит)",
+    "test": "без фолдов, 4 повтора x 8 alpha = 32 пакета (пул — весь test-сплит)",
+    "null_pairs": {
+      "rule": "same-law P vs Q_correct той же length-matched механикой (alpha=0), свежие сиды; = independent same-law пары",
+      "dev": 500,
+      "val": 200,
+      "test": 200,
+      "note": "val/test-нули дают observed FPR с CI; test-нули не участвуют ни в какой настройке"
+    }
+  },
+
+  "metrics": {
+    "battery": ["mtd_PQ", "mtd_QP", "ntd_PQ", "ntd_QP",
+                "precision@1", "recall@1", "precision@3", "recall@3",
+                "precision@10", "recall@10", "mmd", "frechet", "js"],
+    "compute": "TopologyMetrics(seed=0), compute_all(nhood_sizes=(1,3,10), js_k=5, skip=('rtd',))",
+    "rtd_exclusion": "отклонение от пакета: rtd исключён из topology_only (стоимость ~x2 на 1124 вызова, высокий same-law пол; прецедент — L3R, где rtd также исключён); topology_only = mtd_PQ, mtd_QP, ntd_PQ, ntd_QP",
+    "directions": {
+      "less": ["precision@1", "recall@1", "precision@3", "recall@3", "precision@10", "recall@10"],
+      "greater": ["mtd_PQ", "mtd_QP", "ntd_PQ", "ntd_QP", "mmd", "frechet", "js"]
+    },
+    "feature_groups_primary": {
+      "topology_only": ["mtd_PQ", "mtd_QP", "ntd_PQ", "ntd_QP"],
+      "coverage_only": ["precision@1", "recall@1", "precision@3", "recall@3", "precision@10", "recall@10"],
+      "statistics_only": ["mmd", "frechet", "js"]
+    },
+    "forbidden_features": ["llm_confidence (все)", "q_len_mean как признак", "NLL", "entropy", "alpha", "n_hall"],
+    "primary_metric_marker": "precision@3"
+  },
+
+  "primary_analysis": {
+    "threshold_rule": "по dev-null на каждую метрику: direction-aware квантиль — 'greater': quantile(0.95, method='higher'), 'less': quantile(0.05, method='lower'); nominal FPR=0.05",
+    "degenerate_rule": "если sd(dev-null)<=0 — метрика помечается degenerate и исключается из headline (ожидаемо для js при 500x16 — прецедент L3R)",
+    "fpr": "observed FPR на val-null и test-null (200 пар каждый) с биномиальным 95% CI (binomtest.proportion_ci)",
+    "power": "по каждому сплиту x alpha x метрика: доля пакетов за направленным порогом; headline — минимальная alpha сетки с power>=0.8 на test (по метрикам)",
+    "standardized_effect": "mean_z = mean(sign*(value-null_mean)/null_sd) по alpha (moment-ы из dev-null)"
+  },
+
+  "invalidation_checks": {
+    "q_len_mean": "AUROC(q_len_mean; y=alpha>0) по dev-пакетам (160) должна быть <= 0.55; иначе серия INVALID и метрики-результаты не публикуются как headline",
+    "length_balance": "|SMD длин P vs Q_alpha| < 0.1 в КАЖДОЙ строке (SMD ddof=0, знаменатель sqrt((var_p+var_q)/2)); KS(P, Q) reported, не гейт; bin-counts равны по построению (assert-ы сэмплера)",
+    "sanity": "n_cloud_actual == LOCK в каждой строке; иначе строка failed"
+  },
+
+  "secondary_analysis": {
+    "oof": "GroupKFold(5) по фолдам на dev-пакетах: StandardScaler+Logistic (alpha>0) и StandardScaler+Ridge (alpha) — только для трёх primary-групп",
+    "single_feature": "OOF logistic по каждой метрике отдельно (AUROC)",
+    "small_alpha": "отдельный отчёт на подмножестве alpha<=0.1 (0, 0.05, 0.1)",
+    "interpretation": "иллюстрация калибровки смеси, не доказательство практической детекции"
+  },
+
+  "artifacts": {
+    "raw": ["results/raw/l9m/manifest.json", "results/raw/l9m/rows.jsonl",
+            "results/raw/l9m/results.parquet", "results/raw/l9m/packet_table.parquet",
+            "results/raw/l9m/summary.json", "results/raw/l9m/verdict.json"],
+    "tables": ["results/tables/l9m_thresholds_power.csv", "results/tables/l9m_dose_response.csv",
+               "results/tables/l9m_single_feature.csv", "results/tables/l9m_length_balance.csv"],
+    "figures": ["results/figures/l9m_dose_response.png", "results/figures/l9m_power_by_alpha.png",
+                "results/figures/l9m_length_balance.png"],
+    "read_only": ["results/raw/l9/ (старый L9 не переинтерпретируется)", "report/coursework.md"]
+  },
+
+  "headline_constraint": "допустим только формат «length-matched dose response on HaluEval candidate-answer representations»; claims о детекторе собственных галлюцинаций Qwen запрещены; старый L9 (alpha=0 = копия P, длина как утечка) не переинтерпретируется — исправляющая серия L9M замещает его выводы",
+
+  "runtime_budget": {
+    "estimate": "1124 вызова compute_all (n=500) ~2.6s -> ~50 мин + пилот/анализ ~10 мин; кэш restore ~10 мин (частями); итого ~1.5 ч на T4",
+    "resume": "rows.jsonl по experiment_id; сегменты идемпотентны"
+  }
+}
