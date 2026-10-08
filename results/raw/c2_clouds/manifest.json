@@ -1,0 +1,47 @@
+{
+  "created": "2026-10-08T02:43:30.188412+00:00",
+  "versions": {
+    "python": "3.13.15",
+    "numpy": "2.1.3",
+    "torch": "2.11.0+cu130",
+    "torchvision": "0.26.0+cu130",
+    "pandas": "2.2.3",
+    "matplotlib": "3.10.0"
+  },
+  "models": {
+    "clip": "ViT-B/32 (clip.load, jit)",
+    "dino": "dinov2_vits14 (torch.hub)",
+    "vae": "conv-VAE-16: latent_dim=16, epochs=10, seed=42"
+  },
+  "metric_params": {
+    "seed": 42,
+    "rtd_trials": 2,
+    "rtd_batch": 500,
+    "js_k": 5,
+    "nhood_sizes": [
+      1,
+      3,
+      10
+    ],
+    "pca_dim": 16
+  },
+  "clouds": {
+    "P": "полный круг, seed 42 (25 цифр × 18 углов, шаг 20°)",
+    "cc": "полный круг, seed 7",
+    "arc": "дуга 0–180° (шаг 10°), seed 7",
+    "zoom": "масштабный свип 0.6–1.4 (18 значений), seed 7",
+    "arc360": "дуга 180–360° (шаг 10°), seed 7 — вариация вне сетки C2"
+  },
+  "sections": {
+    "env": "ok",
+    "data": "ok",
+    "clouds": "ok",
+    "embed": "ok",
+    "metrics": "ok",
+    "pca2": "ok",
+    "figures": "ok",
+    "export": "ok",
+    "crosscheck": "ok"
+  },
+  "runtime_seconds": 163.90372379800004
+}

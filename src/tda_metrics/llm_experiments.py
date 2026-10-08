@@ -28,6 +28,7 @@ __all__ = [
     'independent_mixture',
     'paired_clouds',
     'length_matched_pair',
+    'sample_length_matched_pair',
     'shuffled_label_pair',
     'linear_cka',
     'build_l3_configs',
@@ -324,3 +325,117 @@ def parse_experiment_id(eid):
         raise ValueError(f'неверная структура: {eid}')
     except ValueError as exc:
         raise ValueError(f'неизвестный experiment_id: {eid} ({exc})') from None
+
+
+def sample_length_matched_pair(meta, vectors, prompt_ids, layer_index, seed,
+                               n_cloud, bins=10, length_col='n_pooled'):
+    """Независимое стратифицированное length-matched подмножество пары correct/hallucinated (L3R).
+
+    Отличие от детерминированного length_matched_pair: внутри каждого бина
+    длины элементы выбираются случайно БЕЗ возвращения (rng от seed), а не
+    «первыми после сортировки» — повторные вызовы с разными seed дают
+    независимые повторения. Отбор двухсторонний: в каждом бине равная квота
+    min(count_correct, count_hallucinated); если суммарная квота больше
+    n_cloud, квоты сокращаются пропорционально (floor + наибольшие остатки
+    по убыванию дробной части, затем по индексу бина — детерминированно).
+
+    Соглашения: meta — DataFrame с колонками layer_index, answer_kind,
+    prompt_id и length_col; vectors — массив (len(meta), hidden), строки
+    соответствуют meta по порядку. Возвращает (correct_matrix,
+    hallucinated_matrix, meta_correct, meta_hallucinated, info): info —
+    dict с keys: bin_edges, quotas (список после сокращения),
+    n_correct_pool, n_hallucinated_pool, n_selected, length_diagnostics
+    (dict: mean_correct, mean_hallucinated, median_correct,
+    median_hallucinated, ks_stat, ks_p), selected_correct_prompt_ids,
+    selected_hallucinated_prompt_ids.
+    """
+    if not isinstance(bins, (int, np.integer)) or bins < 1:
+        raise ValueError(f'bins должен быть целым >= 1: {bins!r}')
+    if not isinstance(n_cloud, (int, np.integer)) or n_cloud < 2:
+        raise ValueError(f'n_cloud должен быть целым >= 2: {n_cloud!r}')
+    if not isinstance(seed, (int, np.integer)):
+        raise ValueError(f'seed должен быть int: {seed!r}')
+    allowed_ids = [] if prompt_ids is None else list(prompt_ids)
+    if not allowed_ids:
+        raise ValueError('prompt_ids пуст — нечего выбирать')
+
+    vectors = np.asarray(vectors)
+    if vectors.ndim != 2 or len(vectors) != len(meta):
+        raise ValueError(
+            f'vectors должен быть массивом (len(meta), hidden) в порядке meta: '
+            f'shape {vectors.shape}, строк meta {len(meta)}'
+        )
+    layer_mask = meta['layer_index'] == layer_index
+    allowed = set(allowed_ids)
+    mask_c = layer_mask & (meta['answer_kind'] == 'correct') & meta['prompt_id'].isin(allowed)
+    mask_h = layer_mask & (meta['answer_kind'] == 'hallucinated') & meta['prompt_id'].isin(allowed)
+    idx_c = np.flatnonzero(mask_c.to_numpy())
+    idx_h = np.flatnonzero(mask_h.to_numpy())
+    meta_c = meta.iloc[idx_c].reset_index(drop=True)
+    meta_h = meta.iloc[idx_h].reset_index(drop=True)
+    correct = vectors[idx_c]
+    hallucinated = vectors[idx_h]
+    if len(meta_c) != len(correct) or len(meta_h) != len(hallucinated):
+        raise ValueError('meta и облака рассинхронизированы — проверь порядок кэша')
+    if len(meta_c) == 0 or len(meta_h) == 0:
+        raise ValueError('одна из сторон length-matched пары пуста')
+
+    lengths_c_pool = np.asarray(meta_c[length_col], dtype=float)
+    lengths_h_pool = np.asarray(meta_h[length_col], dtype=float)
+    pooled = np.concatenate([lengths_c_pool, lengths_h_pool])
+    edges = np.quantile(pooled, np.linspace(0.0, 1.0, bins + 1))
+    edges[-1] += 1e-9
+    bin_c = np.clip(np.digitize(lengths_c_pool, edges) - 1, 0, bins - 1)
+    bin_h = np.clip(np.digitize(lengths_h_pool, edges) - 1, 0, bins - 1)
+    quota = np.minimum(np.bincount(bin_c, minlength=bins),
+                       np.bincount(bin_h, minlength=bins)).astype(np.int64)
+    total_quota = int(quota.sum())
+    if total_quota == 0:
+        raise ValueError('нет ни одного бина длины с обеими сторонами — выбор пуст')
+    if total_quota > n_cloud:
+        scaled = quota * (n_cloud / total_quota)
+        quota = np.floor(scaled).astype(np.int64)
+        remainder = int(n_cloud) - int(quota.sum())
+        if remainder > 0:
+            frac = scaled - np.floor(scaled)
+            quota[np.argsort(-frac, kind='stable')[:remainder]] += 1
+
+    rng = np.random.default_rng(seed)
+
+    def draw(bin_ids):
+        picked = [
+            np.sort(rng.choice(np.flatnonzero(bin_ids == b),
+                               size=int(quota[b]), replace=False))
+            for b in range(bins) if quota[b] > 0
+        ]
+        return np.concatenate(picked)
+
+    sel_c = draw(bin_c)
+    sel_h = draw(bin_h)
+    correct_matrix = correct[sel_c]
+    hallucinated_matrix = hallucinated[sel_h]
+    meta_correct = meta_c.iloc[sel_c].reset_index(drop=True)
+    meta_hallucinated = meta_h.iloc[sel_h].reset_index(drop=True)
+
+    from scipy.stats import ks_2samp
+    lengths_c = np.asarray(meta_correct[length_col], dtype=float)
+    lengths_h = np.asarray(meta_hallucinated[length_col], dtype=float)
+    ks = ks_2samp(lengths_c, lengths_h)
+    info = {
+        'bin_edges': [float(x) for x in edges],
+        'quotas': [int(q) for q in quota],
+        'n_correct_pool': int(len(meta_c)),
+        'n_hallucinated_pool': int(len(meta_h)),
+        'n_selected': int(len(sel_c)),
+        'length_diagnostics': {
+            'mean_correct': float(np.mean(lengths_c)),
+            'mean_hallucinated': float(np.mean(lengths_h)),
+            'median_correct': float(np.median(lengths_c)),
+            'median_hallucinated': float(np.median(lengths_h)),
+            'ks_stat': float(ks.statistic),
+            'ks_p': float(ks.pvalue),
+        },
+        'selected_correct_prompt_ids': np.unique(np.asarray(meta_correct['prompt_id'])),
+        'selected_hallucinated_prompt_ids': np.unique(np.asarray(meta_hallucinated['prompt_id'])),
+    }
+    return correct_matrix, hallucinated_matrix, meta_correct, meta_hallucinated, info

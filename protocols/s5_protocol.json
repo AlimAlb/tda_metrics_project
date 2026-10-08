@@ -1,0 +1,144 @@
+{
+  "wave": "s5",
+  "title": "Чистая синтетика направленной селективности (уточнение S3/S4)",
+  "status": "locked internal protocol",
+  "locked_at": "2026-10-07T16:40:00+03:00",
+  "note_on_prereg": "Это зафиксированный внутренний протокол (committed до запуска), а не внешняя пре-регистрация",
+  "code_ref": "scripts/run_s5_grid.py, src/tda_metrics/s5_samplers.py, tests/test_s5_samplers.py",
+  "reference": "8-модовая смесь: центры на кольце radius=8.0, spread=1.0 (tda_metrics.mixtures.make_mode_reference)",
+  "seeds": {
+    "P": "seed_p(rep) = 42 + rep",
+    "Q": "seed_q(rep) = 7 + rep (s5c retry: +1000*attempt)",
+    "reps": 30
+  },
+  "series": {
+    "s5a_symmetric_drop": {
+      "design": "удаляются противоположные ПАРЫ мод (антиподы (i, i+4) при 8 модах); веса оставшихся равны; центр остаётся нулевым",
+      "grid_pairs": {
+        "np1": [
+          [
+            0,
+            4
+          ]
+        ],
+        "np2": [
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            5
+          ]
+        ],
+        "np3": [
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            6
+          ]
+        ]
+      },
+      "control": "np0 (пустой список пар) — same-law",
+      "dropped_mass": {
+        "np0": 0.0,
+        "np1": 0.25,
+        "np2": 0.5,
+        "np3": 0.75
+      },
+      "deviation_note": "исходная сетка dropped_mass {0,.125,.25,.5,.75} содержит 0.125, нереализуемое при парно-симметричном ЖЁСТКОМ удалении из 8 мод (квантование 2/8=0.25); мелкие дозы покрываются серией s5b. Принятая сетка: {0,.25,.5,.75}"
+    },
+    "s5b_fixed_mass_invention": {
+      "design": "базовые веса 8 мод сохраняются; ровно n_replaced=int(round(alpha*n)) точек Q заменяются внешней симметричной парой мод на (±14, 0); замены вложены по общей перестановке",
+      "grid_alpha": [
+        0.0,
+        0.01,
+        0.05,
+        0.125,
+        0.25,
+        0.5
+      ],
+      "realized_rule": "alpha_realized = n_replaced/n записывается в строку и проверяется; при n=1000 совпадает с номиналом точно (0.01→10, 0.05→50, 0.125→125, 0.25→250, 0.5→500)",
+      "control": "alpha=0 — same-law"
+    },
+    "s5c_moment_matched": {
+      "design": "P — 8 мод на кольце r=8; Q — 4 мод на вершинах квадрата (±sqrt(32), ±sqrt(32)); population mean 0=0, population cov 33I=33I (совпадение по построению, проверяется rtol=1e-9 при создании)",
+      "directions": {
+        "p8q4": "P=кольцо, Q=квадрат (drop-like при matched моментах)",
+        "p4q8": "P=квадрат, Q=кольцо (invention-like при matched моментах)",
+        "p8p8": "контроль same-law кольца",
+        "q4q4": "контроль same-law квадрата"
+      },
+      "moment_gate": {
+        "tol_mean(n)": "4*sqrt(33/n)",
+        "tol_cov(n)": "4*33*sqrt(2/n)",
+        "rule": "пересэмпл Q (seed_q + 1000*attempt) до попадания в допуски, максимум 100 попыток; после — строка failed",
+        "applies_to": "только s5c"
+      }
+    }
+  },
+  "grid": {
+    "n": [
+      100,
+      250,
+      500,
+      1000
+    ],
+    "reps": 30,
+    "rows_total": 1680
+  },
+  "metrics": {
+    "battery": "TopologyMetrics.compute_all (mtd_PQ, mtd_QP, ntd_PQ, ntd_QP, rtd, precision@{1,3,10}, recall@{1,3,10}, mmd, frechet, js)",
+    "rtd_policy": "rtd вычисляется только при n<=250; при n>=500 пропускается (бюджет времени: RTD 9-21 с/вызов; RTD не входит в primary/secondary задачи S5). Поправка внесена ДО расчёта строк n>=500, задокументирована в git",
+    "extras": {
+      "energy": "energy distance: 2*mean(d_PQ) - mean(d_PP) - mean(d_QQ), cap 1000 точек (смещённая состоятельная оценка)",
+      "sinkhorn": "POT sinkhorn2, cost=dist^2/median, reg=0.1, подвыборка 500; при недоступности POT — None"
+    },
+    "primary": [
+      "mtd_PQ",
+      "mtd_QP",
+      "ntd_PQ",
+      "ntd_QP",
+      "precision@3",
+      "recall@3"
+    ],
+    "kinds": {
+      "precision@*|recall@*": "similarity",
+      "остальные": "distance"
+    }
+  },
+  "hypotheses": {
+    "H_s5a": "при симметричном droprecall-семейство {mtd_PQ, ntd_PQ, recall@3} растёт с dropped_mass; precision-семейство {mtd_QP, ntd_QP, precision@3} ~не меняется",
+    "H_s5b": "при фиксированной доле внешних invention-точек precision-семейство растёт с alpha; recall-семейство ~не меняется",
+    "H_s5c": "различие mode coverage (4 против 8 мод) обнаруживается направленными метриками ПРИ совпадающих population-моментах: p8q4 бьёт по recall-семейству, p4q8 — по precision-семейству; эффект не объясняется сдвигом первого/второго момента",
+    "null": "контрольные same-law строки дают |z_mean| около 0 и эмпирический FPR ~5% на пороге 1.96"
+  },
+  "analysis_policy": {
+    "contrast": "own same-law control той же серии и n: delta = mean - mu0 (similarity-метрики со знаком «хуже контроля»), z_mean = delta/(sigma0/sqrt(30)); z_rep покомпонентно для power",
+    "fpr": "200 случайных половинных сплитов контроля (seed 1), доля |z|>1.96",
+    "power": "доля повторов конфигурации с |z_rep|>1.96",
+    "bootstrap": "1000 ресэмплов по rep (seed 0), 95% percentile CI delta",
+    "multiple_comparisons": "Benjamini-Hochberg q по семейству primary-метрик внутри каждой (series, n)",
+    "endpoint_primary": "доза-отклик primary-метрик: подтверждение = монотонный рост соответствующего семейства с q_bh<=0.05 на максимальной дозе и FPR контроля <= ~10%"
+  },
+  "acceptance_mapping": {
+    "no_material_mean_shift": "moment-диагностики публикуются для всех серий; Fréchet/MMD сравнения не считаются matched без опубликованных момент-диагностик",
+    "exact_replacement": "alpha_realized == replaced_count/n проверяется в каждой строке s5b",
+    "direction_reproduces": "CI от bootstrap по 30 повторам; отрицательный результат принимается без post-hoc изменений дизайна",
+    "artifacts_immutable": "S3/S4 артефакты не модифицируются; s5 — отдельная серия results/raw/s5"
+  },
+  "code_sha": "c31bd502ada57ac4343c7d5775c1ef6277790b6c",
+  "amendments": [
+    {
+      "at": "2026-10-07T17:05:00+03:00",
+      "change": "rtd_policy: было «только n=1000», стало «n>=500» (бюджет; не влияет на hypotheses/endpoint; строки n<=250 уже посчитаны с rtd и не пересчитываются)"
+    }
+  ]
+}

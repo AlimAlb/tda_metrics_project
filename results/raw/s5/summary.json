@@ -1,0 +1,44 @@
+{
+  "created": "2026-10-07T15:31:16.430807+00:00",
+  "smoke": false,
+  "sections": {
+    "pytest_light": "ok",
+    "grid": "ok",
+    "analysis": "ok",
+    "figures": "ok"
+  },
+  "grid": {
+    "ok": 1680,
+    "failed": 1680,
+    "skipped": 1680
+  },
+  "effect_rows": 588,
+  "verdict": {
+    "s5a": {
+      "expectation": "recall-like ↑ при drop",
+      "max_dose": "0.75",
+      "z_mean_by_metric": {
+        "mtd_PQ": 53.84528697332281,
+        "ntd_PQ": 271.43677323320173,
+        "recall@3": 563.1202745881179
+      },
+      "fpr_control_max": 0.0
+    },
+    "s5b": {
+      "expectation": "precision-like ↑ при invent",
+      "max_dose": "0.5",
+      "z_mean_by_metric": {
+        "mtd_QP": -15.71911056573992,
+        "ntd_QP": 44.047821493136446,
+        "precision@3": 361.0258897869568
+      },
+      "fpr_control_max": 0.0
+    },
+    "s5c": {
+      "expectation": "эффект при matched-моментах",
+      "max_abs_z_mean": 369.1783863916355,
+      "at": "p4q8/precision@3",
+      "q_bh": 0.0
+    }
+  }
+}

@@ -20,9 +20,10 @@ __all__ = [
     'empirical_power',
     'aggregate_power',
     'select_min_n',
+    'default_alternative_map',
 ]
 
-_ALTERNATIVES = ('greater', 'twosided')
+_ALTERNATIVES = ('greater', 'less', 'twosided')
 
 _POWER_CURVE_COLUMNS = (
     'alpha', 'power', 'threshold', 'n_control', 'n_effect',
@@ -47,6 +48,23 @@ def _validate_alpha_grid(alpha_grid):
     return alphas
 
 
+def default_alternative_map(metrics):
+    """Карта metric -> alternative по конвенции проекта (§5.6, риск R-PWR-1).
+
+    Similarity-метрики (имена с префиксом precision*/recall* — тот же
+    предикат, что statistics._default_kind) детектируются уходом ВНИЗ от
+    same-law распределения: их «ухудшение» — уменьшение значения, поэтому
+    им соответствует alternative='less' (порог — нижний квантиль контроля,
+    детект — строго ниже порога). Остальные метрики — distance-подобные,
+    им соответствует alternative='greater'. Возвращает dict по iterable
+    имён метрик; используется в aggregate_power(kind_map=...).
+    """
+    return {
+        metric: ('less' if str(metric).startswith(('precision', 'recall')) else 'greater')
+        for metric in metrics
+    }
+
+
 def power_curve(effect_values, control_values, alpha_grid=(0.05, 0.10, 0.20), alternative='greater'):
     """Эмпирическая мощность метрики при фиксированной паре выборок (§5.6).
 
@@ -55,6 +73,14 @@ def power_curve(effect_values, control_values, alpha_grid=(0.05, 0.10, 0.20), al
     'higher' гарантирует, что порог — реально наблюдавшееся в контроле
     значение, без оптимистичной интерполяции между соседними точками).
     power(alpha) = доля effect_values строго выше порога.
+
+    Для alternative='less' — зеркальная механика для similarity-метрик,
+    у которых «ухудшение» — уменьшение значения: порог — нижний квантиль
+    np.quantile(control_values, alpha, method='lower') ('lower' — реально
+    наблюдавшееся значение, консервативно: фактический уровень не выше
+    номинала), power(alpha) = доля effect_values строго ниже порога.
+    Вырождение симметрично 'greater': при alpha < 1/len(control) порог —
+    минимум контроля, фактический уровень 1/(n_control+1).
 
     Для alternative='twosided' строится пара квантилей
     [alpha/2, 1 - alpha/2] (оба — method='higher'); power(alpha) = доля
@@ -134,6 +160,9 @@ def power_curve(effect_values, control_values, alpha_grid=(0.05, 0.10, 0.20), al
         if alternative == 'greater':
             threshold = float(np.quantile(control, 1.0 - alpha, method='higher'))
             power = float(np.mean(effect > threshold)) if n_effect else float('nan')
+        elif alternative == 'less':
+            threshold = float(np.quantile(control, alpha, method='lower'))
+            power = float(np.mean(effect < threshold)) if n_effect else float('nan')
         else:
             lower = float(np.quantile(control, alpha / 2.0, method='higher'))
             upper = float(np.quantile(control, 1.0 - alpha / 2.0, method='higher'))
@@ -220,7 +249,8 @@ def empirical_power(
     return pd.DataFrame.from_records(records, columns=list(_VALUES_FRAME_COLUMNS))
 
 
-def aggregate_power(values_frame, alpha_grid=(0.05, 0.10, 0.20), alternative='greater'):
+def aggregate_power(values_frame, alpha_grid=(0.05, 0.10, 0.20), alternative='greater',
+                    kind_map=None):
     """power_curve по каждой (n, metric)-группе длинной таблицы (§5.6).
 
     values_frame — формат empirical_power (колонки n, kind, repeat, metric,
@@ -230,6 +260,14 @@ def aggregate_power(values_frame, alpha_grid=(0.05, 0.10, 0.20), alternative='gr
     колонок — ValueError; недостаточно control-наблюдений в группе (< 2) —
     ValueError из power_curve (ошибка не глушится: либо данные корректны,
     либо прогон не достроен).
+
+    kind_map — словарь metric -> alternative, применяемый по группам:
+    группы с метрикой из kind_map агрегируются с указанным направлением,
+    остальные — с alternative. None соответствует прежнему поведению
+    (единый alternative на все метрики). Для direction-aware прогона —
+    default_alternative_map(metrics): similarity-метрики (precision*/recall*)
+    получают 'less', иначе односторонний 'greater' пропускает их эффект
+    только потому, что он направлен вниз (R-PWR-1: дефект v1 power-таблиц).
 
     Возвращает long-DataFrame: колонки n, metric, затем колонки
     power_curve (alpha, power, threshold, ...), затем target_met; строки
@@ -243,7 +281,9 @@ def aggregate_power(values_frame, alpha_grid=(0.05, 0.10, 0.20), alternative='gr
     for (n, metric), group in values_frame.groupby(['n', 'metric'], sort=True):
         control_values = group.loc[group['kind'] == 'control', 'value'].to_numpy(dtype=float)
         effect_values = group.loc[group['kind'] == 'effect', 'value'].to_numpy(dtype=float)
-        curve = power_curve(effect_values, control_values, alpha_grid=alpha_grid, alternative=alternative)
+        group_alternative = alternative if kind_map is None else kind_map.get(metric, alternative)
+        curve = power_curve(effect_values, control_values, alpha_grid=alpha_grid,
+                            alternative=group_alternative)
         curve.insert(0, 'metric', metric)
         curve.insert(0, 'n', n)
         frames.append(curve)

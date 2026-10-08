@@ -11,6 +11,7 @@ import pytest
 
 from tda_metrics.power import (
     aggregate_power,
+    default_alternative_map,
     empirical_power,
     power_curve,
     select_min_n,
@@ -321,3 +322,87 @@ def test_select_min_n_nondefault_alpha_with_float_noise():
     ])
     assert select_min_n(frame, target_power=0.8, alpha=0.10) == {'m': 100}
     assert select_min_n(frame, target_power=0.8, alpha=0.20) == {'m': 250}
+
+
+# ---------- alternative='less' и kind_map (R-PWR-1) ----------
+
+def test_power_curve_less_catches_downward_effect():
+    control = np.array([1.0, 1.1, 0.9, 1.05, 0.95, 1.02, 0.98, 1.03, 0.97, 1.0])
+    effect = np.full(20, -100.0)
+    table = power_curve(effect, control, alpha_grid=(0.05, 0.10, 0.20), alternative='less')
+    assert np.all(table['power'] == 1.0)
+    table_greater = power_curve(effect, control, alpha_grid=(0.05, 0.10, 0.20),
+                                alternative='greater')
+    assert np.all(table_greater['power'] == 0.0)
+
+
+def test_power_curve_less_threshold_is_lower_quantile():
+    control = np.arange(21.0)
+    effect = np.array([1.0, 1.5, -3.0, 5.0])
+    table = power_curve(effect, control, alpha_grid=(0.10,), alternative='less')
+    row = table.iloc[0]
+    assert row['threshold'] == 2.0
+    assert row['power'] == 0.75
+
+
+def test_power_curve_less_same_law_power_near_alpha():
+    rng = np.random.default_rng(4242)
+    control = rng.normal(loc=0.0, scale=1.0, size=2000)
+    effect = rng.normal(loc=0.0, scale=1.0, size=2000)
+    table = power_curve(effect, control, alpha_grid=(0.05, 0.10, 0.20), alternative='less')
+    row05 = table[table['alpha'] == 0.05].iloc[0]
+    assert 0.02 <= row05['power'] <= 0.09
+
+
+def test_power_curve_less_invalid_alternative_still_rejected():
+    control = np.array([1.0, 2.0, 3.0])
+    with pytest.raises(ValueError):
+        power_curve(np.array([0.5]), control, alternative='lessish')
+
+
+def test_default_alternative_map():
+    mapping = default_alternative_map(['precision@3', 'recall@10', 'mmd', 'ntd_PQ', 'rtd'])
+    assert mapping == {'precision@3': 'less', 'recall@10': 'less',
+                       'mmd': 'greater', 'ntd_PQ': 'greater', 'rtd': 'greater'}
+
+
+def _directed_values_frame():
+    rows = []
+    for repeat, value in enumerate([1.0, 1.1, 0.9, 1.05]):
+        rows.append({'n': 100, 'kind': 'control', 'repeat': repeat,
+                    'metric': 'mmd', 'value': value})
+    for repeat, value in enumerate([100.0, 101.0, 99.0, 100.5]):
+        rows.append({'n': 100, 'kind': 'effect', 'repeat': repeat,
+                    'metric': 'mmd', 'value': value})
+    for repeat, value in enumerate([0.96, 0.97, 0.98, 0.97]):
+        rows.append({'n': 100, 'kind': 'control', 'repeat': repeat,
+                    'metric': 'precision@3', 'value': value})
+    for repeat, value in enumerate([0.50, 0.55, 0.45, 0.52]):
+        rows.append({'n': 100, 'kind': 'effect', 'repeat': repeat,
+                    'metric': 'precision@3', 'value': value})
+    return pd.DataFrame(rows)
+
+
+def test_aggregate_power_kind_map_directs_similarity():
+    frame = _directed_values_frame()
+    kind_map = default_alternative_map(['mmd', 'precision@3'])
+    table = aggregate_power(frame, alpha_grid=(0.05,), kind_map=kind_map)
+    mmd_row = table[table['metric'] == 'mmd'].iloc[0]
+    precision_row = table[table['metric'] == 'precision@3'].iloc[0]
+    assert mmd_row['power'] == 1.0
+    assert precision_row['power'] == 1.0
+    assert bool(precision_row['target_met'])
+
+
+def test_aggregate_power_without_kind_map_misses_downward_effect():
+    frame = _directed_values_frame()
+    table = aggregate_power(frame, alpha_grid=(0.05,))
+    precision_row = table[table['metric'] == 'precision@3'].iloc[0]
+    assert precision_row['power'] == 0.0
+
+
+def test_aggregate_power_kind_map_fallback_to_alternative():
+    frame = _directed_values_frame()
+    table = aggregate_power(frame, alpha_grid=(0.05,), kind_map={})
+    precision_row = table[table['metric'] == 'precision@3'].iloc[0]
+    assert precision_row['power'] == 0.0

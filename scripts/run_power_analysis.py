@@ -52,7 +52,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / 'src'))
 
 from tda_metrics.metrics import TopologyMetrics
 from tda_metrics.mixtures import make_mode_reference, sample_q_dropping_invention, sample_reference
-from tda_metrics.power import aggregate_power, empirical_power, select_min_n
+from tda_metrics.power import aggregate_power, default_alternative_map, empirical_power, select_min_n
 
 SCHEMA_VERSION = 1
 VALUES_FILE_PARQUET = 'power_values.parquet'
@@ -321,7 +321,8 @@ def run(args):
             continue
         try:
             raw_columns = ['n', 'kind', 'repeat', 'metric', 'value']
-            aggregated = aggregate_power(subset[raw_columns], alpha_grid=alpha_grid)
+            kind_map = default_alternative_map(subset[raw_columns]['metric'].unique())
+            aggregated = aggregate_power(subset[raw_columns], alpha_grid=alpha_grid, kind_map=kind_map)
             aggregated = aggregated.copy()
             aggregated['effect'] = effect_label
             summary_frames.append(aggregated)

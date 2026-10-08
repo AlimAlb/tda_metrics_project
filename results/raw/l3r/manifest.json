@@ -1,0 +1,48 @@
+{
+  "created": "2026-10-08T02:20:13.548132+00:00",
+  "protocol_path": "protocols/l3r_protocol.json",
+  "protocol_sha256": "cac8e5d9a292668dd3f8f43e0dbadf01e583564e090a51c89f80fbd480213613",
+  "sections": {
+    "env": "ok",
+    "extract": "ok",
+    "pytest_l3r": "ok",
+    "null": "ok",
+    "contrast": "ok",
+    "permutation": "ok",
+    "analysis": "ok",
+    "figures": "ok"
+  },
+  "grids": {
+    "n_grid": [
+      50,
+      100,
+      250,
+      500,
+      1000
+    ],
+    "null_dev": 500,
+    "null_val": 200,
+    "n_cloud": 500,
+    "reps": 30,
+    "alpha_grid": [
+      0.0,
+      0.01,
+      0.02,
+      0.05,
+      0.1,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "n_permutations": 500,
+    "layer": 18,
+    "pca_dim": 16,
+    "rtd": "не вычислялся (secondary, бюджет времени)"
+  },
+  "split_hashes": {
+    "dev": "debfc629f24af648526470f23db8fe2d837ea40e06eeaea8b24d32c54559a3cf",
+    "val": "98c55b0de59675e6f9ba8ccc33e0d0a3ac79f71069345b5cf2a71371b3b1a1a4",
+    "test": "f4145eb02aa948656c9ce44adfd4f10dcc7ba51a568ee24e454add962708d5f7"
+  },
+  "runtime_seconds": 1514.466641789999
+}
