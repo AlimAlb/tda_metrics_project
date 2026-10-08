@@ -172,7 +172,7 @@ def build_panels(deps):
         deps.setdefault('packets', {})[alpha] = (packet, pools)
     points = pd.DataFrame(point_rows)
     progress(f'points: {len(points)} строк, панелей alpha: {len(ALPHAS)}')
-    return {'points': points, 'pools': pools, 'meta_l': meta_l,
+    return {'points': points, 'pools': pools, 'meta_l': meta_l, 'x16': x16,
             'packets': deps.get('packets'), 'splits': splits}
 
 
@@ -258,6 +258,47 @@ def section_window(deps):
     return window
 
 
+@section('length_encoding')
+def section_length_encoding(deps):
+    import numpy as np
+    from scipy.stats import spearmanr
+    from sklearn.linear_model import Ridge
+    from sklearn.metrics import r2_score
+    from sklearn.model_selection import KFold, cross_val_predict
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import StandardScaler
+
+    panels = deps['panels']
+    meta_l = panels['meta_l']
+    x16 = panels['x16']
+    prompt_np = meta_l['prompt_id'].to_numpy()
+    kind_np = meta_l['answer_kind'].to_numpy()
+    len_np = meta_l['n_pooled'].to_numpy()
+    dev = set(panels['splits']['dev'])
+    in_dev = np.isin(prompt_np, list(dev))
+    out = {}
+    for kind in ('correct', 'hallucinated'):
+        mask = in_dev & (kind_np == kind)
+        X = np.asarray(x16[mask], dtype=float)
+        y = len_np[mask].astype(float)
+        norm = np.linalg.norm(X, axis=1)
+        pc1 = X[:, 0]
+        pred = cross_val_predict(
+            make_pipeline(StandardScaler(), Ridge(alpha=1.0)), X, y,
+            cv=KFold(n_splits=5, shuffle=True, random_state=0))
+        out[kind] = {
+            'n_items': int(mask.sum()),
+            'spearman_len_norm': float(spearmanr(y, norm).statistic),
+            'spearman_len_pc1': float(spearmanr(y, pc1).statistic),
+            'ridge_r2_len_from_vectors': float(r2_score(y, pred)),
+            'len_mean': float(y.mean()), 'len_std': float(y.std(ddof=0)),
+        }
+        progress(f"length_encoding[{kind}]: ρ(len,‖v‖)={out[kind]['spearman_len_norm']:.3f}, "
+                 f"ρ(len,PC1)={out[kind]['spearman_len_pc1']:.3f}, "
+                 f"ridge R²(len|16d)={out[kind]['ridge_r2_len_from_vectors']:.3f}")
+    return out
+
+
 @section('figures')
 def section_figures(deps):
     import matplotlib
@@ -315,6 +356,7 @@ def section_summary(deps):
         'repeat': REPEAT, 'alphas': ALPHAS, 'n_cloud': N_CLOUD,
         'n_bins_locked': N_BINS, 'seeds': list(SEEDS),
         'length_window': deps.get('window'),
+        'length_encoding': deps.get('length_encoding'),
         'main_run_manifest': {
             'protocol_sha256': lock.get('protocol_sha256'),
             'grids': lock.get('grids')},
@@ -340,6 +382,7 @@ def main():
     deps['rows'] = load_rows_packets()
     deps['panels'] = build_panels(deps)
     deps['window'] = section_window(deps)
+    deps['length_encoding'] = section_length_encoding(deps)
     crosscheck = section_crosscheck(deps)
     if crosscheck is None:
         print('L9M-VIZ DONE rc=1')
@@ -347,7 +390,7 @@ def main():
     section_figures(deps)
     section_summary(deps)
     ok = all(SECTION_STATUS.get(name) == 'ok' for name in
-             ('env', 'window', 'crosscheck', 'figures', 'summary'))
+             ('env', 'window', 'length_encoding', 'crosscheck', 'figures', 'summary'))
     print('L9M-VIZ DONE rc=' + ('0' if ok else '1'))
 
 
