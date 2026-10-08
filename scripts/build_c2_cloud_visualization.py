@@ -32,7 +32,7 @@ COMPS = ('cc', 'arc', 'zoom', 'arc360')
 COMP_TITLES = {
     'cc': 'контроль: круг vs круг',
     'arc': 'дуга 0–180°',
-    'zoom': 'масштабный свип 0.6–1.4',
+    'zoom': 'zoom 0.6–1.4',
     'arc360': 'дуга 180–360°',
 }
 SPACES = ('pixels_pca16', 'clip_pca16', 'dino_pca16', 'vae_latent16')
