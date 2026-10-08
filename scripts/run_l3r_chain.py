@@ -1,4 +1,4 @@
-"""Wave L3R — LLM-native калибровка и независимые length-matched повторы (мега-скрипт VM).
+"""LLM-native калибровка и независимые length-matched повторы.
 
 Секции: env → extract (кэш эмбеддингов с чекпоинтами) → pytest → load →
 null (dev 500×n-grid + val 200×n-grid, correct-vs-correct) → contrast

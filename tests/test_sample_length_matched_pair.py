@@ -1,4 +1,4 @@
-"""Инварианты sample_length_matched_pair (Wave L3R-A): стратификация, независимость повторений, квоты.
+"""Инварианты sample_length_matched_pair: стратификация, независимость повторений, квоты.
 
 Синтетический датасет одного слоя: 200 промптов x (correct, hallucinated),
 длины — lognormal(mean(log)=3.8, sigma=0.35) со сдвигом hallucinated на +3%,

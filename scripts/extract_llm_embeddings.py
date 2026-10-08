@@ -1,11 +1,11 @@
-"""Извлечение скрытых представлений LLM на HaluEval QA (мастер-план §L1, ветка G Wave 2).
+"""Извлечение скрытых представлений LLM на HaluEval QA.
 
 Запускается на Colab VM (heavy-стек: torch + transformers). Поток: canonical
 HaluEval QA (тонкий адаптер nlp_datasets) -> teacher-forced токенизация с
 answer-masking (llm_embeddings.build_tokenized_inputs) -> forward pass и
 пулинг по слоям (llm_embeddings.extract_embeddings) -> атомарный дисковый
 кэш с манифестом (embedding_cache.save_cache). Формат входа фиксирован
-решением оркестратора (D-006-усл.3): knowledge включается в промпт,
+протоколом эксперимента: knowledge включается в промпт,
 сериализация через chat-шаблон модели, идентификатор 'chat_knowledge_v1'.
 
 Прогресс печатается чанками по ~200 пунктов (пункт = одна пара

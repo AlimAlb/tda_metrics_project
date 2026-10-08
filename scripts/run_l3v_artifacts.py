@@ -1,4 +1,4 @@
-"""Wave L3V — PCA-2-визуализация LLM-контролей (§5.2–5.4): артефакты + фигуры.
+"""PCA-2-визуализация LLM-контролей (§5.2–5.4): артефакты и фигуры.
 
 Строит из embedding-кэша (Qwen2.5-3B, chat_knowledge_v1, mean_answer):
 - results/raw/l3v/l3d_pca2_r0.parquet — length-matched L3d r0, слои 9/18/27/36;
