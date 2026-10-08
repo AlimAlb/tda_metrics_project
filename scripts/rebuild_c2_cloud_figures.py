@@ -37,7 +37,7 @@ def render(comp, points, panels, out_dir):
     vmin, vmax = (0.6, 1.4) if is_zoom else (0.0, 360.0)
     cbar_label = 'масштаб' if is_zoom else 'угол, градусы'
 
-    fig, axes = plt.subplots(2, 2, figsize=(11.0, 9.0))
+    fig, axes = plt.subplots(1, len(SPACES), figsize=(16.5, 4.4))
     for ax, space in zip(axes.flat, SPACES):
         p = points[(points['space'] == space) & (points['comp'] == 'P')]
         q = points[(points['space'] == space) & (points['comp'] == comp)]
@@ -55,8 +55,8 @@ def render(comp, points, panels, out_dir):
         f'C2: {COMP_TITLES[comp]}\n'
         'PCA-2 (fit на P+Q); метрики в заголовках посчитаны по протоколу C2 '
         '(PCA-16 fit на P, rtd_trials=2) на этих же облаках',
-        y=0.99, fontsize=10)
-    fig.tight_layout(rect=(0, 0, 1, 0.955))
+        y=1.06, fontsize=10)
+    fig.tight_layout(rect=(0, 0, 1, 0.90))
     out = os.path.join(out_dir, f'c2_cloud_{comp}.png')
     fig.savefig(out, dpi=150, bbox_inches='tight')
     plt.close(fig)
