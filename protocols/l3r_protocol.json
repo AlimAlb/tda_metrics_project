@@ -20,7 +20,13 @@
   "design": {
     "null": {
       "pairs": "correct-vs-correct same-law, dev-сплит; стороны — непересекающиеся половины dev-промптов (чётный/нечётный индекс); каждая пара — свежий выбор n промптов без возвращения из своей половины (rng 1000+i)",
-      "n_grid": [50, 100, 250, 500, 1000],
+      "n_grid": [
+        50,
+        100,
+        250,
+        500,
+        1000
+      ],
       "n_pairs_per_n": 500,
       "rtd_policy": "RTD считается только при n<=500 и на первых 200 парах каждого n (бюджет времени: RTD ~17 c/вызов); rtd-null по 200 пар",
       "note": "абсолютные пороги 2D-синтетики НЕ переносятся: пороги калибруются только по этому null"
@@ -32,8 +38,21 @@
     "contrast": {
       "what": "length-matched correct-vs-hallucinated (L3d) и correct-vs-alpha-микс (L3-доза)",
       "n_cloud": 500,
-      "splits": ["dev", "val", "test"],
-      "alpha_grid": [0.0, 0.01, 0.02, 0.05, 0.1, 0.25, 0.5, 1.0],
+      "splits": [
+        "dev",
+        "val",
+        "test"
+      ],
+      "alpha_grid": [
+        0.0,
+        0.01,
+        0.02,
+        0.05,
+        0.1,
+        0.25,
+        0.5,
+        1.0
+      ],
       "reps_per_alpha": 30,
       "resampling": "sample_length_matched_pair(seed=2000+rep) — независимые стратифицированные повторы; общий seed по alpha внутри rep (метод общих случайных чисел: соседние alpha различаются только долей замен через общую перестановку)",
       "mixture": "independent_mixture(correct, hallucinated, alpha, permutation) — Q = correct с round(alpha*n) заменами; alpha=1.0 эквивалентен L3d; alpha=0.0 — same-law контроль мощности"
@@ -45,7 +64,15 @@
   },
   "metrics": {
     "primary": "precision@3 (endpoint D-010 подтверждения)",
-    "secondary": ["ntd_QP", "ntd_PQ", "mtd_QP", "mtd_PQ", "recall@3", "mmd", "frechet"],
+    "secondary": [
+      "ntd_QP",
+      "ntd_PQ",
+      "mtd_QP",
+      "mtd_PQ",
+      "recall@3",
+      "mmd",
+      "frechet"
+    ],
     "js_note": "js — деградирует при малых n*d (оговорка AGENTS): n=50/100 при PCA-16 может давать вырожденные значения — сообщается как caveat, не исключается молча",
     "battery": "TopologyMetrics.compute_all на PCA-16-облаках"
   },
@@ -59,7 +86,19 @@
   "old_artifacts_policy": "results/raw/llm и results/raw/wave5 не модифицируются; всё новое — results/raw/l3r; старый D-010 НЕ ретроактивно переименовывается в verified pre-registration",
   "artifacts": {
     "raw": "results/raw/l3r/{manifest.json, summary.json, rows.jsonl, protocol_ref.json}",
-    "tables": ["results/tables/l3r_null_power.csv", "results/tables/l3r_length_balance.csv"],
-    "figures": ["results/figures/l3r_power_curves.png", "results/figures/l3r_length_balance.png"]
-  }
+    "tables": [
+      "results/tables/l3r_null_power.csv",
+      "results/tables/l3r_length_balance.csv"
+    ],
+    "figures": [
+      "results/figures/l3r_power_curves.png",
+      "results/figures/l3r_length_balance.png"
+    ]
+  },
+  "amendments": [
+    {
+      "at": "2026-10-08T05:25:00+03:00",
+      "change": "ntd не вычисляется при n=50 (ограничение оценщика |Y| >= 2*subsample_size, subsample_size=50 по умолчанию: при |Y|=50 ValueError); пороги/мощность ntd при n=50 отсутствуют (NaN-safe анализ, как у rtd). Поправка внесена ДО перезапуска прогона; 500 failed-строк null/dev/n50 перезапускаются с skip=(\"ntd\",)"
+    }
+  ]
 }

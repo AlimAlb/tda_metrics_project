@@ -104,10 +104,13 @@ def append_row(row, handle):
     handle.flush()
 
 
-def metrics_of(metrics_obj, P, Q):
+def metrics_of(metrics_obj, P, Q, n=None):
     P_pca = pca_reduce(P, P, PCA_DIM)
     Q_pca = pca_reduce(P, Q, PCA_DIM)
-    result = metrics_obj.compute_all(P_pca, Q_pca, skip=('rtd',))
+    skip = ('rtd',)
+    if n is not None and n < 100:
+        skip = ('rtd', 'ntd')
+    result = metrics_obj.compute_all(P_pca, Q_pca, skip=skip)
     out = {}
     for key, value in result.items():
         if key in ('precision@1', 'precision@10', 'recall@1', 'recall@10'):
@@ -223,7 +226,7 @@ def section_null(deps):
                     row = {'experiment_id': eid, 'kind': 'null', 'split': split_name,
                            'n': n, 'pair_idx': i, 'alpha': None, 'rep': None,
                            'status': 'ok', 'error_message': ''}
-                    row.update(metrics_of(metrics_obj, P, Q))
+                    row.update(metrics_of(metrics_obj, P, Q, n))
                 except Exception as exc:
                     row = {'experiment_id': eid, 'kind': 'null', 'split': split_name,
                            'n': n, 'pair_idx': i, 'alpha': None, 'rep': None,
