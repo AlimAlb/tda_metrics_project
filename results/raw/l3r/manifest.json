@@ -1,7 +1,7 @@
 {
-  "created": "2026-10-08T02:20:13.548132+00:00",
+  "created": "2026-10-08T07:17:15.927383+00:00",
   "protocol_path": "protocols/l3r_protocol.json",
-  "protocol_sha256": "cac8e5d9a292668dd3f8f43e0dbadf01e583564e090a51c89f80fbd480213613",
+  "protocol_sha256": "0953791c8054fbed1fade38d0903ddf6daafce2f57df5764e1346aac78a3388d",
   "sections": {
     "env": "ok",
     "extract": "ok",
@@ -44,5 +44,5 @@
     "val": "98c55b0de59675e6f9ba8ccc33e0d0a3ac79f71069345b5cf2a71371b3b1a1a4",
     "test": "f4145eb02aa948656c9ce44adfd4f10dcc7ba51a568ee24e454add962708d5f7"
   },
-  "runtime_seconds": 1514.466641789999
+  "runtime_seconds": 718.6567711399999
 }
