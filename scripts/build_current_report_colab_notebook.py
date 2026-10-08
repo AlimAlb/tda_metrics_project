@@ -60,17 +60,19 @@ precision/recall@k (CPU);
   answer-masking и чекпоинтами;
 * `run_l3r_chain.py` — same-law, length-matched и permutation-контроли,
   смеси по доле галлюцинаций и их анализ;
+* `run_llm_layerwise_chain.py` — пересчёт послойной серии 5.4 с нуля
+  (L3/L3d/L3e по слоям + RTD/CKA layerwise; перенос семантик и сидов
+  исторических прогонов);
 * `run_l3v_artifacts.py` — пересборка PCA-облаков, баркодов и послойных фигур
   из сохранённых артефактов.
 
-В текущем дереве нет отдельного runner'а, который с нуля пересчитывает raw
-послойной серии 5.4 (`results/raw/llm`, `results/raw/wave5`) — эти таблицы
-считаются входными артефактами. Ячейка пересбора фигур честно разделяет два
-случая: фигуры 5.4 (`layerwise_llm_dynamics.png`, `layerwise_rtd_cka.png`)
-строятся только из зафиксированных raw и не выдаются за новый независимый
-расчёт; облака 5.2--5.3, баркоды и их фигуры при наличии кэша
-`embeddings/l3r_cache` пересчитываются из hidden states заново (после
-LLM-серии или при своём кэше). Это ограничение кода, а не свойство Colab.
+Послойная серия 5.4 теперь пересчитывается с нуля раннером
+`run_llm_layerwise_chain.py`: он пишет в `results/raw/layerwise_rerun` и
+исторические `results/raw/llm`/`results/raw/wave5` не перезаписывает. Ячейка
+пересбора фигур ниже по-прежнему читает исторические committed-таблицы — это
+сверка оформления опубликованных рисунков; свежий расчёт 5.4 живёт в
+`layerwise_rerun` с собственным manifest. Облака 5.2--5.3 и баркоды при
+наличии кэша `embeddings/l3r_cache` пересчитываются из hidden states заново.
 """,
         "title",
     ),
@@ -344,6 +346,29 @@ else:
     print('Пропуск: установите PROFILE = "full", чтобы запустить серию LLM.')
 """,
         "llm-full",
+    ),
+    markdown(
+        """## Серия 5.4 с нуля: послойные L3/L3d/L3e + RTD/CKA
+
+`run_llm_layerwise_chain.py` — трекаемый перенос исторических прогонов
+(wave3 режим A и wave5 layerwise) с сохранением сидов и параметров метрик:
+60 строк l3/l3d/l3e (4 слоя x 5 повторов, n=500, rtd_trials=2) + 40 строк
+l5 cross/identity (n=1000). Результат пишется в `results/raw/layerwise_rerun`
+и не перезаписывает опубликованные таблицы. В исторической серии l3e на
+слое 9 пять прогонов не завершились — здесь они считаются заново.
+""",
+        "layerwise-note",
+    ),
+    code(
+        """
+if PROFILE == "full":
+    run([sys.executable, "scripts/run_llm_layerwise_chain.py"])
+    print("Серия 5.4 пересчитана: results/raw/layerwise_rerun "
+          "(l3_series + layerwise.parquet + manifest)")
+else:
+    print('Пропуск: установите PROFILE = "full", чтобы пересчитать серию 5.4.')
+""",
+        "layerwise-full",
     ),
     markdown(
         """## Пересборка фигур 5.2--5.4

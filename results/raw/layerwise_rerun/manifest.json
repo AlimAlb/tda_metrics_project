@@ -1,0 +1,45 @@
+{
+  "created": "2026-10-08T12:12:51.676425+00:00",
+  "sections": {
+    "env": "ok",
+    "extract": "ok",
+    "pytest_light": "ok",
+    "l3_series": "ok",
+    "l5_layerwise": "ok",
+    "analysis": "ok"
+  },
+  "provenance": {
+    "l3_series": "перенос wave3 режим A (logs/orchestration_wave2/wave3_llm_run.py): сид подвыборок 200+k, l3d — детерминированный length_matched_pair (n_max=500), l3e — shuffled_label_pair(seed=k); rtd_trials=2",
+    "l5_layerwise": "перенос wave5_layerwise_run.py: cross сиды 200+k оба пула, identity 200+k/400+k по correct; RTD trials=2 batch=500; cka_distance = 1 - linear_cka",
+    "scope": "семейства l4a/l4b исключены (серии 5.3/paired); серия 5.4 = l3/l3d/l3e + l5 layerwise"
+  },
+  "embedding_cache": {
+    "model": "Qwen/Qwen2.5-3B-Instruct",
+    "input_format": "chat_knowledge_v1",
+    "pooling": "mean_answer",
+    "layer_indices": [
+      9,
+      18,
+      27,
+      36
+    ],
+    "n_items": 20000
+  },
+  "metric_params": "{\"js_k\":5,\"nhood_sizes\":[1,3,10],\"ntd_repeats\":5,\"rtd_batch\":500,\"rtd_mode\":\"random-coupling-exploratory\",\"rtd_trials\":2}",
+  "grids": {
+    "layers": [
+      9,
+      18,
+      27,
+      36
+    ],
+    "repeats": 5,
+    "n_cloud_l3": 500,
+    "n_cloud_l5": 1000
+  },
+  "outputs": {
+    "l3_store": "results/raw/layerwise_rerun/l3_series",
+    "l5_parquet": "results/raw/layerwise_rerun/layerwise.parquet"
+  },
+  "runtime_seconds": 768.769609667
+}

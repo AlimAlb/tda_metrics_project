@@ -1,0 +1,130 @@
+{
+  "created": "2026-10-08T12:12:51.676425+00:00",
+  "sections": {
+    "env": "ok",
+    "extract": "ok",
+    "pytest_light": "ok",
+    "l3_series": "ok",
+    "l5_layerwise": "ok",
+    "analysis": "ok"
+  },
+  "l3_series": {
+    "written": 60,
+    "ok": 60,
+    "failed": 0
+  },
+  "l5_layerwise": {
+    "total": 40,
+    "new": 40
+  },
+  "l5_by_layer": {
+    "9": {
+      "cross": {
+        "rtd": {
+          "mean": 50.130307006835935,
+          "sd": 1.6454693695276803,
+          "n_repeats": 5
+        },
+        "cka_distance": {
+          "mean": 0.8574589733688767,
+          "sd": 0.008029902582920119,
+          "n_repeats": 5
+        }
+      },
+      "identity": {
+        "rtd": {
+          "mean": 57.06699905395508,
+          "sd": 0.669910451781046,
+          "n_repeats": 5
+        },
+        "cka_distance": {
+          "mean": 0.9943218317343308,
+          "sd": 0.0009365482722858008,
+          "n_repeats": 5
+        }
+      }
+    },
+    "18": {
+      "cross": {
+        "rtd": {
+          "mean": 48.289797973632815,
+          "sd": 1.3024897982566233,
+          "n_repeats": 5
+        },
+        "cka_distance": {
+          "mean": 0.7691701222723635,
+          "sd": 0.009867249115002611,
+          "n_repeats": 5
+        }
+      },
+      "identity": {
+        "rtd": {
+          "mean": 60.03394317626953,
+          "sd": 0.4624688440621472,
+          "n_repeats": 5
+        },
+        "cka_distance": {
+          "mean": 0.9936529016348075,
+          "sd": 0.0009843381200361741,
+          "n_repeats": 5
+        }
+      }
+    },
+    "27": {
+      "cross": {
+        "rtd": {
+          "mean": 46.57083740234375,
+          "sd": 1.3355910631059533,
+          "n_repeats": 5
+        },
+        "cka_distance": {
+          "mean": 0.7629861918549089,
+          "sd": 0.008149664223850049,
+          "n_repeats": 5
+        }
+      },
+      "identity": {
+        "rtd": {
+          "mean": 59.40824203491211,
+          "sd": 0.4599582317480505,
+          "n_repeats": 5
+        },
+        "cka_distance": {
+          "mean": 0.9933655133905921,
+          "sd": 0.0008372259302873539,
+          "n_repeats": 5
+        }
+      }
+    },
+    "36": {
+      "cross": {
+        "rtd": {
+          "mean": 45.60458602905273,
+          "sd": 1.6910047535483919,
+          "n_repeats": 5
+        },
+        "cka_distance": {
+          "mean": 0.9174558517879756,
+          "sd": 0.0073761268748392264,
+          "n_repeats": 5
+        }
+      },
+      "identity": {
+        "rtd": {
+          "mean": 53.824468994140624,
+          "sd": 0.5467475511409741,
+          "n_repeats": 5
+        },
+        "cka_distance": {
+          "mean": 0.9955321283715515,
+          "sd": 0.001022382807115697,
+          "n_repeats": 5
+        }
+      }
+    }
+  },
+  "split": {
+    "rule": "prompt_id_split(meta, seed=0, 0.6/0.2/0.2)",
+    "dev_prompt_ids_hash": "debfc629f24af648526470f23db8fe2d837ea40e06eeaea8b24d32c54559a3cf"
+  }
+}
