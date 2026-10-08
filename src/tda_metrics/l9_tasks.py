@@ -1,10 +1,13 @@
 """Пакетная задача L9: пакеты ответов с долей галлюцинаций и признаки групп (мастер-план §L9).
 
 Конструкция пакетов: dev prompt_id режутся на фолды, из пула каждого фолда
-детерминированными сидами выбираются correct- и hallucinated-строки (их
-глобальные item-индексы кэша сохраняются в составе пакета), Q строится
-вложенной заменой ``make_alpha_replacement`` — пакеты с общими сидами и
-разными alpha имеют общий базис и вложенные замены. Признаки пакета —
+детерминированными сидами выбираются две непересекающиеся correct-выборки
+P и Q_correct, а также hallucinated-строки (их глобальные item-индексы
+кэша сохраняются в составе пакета). Q строится вложенной заменой точек
+``Q_correct`` через ``make_alpha_replacement`` — пакеты с общими сидами и
+разными alpha имеют общий базис и вложенные замены. Поэтому alpha=0 —
+честный same-law контроль, а не тривиальное сравнение P с самой собой.
+Признаки пакета —
 метрики ``compute_all`` (группы topology/coverage/statistics) и агрегаты
 скоринга уверенности (группа llm_confidence). Задачи: A — логистическая
 регрессия обнаружения ``alpha > 0`` (AUROC, AUPRC, balanced accuracy),
@@ -70,18 +73,21 @@ def build_packet(correct_matrix, correct_index, hall_matrix, hall_index,
     ``correct_matrix``/``hall_matrix`` — матрицы пула фолда (n_pool, d);
     ``correct_index``/``hall_index`` — глобальные item-индексы этих строк
     (позиции пунктов в полном кэше, 0..n_items-1) той же длины. Выборки:
-    ``idx_p = rng(seed_p).choice(n_pool, n_cloud, replace=False)``
-    (аналогично ``idx_h`` от seed_h); ``permutation =
-    rng(seed_mix).permutation(n_cloud)``; ``Q = make_alpha_replacement(P,
-    H, alpha, permutation)`` — при общих сидах замены соседних alpha
-    вложены. Состав: ``P_items``/``Q_items`` — построчные кортежи
+    ``idx_p`` и ``idx_q`` последовательно выбираются без возвращения из
+    correct-пула одним генератором ``rng(seed_p)``; поэтому P и Q_correct
+    непересекающиеся независимые подвыборки одного распределения.
+    ``idx_h`` выбирается от ``seed_h``; ``permutation =
+    rng(seed_mix).permutation(n_cloud)``; ``Q = make_alpha_replacement(
+    Q_correct, H, alpha, permutation)`` — при общих сидах замены соседних
+    alpha вложены. Состав: ``P_items``/``Q_items`` — построчные кортежи
     (kind, глобальный item-индекс); позиция pos получает
     ('hallucinated', hall_index[idx_h[pos]]), если pos входит в первые
     ``round(alpha*n_cloud)`` позиций permutation, иначе ('correct',
-    correct_index[idx_p[pos]]); ``n_hall = round(alpha*n_cloud)``. При
-    alpha=0 Q — чистая correct-выборка (same-law), при alpha=1 —
-    hallucinated. ValueError при пуле меньше n_cloud, несовпадении длин
-    матриц с их индексами или alpha вне [0, 1].
+    correct_index[idx_q[pos]]); ``n_hall = round(alpha*n_cloud)``. При
+    alpha=0 Q — независимая чистая correct-выборка (same-law), при
+    alpha=1 — hallucinated. ValueError при correct-пуле меньше
+    ``2 * n_cloud``, hallucinated-пуле меньше ``n_cloud``, несовпадении
+    длин матриц с их индексами или alpha вне [0, 1].
     """
     correct_matrix = np.asarray(correct_matrix)
     hall_matrix = np.asarray(hall_matrix)
@@ -95,20 +101,25 @@ def build_packet(correct_matrix, correct_index, hall_matrix, hall_index,
         raise ValueError(
             f'hall_matrix ({len(hall_matrix)}) и hall_index '
             f'({len(hall_index)}) разной длины')
-    if len(correct_matrix) < n_cloud:
+    if len(correct_matrix) < 2 * n_cloud:
         raise ValueError(
-            f'пул correct ({len(correct_matrix)}) меньше n_cloud={n_cloud}')
+            f'пул correct ({len(correct_matrix)}) меньше 2*n_cloud={2 * n_cloud}; '
+            'нужны непересекающиеся P и Q_correct')
     if len(hall_matrix) < n_cloud:
         raise ValueError(
             f'пул hallucinated ({len(hall_matrix)}) меньше n_cloud={n_cloud}')
-    idx_p = np.random.default_rng(seed_p).choice(
-        len(correct_matrix), size=n_cloud, replace=False)
+    correct_rng = np.random.default_rng(seed_p)
+    idx_p = correct_rng.choice(len(correct_matrix), size=n_cloud, replace=False)
+    remaining_correct = np.setdiff1d(
+        np.arange(len(correct_matrix), dtype=np.int64), idx_p, assume_unique=False)
+    idx_q = correct_rng.choice(remaining_correct, size=n_cloud, replace=False)
     idx_h = np.random.default_rng(seed_h).choice(
         len(hall_matrix), size=n_cloud, replace=False)
     permutation = np.random.default_rng(seed_mix).permutation(n_cloud)
     p_cloud = correct_matrix[idx_p]
+    q_correct_cloud = correct_matrix[idx_q]
     h_cloud = hall_matrix[idx_h]
-    q_cloud = make_alpha_replacement(p_cloud, h_cloud, alpha, permutation)
+    q_cloud = make_alpha_replacement(q_correct_cloud, h_cloud, alpha, permutation)
     n_hall = int(round(alpha * n_cloud))
     replaced = np.zeros(n_cloud, dtype=bool)
     replaced[permutation[:n_hall]] = True
@@ -118,7 +129,7 @@ def build_packet(correct_matrix, correct_index, hall_matrix, hall_index,
         if replaced[position]:
             q_items.append(('hallucinated', int(hall_index[idx_h[position]])))
         else:
-            q_items.append(('correct', int(correct_index[idx_p[position]])))
+            q_items.append(('correct', int(correct_index[idx_q[position]])))
     return {
         'P': p_cloud,
         'Q': q_cloud,

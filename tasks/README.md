@@ -1,16 +1,19 @@
-# Реестр следующих work packet'ов
+# Реестр work packet'ов
 
 Это versioned-замена локальным заметкам `docs/`, которые в данном репозитории
 игнорируются. Каждый packet независим, не перезаписывает готовые артефакты и
 должен создавать новую серию в `results/raw/`.
 
-| Порядок | ID | Цель | Зависимости |
+| Приоритет | ID | Цель | Зависимости |
 |---:|---|---|---|
-| 1 | [Wave PRV](wave_prv_precision_recall_visualization.md) | Объяснить механику precision/recall@k в нативном 2D | Нет |
-| 2 | [Wave L3R](wave_l3r_llm_calibration_and_length_control.md) | Исправить L3d и получить LLM-native null/power | Существующий LLM cache |
-| 3 | [Wave ST](wave_st_source_truth_factorial.md) | Отделить truth-effect от source/style-effect | Wave L3R protocol |
-| 4 | [Wave L9R](wave_l9r_external_packet_validation.md) | Проверить пакетную задачу без вложенных пакетов и leakage | Wave ST data; L3R calibration |
-| 5 | [Wave S5](wave_s5_clean_synthetic_directionality.md) | Изолировать mode drop/invention от moment/density-конфаундов | Нет |
+| 1 — единственный запуск | [Wave L9M](wave_l9m_length_matched_packets.md) | Проверить L9 без конфаунда длины; length-matched dose response | Исправленный L9 packet builder; встроенный стратифицированный sampler |
+
+## Вне текущего scope
+
+`Wave PRV`, `Wave L3R`, `Wave ST`, `Wave L9R` и `Wave S5` сохранены в этой
+папке как идеи для возможного продолжения, но **не являются задачами данного
+цикла**. Wave 5 также не перезапускается и не требуется для интерпретации
+L9M: его артефакты остаются историческими, read-only.
 
 ## Общие правила оркестрации
 

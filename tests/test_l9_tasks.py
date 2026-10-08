@@ -21,7 +21,7 @@ from tda_metrics.l9_tasks import (
     prompt_folds,
 )
 
-N_POOL = 12
+N_POOL = 24
 D = 3
 N_CLOUD = 10
 FOLD_ALPHAS = (0.0, 0.0, 0.05, 0.1, 0.15, 0.25, 0.5, 0.5, 0.75, 1.0)
@@ -68,14 +68,17 @@ def test_prompt_folds_deduplicates_and_validates():
 
 # ---------- пакеты ----------
 
-def test_build_packet_alpha_zero_is_pure_correct():
+def test_build_packet_alpha_zero_is_independent_pure_correct_same_law():
     packet = build_packet(*marker_pools(), alpha=0.0, n_cloud=N_CLOUD,
                           seed_p=11, seed_h=22, seed_mix=33)
     assert packet['n_hall'] == 0
-    assert np.array_equal(packet['Q'], packet['P'])
+    assert not np.array_equal(packet['Q'], packet['P'])
     assert all(kind == 'correct' for kind, _ in packet['Q_items'])
     assert packet['P'].shape == (N_CLOUD, D) and packet['Q'].shape == (N_CLOUD, D)
     assert len(packet['P_items']) == len(packet['Q_items']) == N_CLOUD
+    p_indices = {index for _, index in packet['P_items']}
+    q_indices = {index for _, index in packet['Q_items']}
+    assert p_indices.isdisjoint(q_indices)
 
 
 def test_build_packet_alpha_one_is_pure_hallucinated():
@@ -127,7 +130,8 @@ def test_build_packet_pool_too_small_and_index_mismatch_raise():
     correct_rows, correct_index, hall_rows, hall_index = marker_pools()
     with pytest.raises(ValueError):
         build_packet(correct_rows, correct_index, hall_rows, hall_index,
-                     alpha=0.5, n_cloud=N_POOL + 1, seed_p=1, seed_h=2, seed_mix=3)
+                     alpha=0.5, n_cloud=(N_POOL // 2) + 1,
+                     seed_p=1, seed_h=2, seed_mix=3)
     with pytest.raises(ValueError):
         build_packet(correct_rows, correct_index[:5], hall_rows, hall_index,
                      alpha=0.5, n_cloud=4, seed_p=1, seed_h=2, seed_mix=3)
