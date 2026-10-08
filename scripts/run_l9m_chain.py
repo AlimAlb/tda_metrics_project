@@ -341,7 +341,7 @@ def load_state():
 @section('pilot')
 def section_pilot(deps):
     import numpy as np
-    pools = deps['pools']
+    pools = deps['state']['pools']
     planned = []
     for fold in range(N_FOLDS):
         for repeat in range(REPEATS):
@@ -431,7 +431,7 @@ def section_grid(deps):
     from tda_metrics.l9m_pools import build_length_matched_packet
 
     lock = deps['lock']
-    pools = deps['pools']
+    pools = deps['state']['pools']
     metrics_obj = deps['metrics_obj']
     os.makedirs(RAW, exist_ok=True)
     done = load_done_ids()
