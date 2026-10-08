@@ -316,11 +316,12 @@ def section_permutation(deps):
     t0 = time.perf_counter()
     joint = np.concatenate([correct_m, hall_m])
     labels = np.concatenate([np.zeros(len(correct_m)), np.ones(len(hall_m))])
+    from tda_metrics.statistics import paired_permutation_labels
     for i in range(N_PERMS):
         eid = f'perm/dev/p{i}'
         if eid in done:
             continue
-        signs = shuffled_label_pair(len(correct_m), 1, seed=7000 + i)[0]
+        signs = paired_permutation_labels(len(correct_m), 1, seed=7000 + i)[0]
         labels_perm = labels.copy()
         flip = signs < 0
         labels_perm[:len(correct_m)][flip] = 1.0
@@ -391,10 +392,12 @@ def section_analysis(deps):
             if len(dev_vals) < 50:
                 continue
             mu, sd = float(dev_vals.mean()), float(dev_vals.std(ddof=1))
+            degenerate = sd <= 0.0
             z = (dev_vals - mu) / (sd + 1e-12)
             z_crit = float(np.quantile(np.abs(z), 0.95))
             row = {'n': n, 'metric': metric, 'null_mean': mu, 'null_sd': sd,
-                   'z_crit': z_crit, 'n_null_dev': int(len(dev_vals))}
+                   'z_crit': z_crit, 'n_null_dev': int(len(dev_vals)),
+                   'degenerate': degenerate}
             val_vals = null[(null['split'] == 'val') & (null['n'] == n)][metric].dropna()
             if len(val_vals) >= 50:
                 z_val = np.abs((val_vals - mu) / (sd + 1e-12))
@@ -430,11 +433,11 @@ def section_analysis(deps):
                     'split': split_name, 'alpha': alpha, 'metric': metric,
                     'mean': float(vals.mean()), 'mean_z': mean_z,
                     'power': power, 'n_reps': int(len(vals)),
-                    'z_crit': zc,
+                    'z_crit': zc, 'null_sd': float(base.loc[metric, 'null_sd']),
                 })
     power = pd.DataFrame(power_rows)
     p = np.array(pvals)
-    p_values = 2 * (1 - _norm_sf(p))
+    p_values = np.clip(2 * (1 - _norm_sf(p)), 0.0, 1.0)
     mask = power['metric'] != PRIMARY
     power['p_value'] = p_values
     power['q_bh'] = np.nan
