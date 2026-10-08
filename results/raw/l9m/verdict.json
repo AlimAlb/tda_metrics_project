@@ -1,0 +1,137 @@
+{
+  "created": "2026-10-08T07:13:21.987409+00:00",
+  "status": "INVALID_LENGTH_CONTROL",
+  "checks": {
+    "length_smd_within_tolerance": {
+      "value": 0.07434799655223844,
+      "tolerance": 0.1,
+      "pass": true
+    },
+    "q_len_mean_not_separating": {
+      "auroc": 0.8171428571428571,
+      "max": 0.55,
+      "pass": false
+    },
+    "n_cloud_constant": {
+      "pass": true
+    },
+    "bin_quotas_equal_across_sides": {
+      "pass": true,
+      "note": "гарантировано assert-ами sample_length_matched_pools"
+    },
+    "failed_rows": 0
+  },
+  "locked": {
+    "n_bins": 4,
+    "n_cloud": 500
+  },
+  "min_alpha_power08_heldout": {
+    "mtd_PQ": 0.75,
+    "mtd_QP": 0.5,
+    "ntd_PQ": 0.75,
+    "ntd_QP": null,
+    "precision@1": 0.25,
+    "recall@1": 1.0,
+    "precision@3": 0.25,
+    "recall@3": 1.0,
+    "precision@10": 0.5,
+    "recall@10": 0.75,
+    "mmd": 0.25,
+    "frechet": 0.25,
+    "js": null
+  },
+  "fpr": [
+    {
+      "metric": "mtd_PQ",
+      "fpr_heldout": 0.025,
+      "fpr_heldout_ci_low": 0.008166166190710242,
+      "fpr_heldout_ci_high": 0.05737435112726713,
+      "degenerate": false
+    },
+    {
+      "metric": "mtd_QP",
+      "fpr_heldout": 0.02,
+      "fpr_heldout_ci_low": 0.005475565879556445,
+      "fpr_heldout_ci_high": 0.050413609089896255,
+      "degenerate": false
+    },
+    {
+      "metric": "ntd_PQ",
+      "fpr_heldout": 0.055,
+      "fpr_heldout_ci_low": 0.02777225455217507,
+      "fpr_heldout_ci_high": 0.09627764443388101,
+      "degenerate": false
+    },
+    {
+      "metric": "ntd_QP",
+      "fpr_heldout": 0.055,
+      "fpr_heldout_ci_low": 0.02777225455217507,
+      "fpr_heldout_ci_high": 0.09627764443388101,
+      "degenerate": false
+    },
+    {
+      "metric": "precision@1",
+      "fpr_heldout": 0.03,
+      "fpr_heldout_ci_low": 0.011087455672203695,
+      "fpr_heldout_ci_high": 0.06415062670502639,
+      "degenerate": false
+    },
+    {
+      "metric": "recall@1",
+      "fpr_heldout": 0.045,
+      "fpr_heldout_ci_low": 0.020780422227004356,
+      "fpr_heldout_ci_high": 0.08370268807585404,
+      "degenerate": false
+    },
+    {
+      "metric": "precision@3",
+      "fpr_heldout": 0.09,
+      "fpr_heldout_ci_low": 0.05421425445606032,
+      "fpr_heldout_ci_high": 0.13850820847379608,
+      "degenerate": false
+    },
+    {
+      "metric": "recall@3",
+      "fpr_heldout": 0.095,
+      "fpr_heldout_ci_low": 0.058169609725119205,
+      "fpr_heldout_ci_high": 0.14437663997685266,
+      "degenerate": false
+    },
+    {
+      "metric": "precision@10",
+      "fpr_heldout": 0.115,
+      "fpr_heldout_ci_low": 0.07431337369227888,
+      "fpr_heldout_ci_high": 0.16754694448225504,
+      "degenerate": false
+    },
+    {
+      "metric": "recall@10",
+      "fpr_heldout": 0.15,
+      "fpr_heldout_ci_low": 0.10354952352186261,
+      "fpr_heldout_ci_high": 0.20715870366855224,
+      "degenerate": false
+    },
+    {
+      "metric": "mmd",
+      "fpr_heldout": 0.1,
+      "fpr_heldout_ci_low": 0.062159366254066165,
+      "fpr_heldout_ci_high": 0.15021278786775585,
+      "degenerate": false
+    },
+    {
+      "metric": "frechet",
+      "fpr_heldout": 0.08,
+      "fpr_heldout_ci_low": 0.046417608399578085,
+      "fpr_heldout_ci_high": 0.1266648560220818,
+      "degenerate": false
+    },
+    {
+      "metric": "js",
+      "fpr_heldout": 0.0,
+      "fpr_heldout_ci_low": 0.0,
+      "fpr_heldout_ci_high": 0.0182753403551488,
+      "degenerate": true
+    }
+  ],
+  "headline_allowed": "length-matched dose response on HaluEval candidate-answer representations (без claims о детекторе собственных галлюцинаций Qwen)"
+}

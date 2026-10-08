@@ -1,0 +1,92 @@
+{
+  "created": "2026-10-08T07:26:55.185441+00:00",
+  "sections": {
+    "env": "ok",
+    "window": "ok",
+    "length_encoding": "ok",
+    "crosscheck": "ok",
+    "figures": "ok"
+  },
+  "repeat": 0,
+  "alphas": [
+    0.0,
+    0.25,
+    0.5,
+    1.0
+  ],
+  "n_cloud": 500,
+  "n_bins_locked": 4,
+  "seeds": [
+    100000,
+    200000,
+    300000
+  ],
+  "length_window": {
+    "n_bins_locked": 4,
+    "bin_edges_finite": [
+      5.0,
+      7.0,
+      13.0
+    ],
+    "bin_quotas": [
+      21,
+      50,
+      376,
+      53
+    ],
+    "active_bins": 4,
+    "window_lo": 3.0,
+    "window_hi": 74.0,
+    "coverage_correct_in_window": 0.9998333333333334,
+    "coverage_hallucinated_in_window": 0.9995,
+    "full_correct_mean": 6.0445,
+    "full_hall_mean": 17.980333333333334,
+    "matched_p_mean": 9.272,
+    "matched_h_mean": 10.798,
+    "note": "окно length-matching: доля full dev-пулов correct/hallucinated с длинами внутри диапазона фактически отобранных строк; выводы L9M валидны внутри этого окна"
+  },
+  "length_encoding": {
+    "correct": {
+      "n_items": 6000,
+      "spearman_len_norm": 0.11424368564374793,
+      "spearman_len_pc1": -0.7830698203274765,
+      "ridge_r2_len_from_vectors": 0.5464069577478549,
+      "len_mean": 6.0445,
+      "len_std": 3.5127652568880836
+    },
+    "hallucinated": {
+      "n_items": 6000,
+      "spearman_len_norm": 0.7932257415691938,
+      "spearman_len_pc1": -0.7502396818503408,
+      "ridge_r2_len_from_vectors": 0.729774897722723,
+      "len_mean": 17.980333333333334,
+      "len_std": 8.424564077083685
+    }
+  },
+  "main_run_manifest": {
+    "protocol_sha256": "87d7039657fad766b6b0aa4dda51c5253a20b22fc8971a843747769cc9541617",
+    "grids": {
+      "alpha_grid": [
+        0.0,
+        0.05,
+        0.1,
+        0.15,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "repeats_dev": 10,
+      "repeats_heldout": 4,
+      "null_dev": 500,
+      "null_heldout": 200,
+      "n_cloud": 500,
+      "n_bins_locked": 4,
+      "layer": 18,
+      "pca_dim": 16,
+      "pca_fit": "dev-correct, весь сплит",
+      "rtd": "исключён из батареи (отклонение, см. протокол)"
+    }
+  },
+  "runtime_seconds": 27.977271974999894
+}

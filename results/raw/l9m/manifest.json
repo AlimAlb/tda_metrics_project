@@ -1,0 +1,43 @@
+{
+  "created": "2026-10-08T07:13:21.989939+00:00",
+  "protocol_path": "protocols/l9m_protocol.json",
+  "protocol_sha256": "87d7039657fad766b6b0aa4dda51c5253a20b22fc8971a843747769cc9541617",
+  "sections": {
+    "env": "ok",
+    "pytest": "ok",
+    "pilot": "ok",
+    "grid": "ok",
+    "analysis": "ok",
+    "figures": "ok",
+    "tables": "ok",
+    "verdict": "ok"
+  },
+  "grids": {
+    "alpha_grid": [
+      0.0,
+      0.05,
+      0.1,
+      0.15,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "repeats_dev": 10,
+    "repeats_heldout": 4,
+    "null_dev": 500,
+    "null_heldout": 200,
+    "n_cloud": 500,
+    "n_bins_locked": 4,
+    "layer": 18,
+    "pca_dim": 16,
+    "pca_fit": "dev-correct, весь сплит",
+    "rtd": "исключён из батареи (отклонение, см. протокол)"
+  },
+  "split_hashes": {
+    "dev": "debfc629f24af648526470f23db8fe2d837ea40e06eeaea8b24d32c54559a3cf",
+    "val": "98c55b0de59675e6f9ba8ccc33e0d0a3ac79f71069345b5cf2a71371b3b1a1a4",
+    "test": "f4145eb02aa948656c9ce44adfd4f10dcc7ba51a568ee24e454add962708d5f7"
+  },
+  "runtime_seconds": 5664.267052387
+}

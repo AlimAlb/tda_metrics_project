@@ -383,7 +383,8 @@ def main():
     deps['panels'] = build_panels(deps)
     deps['window'] = section_window(deps)
     deps['length_encoding'] = section_length_encoding(deps)
-    crosscheck = section_crosscheck(deps)
+    deps['crosscheck'] = section_crosscheck(deps)
+    crosscheck = deps['crosscheck']
     if crosscheck is None:
         print('L9M-VIZ DONE rc=1')
         return
