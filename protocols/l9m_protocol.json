@@ -43,30 +43,26 @@
     "n_cloud_floor": 250,
     "bin_rule": "квантильные бины по объединению длин n_pooled трёх пулов (A-correct, B-correct, H); ±inf-концы; дубликаты квантилей схлопываются",
     "bin_quota_rule": "cap_бина = min(count_A, count_QB, count_H); квоты — level-fill (максимально равное заполнение, детерминированно)",
-    "prompt_halving": "rng(seed_half).permutation уникальных промптов; half_A = первые floor(n/2) — сторона P; half_B = остальные (при нечётном на 1 больше) — стороны Q_correct и H; P и Q_correct не пересекаются ни по item, ни по prompt",
+    "prompt_halving": "rng(seed_half).permutation уникальных промптов сплита; half_A — первые floor(n/2), half_B — остальные: сторона A даёт P (correct), сторона B — Q_correct (correct) и H (hallucinated); P и Q_correct не пересекаются ни по item, ни по prompt",
     "H_side": "hallucinated-пул берётся только из half_B — состав Q_alpha целиком в prompt-половине B",
-    "pilot_lock": "до основного прогона: по всем 928 запланированным базисам для каждого rung лестницы (10,8,6,5,4,3,2; вызов с bin_ladder=()) считается min(n_cloud_actual); LOCK = первый rung с min==500; если такого нет — rung с максимальным min и n_cloud=min; если n_cloud<250 — прогон падает (дизайн невыполним); LOCK фиксируется одинаково для dev/val/test (ослабление баланса на val/test запрещено)",
+    "pool_level": "Amendment #1: пулы = целые сплиты (dev: 6000 промптов -> половины 3000; heldout: 4000 -> половины 2000), НЕ фолды; фолд-пулы (1200) и раздельные val/test-половины (1000) не дают 500 тройственно-согласованных точек ни при одном биннинге (пилоты 08.10: 83-161 и 198-213 соответственно)",
+    "pilot_lock": "до основного прогона: по всем запланированным базам (714) для каждого rung лестницы (10,8,6,5,4,3,2; вызов с bin_ladder=()) считается min(n_cloud_actual); LOCK = первый rung с min==500 (по зонду ожидается k=4: dev 889-917, heldout 583-608); если такого нет — rung с максимальным min и n_cloud=min; если n_cloud<250 — прогон падает; LOCK один для dev и heldout (ослабление баланса на heldout запрещено)",
     "seeds": {
-      "dev_packet": "seed_half=100000+1000*fold+repeat, seed_sample=200000+1000*fold+repeat, seed_mix=300000+1000*fold+repeat",
-      "dev_null": "seed_half=400000+1000*fold+pair, seed_sample=500000+1000*fold+pair (pair=0..99)",
-      "val_packet": "seed_half=700000+repeat, seed_sample=800000+repeat, seed_mix=900000+repeat",
-      "val_null": "seed_half=1000000+pair, seed_sample=1100000+pair (pair=0..199)",
-      "test_packet": "seed_half=1200000+repeat, seed_sample=1300000+repeat, seed_mix=1400000+repeat",
-      "test_null": "seed_half=1500000+pair, seed_sample=1600000+pair (pair=0..199)"
+      "dev_packet": "seed_half=100000+repeat, seed_sample=200000+repeat, seed_mix=300000+repeat (repeat=0..9)",
+      "dev_null": "seed_half=400000+pair, seed_sample=500000+pair (pair=0..499)",
+      "heldout_packet": "seed_half=700000+repeat, seed_sample=800000+repeat, seed_mix=900000+repeat (repeat=0..3)",
+      "heldout_null": "seed_half=1000000+pair, seed_sample=1100000+pair (pair=0..199)"
     }
   },
 
   "design": {
     "alpha_grid": [0.0, 0.05, 0.1, 0.15, 0.25, 0.5, 0.75, 1.0],
-    "dev": "5 фолдов x 4 повтора x 8 alpha = 160 пакетов; все alpha одного (fold, repeat) — общий базис, вложенные замены (dose-response кривые, НЕ независимые пакеты, НЕ headline deployment validation)",
-    "val": "без фолдов, 4 повтора x 8 alpha = 32 пакета (пул — весь val-сплит)",
-    "test": "без фолдов, 4 повтора x 8 alpha = 32 пакета (пул — весь test-сплит)",
+    "dev": "Amendment #1: сплит-уровень; 10 повторов x 8 alpha = 80 пакетов; все alpha одного повтора — общий базис, вложенные замены (dose-response кривые, НЕ независимые пакеты, НЕ headline deployment validation); повторы служат OOF-группами secondary",
+    "heldout": "Amendment #1: val+test слиты (4000 промптов); 4 повтора x 8 alpha = 32 пакета; observed FPR с binomial CI (200 same-law пар) + power по alpha + min-alpha — всё на heldout; ни одна настройка не выполняется на heldout",
     "null_pairs": {
-      "rule": "same-law P vs Q_correct той же length-matched механикой (alpha=0), свежие сиды; = independent same-law пары",
+      "rule": "same-law P vs Q_correct той же length-matched механикой (alpha=0), свежие сиды; = independent same-law пары (половины prompt-дизъюнктны)",
       "dev": 500,
-      "val": 200,
-      "test": 200,
-      "note": "val/test-нули дают observed FPR с CI; test-нули не участвуют ни в какой настройке"
+      "heldout": 200
     }
   },
 
@@ -92,8 +88,8 @@
   "primary_analysis": {
     "threshold_rule": "по dev-null на каждую метрику: direction-aware квантиль — 'greater': quantile(0.95, method='higher'), 'less': quantile(0.05, method='lower'); nominal FPR=0.05",
     "degenerate_rule": "если sd(dev-null)<=0 — метрика помечается degenerate и исключается из headline (ожидаемо для js при 500x16 — прецедент L3R)",
-    "fpr": "observed FPR на val-null и test-null (200 пар каждый) с биномиальным 95% CI (binomtest.proportion_ci)",
-    "power": "по каждому сплиту x alpha x метрика: доля пакетов за направленным порогом; headline — минимальная alpha сетки с power>=0.8 на test (по метрикам)",
+    "fpr": "Amendment #1: observed FPR на heldout-null (val+test, 200 пар) с биномиальным 95% CI (binomtest.proportion_ci)",
+    "power": "по dev и heldout x alpha x метрика: доля пакетов за направленным порогом; headline — минимальная alpha сетки с power>=0.8 на heldout (по метрикам)",
     "standardized_effect": "mean_z = mean(sign*(value-null_mean)/null_sd) по alpha (moment-ы из dev-null)"
   },
 
@@ -104,7 +100,7 @@
   },
 
   "secondary_analysis": {
-    "oof": "GroupKFold(5) по фолдам на dev-пакетах: StandardScaler+Logistic (alpha>0) и StandardScaler+Ridge (alpha) — только для трёх primary-групп",
+    "oof": "Amendment #1: GroupKFold(5) по ПОВТОРАМ (10 значений) на dev-пакетах: StandardScaler+Logistic (alpha>0) и StandardScaler+Ridge (alpha) — только для трёх primary-групп; ограничение: кросс-повторное пересечение промптов задаётся documentрованно (пакеты сплит-уровня)",
     "single_feature": "OOF logistic по каждой метрике отдельно (AUROC)",
     "small_alpha": "отдельный отчёт на подмножестве alpha<=0.1 (0, 0.05, 0.1)",
     "interpretation": "иллюстрация калибровки смеси, не доказательство практической детекции"
@@ -122,6 +118,23 @@
   },
 
   "headline_constraint": "допустим только формат «length-matched dose response on HaluEval candidate-answer representations»; claims о детекторе собственных галлюцинаций Qwen запрещены; старый L9 (alpha=0 = копия P, длина как утечка) не переинтерпретируется — исправляющая серия L9M замещает его выводы",
+
+  "amendments": [
+    {
+      "id": "amendment_1",
+      "date": "2026-10-08",
+      "trigger": "пилот фолд-дизайна провалился: при 5 фолдах (пулы 1200 промптов) с prompt-половинами min_total = 83-154 по всей лестнице (10..2) < пола 250; без половин на фолдах 141-336; на раздельных val/test-половинах (1000 промптов) потолок 198-213 при k=10, максимум ~300 при любом биннинге. Причина: распределения длин correct (короткие gold-спаны) и hallucinated (длинные ChatGPT-ответы) пересекаются узко, и малые пулы не дают 500 тройственно-согласованных точек",
+      "probe_evidence": "сплит-уровень: dev-половины (3000) k=10: 624-640, k=4: 889-917; heldout val+test-половины (2000) k=4: 583-608 (k=10: 418-434 < 500)",
+      "changes": [
+        "пакеты и нули строятся на сплит-уровне с prompt-дизъюнктными половинами (родная механика сэмплера), не по фолдам",
+        "val и test слиты в один heldout (4000 промптов); индивидуальные сплит-хэши dev/val/test по-прежнему проверяются",
+        "глобальный пилот-лок биннинга по всем 714 базам (ожидание k=4); n_cloud=500 сохранён везде",
+        "dev: 10 повторов (было 5 фолдов x 4 повтора) — повторы служат OOF-группами secondary (GroupKFold(5)); heldout: 4 повтора",
+        "FPR/power/min-alpha сообщаются на heldout; настройка — только на dev"
+      ],
+      "unchanged": ["метрики-батарея и направления", "threshold rule", "q_len-инвалидация AUROC<=0.55", "SMD<0.1", "запрещённые признаки", "alpha-сетка", "PCA на dev-correct", "rtd-отклонение"]
+    }
+  ],
 
   "runtime_budget": {
     "estimate": "1124 вызова compute_all (n=500) ~2.6s -> ~50 мин + пилот/анализ ~10 мин; кэш restore ~10 мин (частями); итого ~1.5 ч на T4",

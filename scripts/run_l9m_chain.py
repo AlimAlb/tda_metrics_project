@@ -1,20 +1,25 @@
 """L9M: length-matched packet dose response без confidence-признаков (wave L9M).
 
-Запускается на Colab VM (heavy-стек: torch не нужен — только кэш экстракции,
-TF-метрики, ripser++/MTopDiv, pandas/scipy/sklearn). Поток: восстановление
-кэша -> pytest-гейт -> пилот биннинга (лок n_bins/n_cloud по всем
-запланированным сидам) -> same-law null-пары (dev/val/test) и length-matched
-пакеты (dev: 5 фолдов x 4 повтора x 8 alpha; val/test: без фолдов,
-4 повтора x 8 alpha; alpha одного (fold, repeat) вложены — дозовые кривые,
-не независимые пакеты) -> калибровка порогов на dev-null (направленный
-threshold, coverage -> 'less', дистанции -> 'greater') -> FPR с binomial CI
-(val/test null) и power по alpha -> dose-response, single-feature OOF,
-length-balance -> figures/verdict/summary.
+Запускается на Colab VM (heavy-стек: TF-метрики, ripser++/MTopDiv,
+pandas/scipy/sklearn; кэш экстракции — без torch). Поток: восстановление
+кэша -> pytest-гейт -> пилот биннинга (глобальный лок n_bins/n_cloud по
+всем запланированным базам, Amendment #1: dev/heldout на сплит-уровне с
+prompt-дизъюнктными половинами) -> same-law null-пары (dev 500, heldout
+200) и length-matched пакеты (dev: 10 повторов x 8 alpha; heldout: 4
+повтора x 8 alpha; alpha одного повтора вложены — дозовые кривые, не
+независимые пакеты) -> калибровка порогов на dev-null (направленный
+threshold, coverage -> 'less', дистанции -> 'greater') -> observed FPR с
+binomial CI на heldout-null и power по alpha -> dose-response,
+single-feature OOF, length-balance -> figures/verdict/summary.
 
-Отклонение от пакета: rtd исключён из батареи (стоимость ~x2 и шумовой пол;
-прецедент L3R) — topology_only = {mtd_PQ, mtd_QP, ntd_PQ, ntd_QP}; задокументировано
-в протоколе. Resume-safe: строки дописываются в rows.jsonl по experiment_id;
-SystemExit не поднимается (только печать rc).
+Отклонения от пакета (Amendment #1, см. protocols/l9m_protocol.json):
+пакеты строятся на сплит-уровне (не по фолдам — фолд-пулы 1200 промптов
+не дают 500 тройственно-согласованных точек ни при одном биннинге);
+val/test слиты в heldout (раздельные половины по 1000 промптов дают
+потолок ~300); OOF-группы = повторы (10). rtd исключён из батареи
+(прецедент L3R), topology_only = mtd_PQ, mtd_QP, ntd_PQ, ntd_QP.
+Resume-safe: строки дописываются в rows.jsonl по experiment_id;
+SystemExit не поднимается; stdout возвращается при завершении.
 """
 from __future__ import annotations
 
@@ -41,13 +46,11 @@ PCA_DIM = 16
 N_CLOUD_TARGET = 500
 N_CLOUD_FLOOR = 250
 BIN_LADDER = (10, 8, 6, 5, 4, 3, 2)
-N_FOLDS = 5
-FOLD_SEED = 500
-REPEATS = 4
+REPEATS_DEV = 10
+REPEATS_HELD = 4
 ALPHA_GRID = [0.0, 0.05, 0.1, 0.15, 0.25, 0.5, 0.75, 1.0]
-NULL_DEV_PER_FOLD = 100
-NULL_VAL = 200
-NULL_TEST = 200
+NULL_DEV = 500
+NULL_HELD = 200
 
 METRICS = ['mtd_PQ', 'mtd_QP', 'ntd_PQ', 'ntd_QP',
            'precision@1', 'recall@1', 'precision@3', 'recall@3',
@@ -156,29 +159,20 @@ def read_rows():
     return pd.DataFrame(rows)
 
 
-def dev_packet_seeds(fold, repeat):
-    return (100000 + 1000 * fold + repeat, 200000 + 1000 * fold + repeat,
-            300000 + 1000 * fold + repeat)
+def dev_packet_seeds(repeat):
+    return (100000 + repeat, 200000 + repeat, 300000 + repeat)
 
 
-def dev_null_seeds(fold, pair):
-    return (400000 + 1000 * fold + pair, 500000 + 1000 * fold + pair)
+def dev_null_seeds(pair):
+    return (400000 + pair, 500000 + pair)
 
 
-def val_packet_seeds(repeat):
+def held_packet_seeds(repeat):
     return (700000 + repeat, 800000 + repeat, 900000 + repeat)
 
 
-def val_null_seeds(pair):
+def held_null_seeds(pair):
     return (1000000 + pair, 1100000 + pair)
-
-
-def test_packet_seeds(repeat):
-    return (1200000 + repeat, 1300000 + repeat, 1400000 + repeat)
-
-
-def test_null_seeds(pair):
-    return (1500000 + pair, 1600000 + pair)
 
 
 def fold_pools(meta_l, x16, prompts):
@@ -232,12 +226,12 @@ def metrics_of(metrics_obj, P, Q):
     return out
 
 
-def packet_row(eid, kind, split, fold, repeat, pair_idx, alpha, seeds,
+def packet_row(eid, kind, split, repeat, pair_idx, alpha, seeds,
                pools_obj, packet, metrics, seconds):
     import numpy as np
     diagnostics = pools_obj['diagnostics']
     return {
-        'experiment_id': eid, 'kind': kind, 'split': split, 'fold': fold,
+        'experiment_id': eid, 'kind': kind, 'split': split,
         'repeat': repeat, 'pair_idx': pair_idx, 'alpha': alpha,
         'seed_half': seeds[0], 'seed_sample': seeds[1], 'seed_mix': seeds[2],
         'n_cloud_actual': pools_obj['n_cloud_actual'],
@@ -290,7 +284,6 @@ def load_state():
     from tda_metrics.embedding_cache import load_cache
     from tda_metrics.llm_experiments import prompt_id_split, prompt_ids_hash
     from tda_metrics.reduction import pca_fit, pca_transform
-    from tda_metrics.l9_tasks import prompt_folds
 
     meta, vectors, manifest = load_cache(
         CACHE_DIR,
@@ -322,13 +315,11 @@ def load_state():
     progress(f'PCA explained total: {info.get("total")}')
     x16 = np.asarray(x16, dtype=float)
 
-    folds = prompt_folds(splits['dev'], n_folds=N_FOLDS, seed=FOLD_SEED)
+    heldout_prompts = sorted(splits['val'] + splits['test'])
     pools = {
-        ('dev', fold): fold_pools(meta_l, x16, prompts)
-        for fold, prompts in enumerate(folds)
+        ('dev', None): fold_pools(meta_l, x16, splits['dev']),
+        ('heldout', None): fold_pools(meta_l, x16, heldout_prompts),
     }
-    pools[('val', None)] = fold_pools(meta_l, x16, splits['val'])
-    pools[('test', None)] = fold_pools(meta_l, x16, splits['test'])
     for key, value in pools.items():
         progress(f'пул {key}: correct {len(value["correct_index"])}, '
                  f'hall {len(value["hall_index"])}')
@@ -338,33 +329,56 @@ def load_state():
     }
 
 
+def planned_items():
+    items = []
+    for pair in range(NULL_DEV):
+        items.append({
+            'eid': f'null/dev/x/p{pair}', 'kind': 'null', 'split': 'dev',
+            'repeat': None, 'pair_idx': pair, 'alpha': 0.0,
+            'seeds': (*dev_null_seeds(pair), 0), 'pool_key': ('dev', None),
+        })
+    for pair in range(NULL_HELD):
+        items.append({
+            'eid': f'null/heldout/x/p{pair}', 'kind': 'null', 'split': 'heldout',
+            'repeat': None, 'pair_idx': pair, 'alpha': 0.0,
+            'seeds': (*held_null_seeds(pair), 0), 'pool_key': ('heldout', None),
+        })
+    for repeat in range(REPEATS_DEV):
+        for alpha in ALPHA_GRID:
+            items.append({
+                'eid': f'packet/dev/x/r{repeat}/a{alpha}', 'kind': 'packet',
+                'split': 'dev', 'repeat': repeat, 'pair_idx': None,
+                'alpha': alpha, 'seeds': dev_packet_seeds(repeat),
+                'pool_key': ('dev', None), 'per_base': repeat,
+            })
+    for repeat in range(REPEATS_HELD):
+        for alpha in ALPHA_GRID:
+            items.append({
+                'eid': f'packet/heldout/x/r{repeat}/a{alpha}', 'kind': 'packet',
+                'split': 'heldout', 'repeat': repeat, 'pair_idx': None,
+                'alpha': alpha, 'seeds': held_packet_seeds(repeat),
+                'pool_key': ('heldout', None), 'per_base': repeat,
+            })
+    return items
+
+
 @section('pilot')
 def section_pilot(deps):
     import numpy as np
     pools = deps['state']['pools']
-    planned = []
-    for fold in range(N_FOLDS):
-        for repeat in range(REPEATS):
-            planned.append((('dev', fold), dev_packet_seeds(fold, repeat)))
-        for pair in range(NULL_DEV_PER_FOLD):
-            planned.append((('dev', fold), dev_null_seeds(fold, pair)))
-    for repeat in range(REPEATS):
-        planned.append((('val', None), val_packet_seeds(repeat)))
-    for pair in range(NULL_VAL):
-        planned.append((('val', None), val_null_seeds(pair)))
-    for repeat in range(REPEATS):
-        planned.append((('test', None), test_packet_seeds(repeat)))
-    for pair in range(NULL_TEST):
-        planned.append((('test', None), test_null_seeds(pair)))
-    progress(f'пилот: {len(planned)} сэмплов по лестнице {BIN_LADDER}')
+    seen = {}
+    for item in planned_items():
+        seen[(item['pool_key'], item['seeds'][0], item['seeds'][1])] = None
+    planned = list(seen)
+    progress(f'пилот: {len(planned)} баз по лестнице {BIN_LADDER}')
 
     lock = None
     ladder_report = []
     for n_bins in BIN_LADDER:
         totals = np.empty(len(planned), dtype=np.int64)
-        for i, (pool_key, seeds) in enumerate(planned):
+        for i, (pool_key, seed_half, seed_sample) in enumerate(planned):
             pools_obj = sample_pools(pools[pool_key], N_CLOUD_TARGET,
-                                      seeds[0], seeds[1], n_bins)
+                                     seed_half, seed_sample, n_bins)
             totals[i] = pools_obj['n_cloud_actual']
         min_total = int(totals.min())
         ladder_report.append({'n_bins': n_bins, 'min_total': min_total})
@@ -384,48 +398,6 @@ def section_pilot(deps):
     return {'lock': lock, 'ladder_report': ladder_report}
 
 
-def planned_items():
-    items = []
-    for fold in range(N_FOLDS):
-        for pair in range(NULL_DEV_PER_FOLD):
-            items.append({
-                'eid': f'null/dev/f{fold}/p{pair}', 'kind': 'null', 'split': 'dev',
-                'fold': fold, 'repeat': None, 'pair_idx': pair, 'alpha': 0.0,
-                'seeds': (*dev_null_seeds(fold, pair), 0), 'pool_key': ('dev', fold),
-            })
-    for pair in range(NULL_VAL):
-        items.append({
-            'eid': f'null/val/x/p{pair}', 'kind': 'null', 'split': 'val',
-            'fold': None, 'repeat': None, 'pair_idx': pair, 'alpha': 0.0,
-            'seeds': (*val_null_seeds(pair), 0), 'pool_key': ('val', None),
-        })
-    for pair in range(NULL_TEST):
-        items.append({
-            'eid': f'null/test/x/p{pair}', 'kind': 'null', 'split': 'test',
-            'fold': None, 'repeat': None, 'pair_idx': pair, 'alpha': 0.0,
-            'seeds': (*test_null_seeds(pair), 0), 'pool_key': ('test', None),
-        })
-    for fold in range(N_FOLDS):
-        for repeat in range(REPEATS):
-            for alpha in ALPHA_GRID:
-                items.append({
-                    'eid': f'packet/dev/f{fold}/r{repeat}/a{alpha}', 'kind': 'packet',
-                    'split': 'dev', 'fold': fold, 'repeat': repeat, 'pair_idx': None,
-                    'alpha': alpha, 'seeds': dev_packet_seeds(fold, repeat),
-                    'pool_key': ('dev', fold), 'per_base': (fold, repeat),
-                })
-    for split_name, seeds_fn in (('val', val_packet_seeds), ('test', test_packet_seeds)):
-        for repeat in range(REPEATS):
-            for alpha in ALPHA_GRID:
-                items.append({
-                    'eid': f'packet/{split_name}/x/r{repeat}/a{alpha}', 'kind': 'packet',
-                    'split': split_name, 'fold': None, 'repeat': repeat,
-                    'pair_idx': None, 'alpha': alpha, 'seeds': seeds_fn(repeat),
-                    'pool_key': (split_name, None), 'per_base': (None, repeat),
-                })
-    return items
-
-
 @section('grid')
 def section_grid(deps):
     from tda_metrics.l9m_pools import build_length_matched_packet
@@ -441,38 +413,35 @@ def section_grid(deps):
     t0 = time.perf_counter()
     try:
         for item in planned_items():
-            if item.get('once') and item['eid'] in done:
-                continue
             if item['eid'] in done:
                 continue
-            pool_key = item['pool_key']
-            base_key = item.get('per_base')
+            base_key = (item['split'], item.get('per_base'))
             started = time.perf_counter()
             try:
-                if base_key is not None and base_key in bases:
+                if base_key[1] is not None and base_key in bases:
                     pools_obj = bases[base_key]
                 else:
                     pools_obj = sample_pools(
-                        pools[pool_key], lock['n_cloud'],
+                        pools[item['pool_key']], lock['n_cloud'],
                         item['seeds'][0], item['seeds'][1], lock['n_bins'])
                     if pools_obj['n_cloud_actual'] != lock['n_cloud']:
                         raise RuntimeError(
                             f'n_cloud_actual {pools_obj["n_cloud_actual"]} != lock '
                             f'{lock["n_cloud"]} — пилот и прод расходятся')
-                    if base_key is not None:
+                    if base_key[1] is not None:
                         bases[base_key] = pools_obj
                 packet = build_length_matched_packet(pools_obj, item['alpha'], item['seeds'][2])
                 metrics = metrics_of(metrics_obj, packet['P'], packet['Q'])
                 row = packet_row(
-                    item['eid'], item['kind'], item['split'], item['fold'],
+                    item['eid'], item['kind'], item['split'],
                     item['repeat'], item['pair_idx'], item['alpha'], item['seeds'],
                     pools_obj, packet, metrics, time.perf_counter() - started)
             except Exception as exc:
                 row = {
                     'experiment_id': item['eid'], 'kind': item['kind'],
-                    'split': item['split'], 'fold': item['fold'],
-                    'repeat': item['repeat'], 'pair_idx': item['pair_idx'],
-                    'alpha': item['alpha'], 'status': 'failed',
+                    'split': item['split'], 'repeat': item['repeat'],
+                    'pair_idx': item['pair_idx'], 'alpha': item['alpha'],
+                    'status': 'failed',
                     'error_message': f'{type(exc).__name__}: {exc}',
                 }
             append_row(row, handle)
@@ -528,23 +497,23 @@ def section_analysis(deps):
         row = {'metric': metric, 'direction': direction_of(metric),
                'null_mean': mu, 'null_sd': sd, 'threshold': thr,
                'degenerate': degenerate, 'n_null_dev': int(len(dev_vals))}
-        for split_name in ('val', 'test'):
-            split_nulls = null[null['split'] == split_name][metric].dropna()
-            if len(split_nulls) >= 50:
-                fpr = float(np.mean(crossing(split_nulls, metric, thr)))
-                k = int(np.sum(crossing(split_nulls, metric, thr)))
-                ci = binomtest(k, len(split_nulls), 0.05).proportion_ci(0.95)
-                row[f'fpr_{split_name}'] = fpr
-                row[f'fpr_{split_name}_ci_low'] = float(ci.low)
-                row[f'fpr_{split_name}_ci_high'] = float(ci.high)
-                row[f'n_null_{split_name}'] = int(len(split_nulls))
+        held_nulls = null[null['split'] == 'heldout'][metric].dropna()
+        if len(held_nulls) >= 50:
+            crossed = crossing(held_nulls, metric, thr)
+            fpr = float(np.mean(crossed))
+            k = int(np.sum(crossed))
+            ci = binomtest(k, len(held_nulls), 0.05).proportion_ci(0.95)
+            row['fpr_heldout'] = fpr
+            row['fpr_heldout_ci_low'] = float(ci.low)
+            row['fpr_heldout_ci_high'] = float(ci.high)
+            row['n_null_heldout'] = int(len(held_nulls))
         thresholds.append(row)
     thr_frame = pd.DataFrame(thresholds).set_index('metric')
     progress(f'порогов: {len(thr_frame)} (degenerate: '
              f'{int(thr_frame["degenerate"].sum())})')
 
     power_rows = []
-    for split_name in ('dev', 'val', 'test'):
+    for split_name in ('dev', 'heldout'):
         block = packet[packet['split'] == split_name]
         for alpha in ALPHA_GRID:
             for metric in thr_frame.index:
@@ -567,13 +536,11 @@ def section_analysis(deps):
     power = pd.DataFrame(power_rows)
 
     min_alpha = {}
-    for split_name in ('val', 'test'):
-        for metric in thr_frame.index:
-            block = power[(power['split'] == split_name) & (power['metric'] == metric)]
-            block = block[~block['degenerate']]
-            hit = block[block['power'] >= 0.8].sort_values('alpha')
-            min_alpha[(split_name, metric)] = (
-                float(hit['alpha'].iloc[0]) if len(hit) else None)
+    for metric in thr_frame.index:
+        block = power[(power['split'] == 'heldout') & (power['metric'] == metric)]
+        block = block[~block['degenerate']]
+        hit = block[block['power'] >= 0.8].sort_values('alpha')
+        min_alpha[metric] = float(hit['alpha'].iloc[0]) if len(hit) else None
 
     dev_packets = packet[packet['split'] == 'dev'].copy()
     y_alpha = (dev_packets['alpha'] > 0).astype(int).to_numpy()
@@ -599,7 +566,7 @@ def section_analysis(deps):
              f'KS mean={ks_frame["ks_stat"].mean():.4f}')
 
     packet_table = packet[packet['split'] == 'dev'][
-        ['alpha', 'fold', *METRICS]].copy()
+        ['alpha', 'repeat', *METRICS]].rename(columns={'repeat': 'fold'})
     oof = {'detection': {}, 'regression': {},
            'single_feature': {}, 'small_alpha': {}}
     oof['detection'] = evaluate_detection(packet_table, feature_groups=GROUPS_OOF)
@@ -615,8 +582,7 @@ def section_analysis(deps):
     analysis = {
         'thresholds': thr_frame.reset_index().to_dict('records'),
         'power': power,
-        'min_alpha': {f'{split}/{metric}': value
-                      for (split, metric), value in min_alpha.items()},
+        'min_alpha': min_alpha,
         'q_len_auroc': q_len_auroc,
         'per_alpha_len': per_alpha_len,
         'length_balance': length_balance,
@@ -663,7 +629,7 @@ def section_figures(deps):
     for position in range(len(metrics), n_rows * n_cols):
         axes[position // n_cols][position % n_cols].axis('off')
     axes[0][0].legend(fontsize=7)
-    figure.suptitle('L9M: dose response, dev-пакеты (mean±sd, 5 фолдов x 4 повтора), '
+    figure.suptitle('L9M: dose response, dev-пакеты (mean±sd, 10 повторов), '
                     'заливка — dev-null band')
     figure.tight_layout()
     figure.savefig(os.path.join(FIGURES, 'l9m_dose_response.png'), dpi=150)
@@ -672,8 +638,8 @@ def section_figures(deps):
     figure, axes = plt.subplots(n_rows, n_cols, figsize=(16, 12))
     for position, metric in enumerate(metrics):
         axis = axes[position // n_cols][position % n_cols]
-        for split_name, style, color in (('val', 'o-', 'tab:orange'),
-                                         ('test', 's--', 'tab:green')):
+        for split_name, style, color in (('dev', 'o-', 'tab:blue'),
+                                         ('heldout', 's--', 'tab:green')):
             block = power[(power['split'] == split_name)
                           & (power['metric'] == metric)].sort_values('alpha')
             if not block.empty:
@@ -702,11 +668,10 @@ def section_figures(deps):
                                  (q_correct_len, 'Q_correct (half B)', 'tab:cyan'),
                                  (h_len, 'H (hallucinated, half B)', 'tab:red')):
         axes[0].hist(values, bins=30, alpha=0.5, label=label, color=color, density=True)
-    axes[0].set_title('Распределения длин n_pooled')
+    axes[0].set_title('Распределения длин n_pooled (length-matched выборки)')
     axes[0].set_xlabel('n_pooled')
     axes[0].legend(fontsize=8)
-    for split_name, color in (('dev', 'tab:blue'), ('val', 'tab:orange'),
-                              ('test', 'tab:green')):
+    for split_name, color in (('dev', 'tab:blue'), ('heldout', 'tab:green')):
         block = packet[packet['split'] == split_name]
         axes[1].scatter(block['alpha'], block['smd_pq'], s=12, alpha=0.6,
                         color=color, label=split_name)
@@ -731,16 +696,13 @@ def section_tables(deps):
     os.makedirs(TABLES, exist_ok=True)
 
     thr_power = pd.DataFrame(analysis['thresholds'])
-    power = analysis['power']
-    for split_name in ('val', 'test'):
-        min_col = []
-        for metric in thr_power['metric']:
-            min_col.append(analysis['min_alpha'].get(f'{split_name}/{metric}'))
-        thr_power[f'min_alpha_power08_{split_name}'] = min_col
+    thr_power['min_alpha_power08_heldout'] = [
+        analysis['min_alpha'].get(metric) for metric in thr_power['metric']]
     thr_power.to_csv(os.path.join(TABLES, 'l9m_thresholds_power.csv'), index=False)
 
-    dose = power[power['split'] == 'dev'][
-        ['metric', 'alpha', 'mean', 'sd', 'mean_z', 'power', 'n_reps', 'degenerate']]
+    power = analysis['power']
+    dose = power[['split', 'metric', 'alpha', 'mean', 'sd', 'mean_z',
+                  'power', 'n_reps', 'degenerate']]
     dose.to_csv(os.path.join(TABLES, 'l9m_dose_response.csv'), index=False)
 
     single_rows = []
@@ -757,7 +719,7 @@ def section_tables(deps):
     frame = read_rows()
     frame.to_parquet(os.path.join(RAW, 'results.parquet'))
     packets_flat = frame[(frame['kind'] == 'packet') & (frame['status'] == 'ok')][
-        ['experiment_id', 'split', 'fold', 'repeat', 'alpha', 'n_hall',
+        ['experiment_id', 'split', 'repeat', 'alpha', 'n_hall',
          'n_cloud_actual', 'n_bins_actual', 'bin_quotas', 'q_len_mean',
          'p_len_mean', 'smd_pq', 'composition_hash', *METRICS]]
     packets_flat.to_parquet(os.path.join(RAW, 'packet_table.parquet'))
@@ -772,9 +734,9 @@ def section_verdict(deps):
         raise RuntimeError('analysis отсутствует')
     smd_ok = analysis['smd_max_abs'] < SMD_TOLERANCE
     q_len_ok = analysis['q_len_auroc'] <= Q_LEN_AUROC_MAX
-    n_cloud_ok = True
     frame = read_rows()
     ok_rows = frame[frame['status'] == 'ok']
+    n_cloud_ok = True
     if 'n_cloud_actual' in ok_rows and len(ok_rows):
         n_cloud_ok = bool((ok_rows['n_cloud_actual'] == lock.get('n_cloud')).all())
     checks = {
@@ -799,13 +761,11 @@ def section_verdict(deps):
         'status': status,
         'checks': checks,
         'locked': lock,
-        'min_alpha_power08_test': {
-            metric.split('/', 1)[1]: value for metric, value in
-            analysis['min_alpha'].items() if metric.startswith('test/')},
+        'min_alpha_power08_heldout': analysis['min_alpha'],
         'fpr': [
             {key: row.get(key) for key in (
-                'metric', 'fpr_val', 'fpr_val_ci_low', 'fpr_val_ci_high',
-                'fpr_test', 'fpr_test_ci_low', 'fpr_test_ci_high', 'degenerate')}
+                'metric', 'fpr_heldout', 'fpr_heldout_ci_low',
+                'fpr_heldout_ci_high', 'degenerate')}
             for row in analysis['thresholds']],
         'headline_allowed': (
             'length-matched dose response on HaluEval candidate-answer '
@@ -832,33 +792,27 @@ def section_summary(deps):
             'metric': PRIMARY,
             'thresholds_power': [
                 {**{key: row.get(key) for key in (
-                    'metric', 'direction', 'threshold', 'fpr_val',
-                    'fpr_val_ci_low', 'fpr_val_ci_high', 'fpr_test',
+                    'metric', 'direction', 'threshold', 'null_mean', 'null_sd',
+                    'fpr_heldout', 'fpr_heldout_ci_low', 'fpr_heldout_ci_high',
                     'degenerate')},
-                 'min_alpha_power08_val': analysis['min_alpha'].get(
-                     f"val/{row.get('metric')}"),
-                 'min_alpha_power08_test': analysis['min_alpha'].get(
-                     f"test/{row.get('metric')}")}
+                 'min_alpha_power08_heldout': analysis['min_alpha'].get(
+                     row.get('metric'))}
                 for row in analysis['thresholds']],
-            'min_alpha_test': (
-                {m.split('/', 1)[1]: v for m, v in analysis['min_alpha'].items()
-                 if m.startswith('test/')} if analysis else None),
         },
         'invalidation': {
-            'q_len_auroc': analysis['q_len_auroc'] if analysis else None,
-            'smd_max_abs': analysis['smd_max_abs'] if analysis else None,
-            'per_alpha_len': (
-                analysis['per_alpha_len'].to_dict('records') if analysis else None),
+            'q_len_auroc': analysis['q_len_auroc'],
+            'smd_max_abs': analysis['smd_max_abs'],
+            'per_alpha_len': analysis['per_alpha_len'].to_dict('records'),
         },
         'secondary_oof': {
-            'detection': analysis['oof']['detection'] if analysis else None,
-            'regression': analysis['oof']['regression'] if analysis else None,
+            'detection': analysis['oof']['detection'],
+            'regression': analysis['oof']['regression'],
             'single_feature': {
                 metric: entry['auroc'] for metric, entry in
-                analysis['oof']['single_feature'].items()} if analysis else None,
-            'small_alpha': analysis['oof']['small_alpha'] if analysis else None,
+                analysis['oof']['single_feature'].items()},
+            'small_alpha': analysis['oof']['small_alpha'],
         },
-        'failed_rows': analysis['failed_rows'] if analysis else None,
+        'failed_rows': analysis['failed_rows'],
         'split_hashes': state.get('split_hashes'),
         'cache_manifest_keys': {
             key: (state.get('manifest') or {}).get(key) for key in
@@ -870,9 +824,9 @@ def section_summary(deps):
         'protocol_sha256': _sha256_file(PROTOCOL_PATH),
         'sections': SECTION_STATUS,
         'grids': {
-            'alpha_grid': ALPHA_GRID, 'n_folds': N_FOLDS, 'repeats': REPEATS,
-            'null_dev_per_fold': NULL_DEV_PER_FOLD, 'null_val': NULL_VAL,
-            'null_test': NULL_TEST, 'n_cloud': lock.get('n_cloud'),
+            'alpha_grid': ALPHA_GRID, 'repeats_dev': REPEATS_DEV,
+            'repeats_heldout': REPEATS_HELD, 'null_dev': NULL_DEV,
+            'null_heldout': NULL_HELD, 'n_cloud': lock.get('n_cloud'),
             'n_bins_locked': lock.get('n_bins'), 'layer': LAYER,
             'pca_dim': PCA_DIM, 'pca_fit': 'dev-correct, весь сплит',
             'rtd': 'исключён из батареи (отклонение, см. протокол)',
@@ -932,5 +886,10 @@ def main():
 if __name__ == '__main__':
     os.makedirs('logs', exist_ok=True)
     os.makedirs(RAW, exist_ok=True)
+    _original_stdout = sys.stdout
     sys.stdout = Tee(LOG_PATH)
-    main()
+    try:
+        main()
+    finally:
+        sys.stdout = _original_stdout
+        sys.stdout.flush()
