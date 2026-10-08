@@ -53,6 +53,9 @@ Qwen2.5-3B-Instruct; smoke-профиль безопасен для провер
 ## Что воспроизводится
 
 * `run_power_analysis.py` — Monte Carlo power-анализ на синтетических смесях;
+* `run_s5_grid.py` — чистая синтетика направленной селективности (S5a/b/c);
+* `run_precision_recall_visualization.py` — 2D-иллюстрация механики improved
+precision/recall@k (CPU);
 * `extract_llm_embeddings.py` — извлечение скрытых состояний Qwen с
   answer-masking и чекпоинтами;
 * `run_l3r_chain.py` — same-law, length-matched и permutation-контроли,
@@ -77,9 +80,9 @@ REPO_DIR = "/content/tda_metrics_project"
 PROFILE = "smoke"
 
 # В full-режиме очистить только воспроизводимые промежуточные артефакты в
-# одноразовой VM Colab перед LLM-запуском. По умолчанию False: это исключает
+# одноразовой VM Colab перед запуском серий. По умолчанию False: это исключает
 # случайную потерю checkpoint/resume при повторном запуске ячеек.
-RESET_LLM_WORKDIR = False
+RESET_WORKDIR = False
 
 # Smoke-извлечение загружает Qwen2.5-3B даже для нескольких примеров. Оставьте
 # False, если проверяете только компиляцию и синтетическую часть.
@@ -124,7 +127,7 @@ RTD и improved precision/recall. `ripser++` собирается с CUDA; па�
     code(
         """from pathlib import Path
 
-run([sys.executable, "-m", "pip", "install", "-q", "-e", "."])
+run([sys.executable, "-m", "pip", "install", "-q", "."])
 run([sys.executable, "-m", "pip", "install", "-q", "pytest", "pyarrow", "transformers", "accelerate", "sentencepiece"])
 
 def clone_once(url, directory, recursive=False):
@@ -168,8 +171,12 @@ print("Python:", sys.version.split()[0])
 print("PyTorch:", torch.__version__)
 print("CUDA доступна:", torch.cuda.is_available())
 if not torch.cuda.is_available():
-    raise RuntimeError("Нужен GPU runtime Colab: Runtime → Change runtime type → T4 GPU.")
-print("GPU:", torch.cuda.get_device_name(0))
+    message = "GPU не найден: тяжёлые серии (MTD/RTD, LLM) требуют T4."
+    if PROFILE == "full":
+        raise RuntimeError(message + " Runtime → Change runtime type → T4 GPU.")
+    print("ПРЕДУПРЕЖДЕНИЕ (smoke):", message, "Продолжаю — smoke не считает RTD/NTD.")
+else:
+    print("GPU:", torch.cuda.get_device_name(0))
 run(["nvidia-smi"])
 
 # Импорт TopologyMetrics проверяет, что CUDA-стек для MTD/RTD действительно собран.
@@ -208,6 +215,9 @@ Smoke-прогон проверяет установку, фиксированн
     "tests/test_power.py",
     "tests/test_llm_embeddings.py",
     "tests/test_sample_length_matched_pair.py",
+    "tests/test_s5_samplers.py",
+    "tests/test_precision_recall_viz.py",
+    "tests/test_barcodes.py",
 ])
 
 smoke_power = run_root / "power_smoke"
@@ -221,6 +231,11 @@ run([
     "--out-dir", str(smoke_power),
 ])
 print("Smoke-артефакты:", smoke_power)
+
+# PRV: CPU-иллюстрация механики improved PR@k (детерминированная, ~1 мин).
+run([sys.executable, "scripts/run_precision_recall_visualization.py"])
+print("PRV-фигуры: results/figures/prv_precision_recall_semantics.png, "
+      "prv_precision_recall_k_sweep.png")
 """,
         "smoke",
     ),
@@ -253,6 +268,34 @@ else:
         "power-full",
     ),
     markdown(
+        """## Синтетика S5: направленная селективность
+
+`run_s5_grid.py` требует `protocols/s5_protocol.json` (есть в репозитории);
+грид resume-безопасен по `results/raw/s5/rows.jsonl`. В клонах с
+закокоммиченными результатами грид мгновенно пропускает готовые строки и
+повторяет только analysis/figures поверх них — это сверка
+воспроизводимости, а не новый расчёт; для честного пересчёта с нуля
+включите `RESET_WORKDIR`. RTD считается только при n<=250 (решение
+протокола по бюджету времени).
+""",
+        "s5-note",
+    ),
+    code(
+        """
+import os
+import subprocess
+
+env = dict(os.environ)
+if PROFILE != "full":
+    env["S5_SMOKE"] = "1"
+    print("S5 smoke: усечённая сетка (n=100, 2 повтора, s5b alpha {0, 0.5})")
+else:
+    print("S5 full: 1680 строк (s5a/s5b/s5c x 4 n x 30 повторов); RTD только n<=250")
+subprocess.run([sys.executable, "scripts/run_s5_grid.py"], env=env, check=True)
+""",
+        "synthetic-s5",
+    ),
+    markdown(
         """## LLM: извлечение hidden states и серии 5.2--5.3
 
 `run_l3r_chain.py` сам запускает извлечение, если в `embeddings/l3r_cache`
@@ -261,7 +304,7 @@ else:
 проектный протокол: Qwen2.5-3B-Instruct, `chat_knowledge_v1`, `mean_answer`,
 слой 18, PCA-16 и фиксированный split по `prompt_id`.
 
-Для действительно нового полного расчёта включите `RESET_LLM_WORKDIR`.
+Для действительно нового полного расчёта включите `RESET_WORKDIR`.
 Очистка происходит только внутри временной VM Colab и удаляет лишь кэш и
 результаты, которые полностью пересчитываются этим скриптом.
 """,
@@ -284,8 +327,9 @@ else:
     ),
     code(
         """if PROFILE == "full":
-    if RESET_LLM_WORKDIR:
-        for relative in ("embeddings/l3r_cache", "results/raw/l3r", "results/raw/l3v"):
+    if RESET_WORKDIR:
+        for relative in ("embeddings/l3r_cache", "results/raw/l3r", "results/raw/l3v",
+                         "results/raw/s5"):
             path = Path(relative)
             if path.exists():
                 print("Очищаю воспроизводимый промежуточный каталог:", path)
@@ -313,9 +357,17 @@ raw-таблицы 5.4 (`results/raw/llm`, `results/raw/wave5`) в текуще�
 missing_54 = [str(path) for path in required_54 if not path.exists()]
 if missing_54:
     raise FileNotFoundError("Для пересборки фигур 5.4 не хватает: " + ", ".join(missing_54))
-run([sys.executable, "scripts/run_l3v_artifacts.py"])
-print("Готовы фигуры: results/figures/l3d_length_matched_pca2_layers.png, "
-      "l4a_mixture_pca2_layers.png, layerwise_llm_dynamics.png, layerwise_rtd_cka.png.")
+cache = Path("embeddings/l3r_cache/vectors.npy")
+if cache.exists():
+    run([sys.executable, "scripts/run_l3v_artifacts.py"])
+    print("Готовы фигуры: results/figures/l3d_length_matched_pca2_layers.png, "
+          "l4a_mixture_pca2_layers.png, l3_direct_pca2_layers.png, "
+          "l3_barcodes_layer18.png, layerwise_llm_dynamics.png, layerwise_rtd_cka.png.")
+else:
+    print("Кэш embeddings/l3r_cache отсутствует: пересборка облаков/баркодов "
+          "пропущена. Для полного запуска запустите LLM-серию (PROFILE = 'full') "
+          "или положите кэш; послойные фигуры строятся из committed raw.")
+    run([sys.executable, "scripts/run_l3v_artifacts.py"])
 """,
         "figures",
     ),
