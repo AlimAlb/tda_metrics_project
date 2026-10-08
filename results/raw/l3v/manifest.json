@@ -1,0 +1,180 @@
+{
+  "created": "2026-10-08T09:17:55.128956+00:00",
+  "sections": {
+    "load": "ok",
+    "artifacts": "ok",
+    "barcodes": "ok",
+    "figures_clouds": "ok",
+    "figure_barcodes": "ok",
+    "figures_layerwise": "ok",
+    "checks": "ok"
+  },
+  "embedding_cache": {
+    "model": "Qwen/Qwen2.5-3B-Instruct",
+    "input_format": "chat_knowledge_v1",
+    "pooling": "mean_answer",
+    "layer_indices": [
+      9,
+      18,
+      27,
+      36
+    ],
+    "n_items": 20000,
+    "dtype": "float16",
+    "manifest_sha256": "a9421ae9f64b114593e5477a47bf8ff62a316c7b21d9b666e351184dc08d568f"
+  },
+  "split": {
+    "rule": "prompt_id_split(meta, seed=0, 0.6/0.2/0.2)",
+    "dev_prompt_ids_hash": "debfc629f24af648526470f23db8fe2d837ea40e06eeaea8b24d32c54559a3cf"
+  },
+  "pca_rule": "PCA-16 fit на полном dev-correct пуле каждого слоя (reduction.pca_fit); pc1/pc2 — первые две компоненты рабочего PCA-16-пространства; hallucinated ответы в fit не используются",
+  "seeds": {
+    "l3d_r0": "детерминированный length_matched_pair (wave3-семантика, n_max=500, бины по n_pooled)",
+    "l3_direct_r0": "np.random.default_rng(200).choice, позиционные индексы в обоих пулах (wave3 _subsample k=0)",
+    "l4a_r0": "облака l3-direct r0 + permutation np.random.default_rng(100) (wave3 k=0), вложенная замена make_alpha_replacement",
+    "barcodes": "np.random.default_rng(404/405/406).choice, n=500, PCA-16 слоя 18 (реплика wave-BC)"
+  },
+  "l3d_prompt_hashes": {
+    "9": {
+      "correct": "708c436171247931bdfaaa25a950baba10b97a198552387b31a090908af9447d",
+      "hallucinated": "a4f24826869fb7c17e46e05b6ca3b6a6586a05f85548dc414e21eb138f07a1a3"
+    },
+    "18": {
+      "correct": "708c436171247931bdfaaa25a950baba10b97a198552387b31a090908af9447d",
+      "hallucinated": "a4f24826869fb7c17e46e05b6ca3b6a6586a05f85548dc414e21eb138f07a1a3"
+    },
+    "27": {
+      "correct": "708c436171247931bdfaaa25a950baba10b97a198552387b31a090908af9447d",
+      "hallucinated": "a4f24826869fb7c17e46e05b6ca3b6a6586a05f85548dc414e21eb138f07a1a3"
+    },
+    "36": {
+      "correct": "708c436171247931bdfaaa25a950baba10b97a198552387b31a090908af9447d",
+      "hallucinated": "a4f24826869fb7c17e46e05b6ca3b6a6586a05f85548dc414e21eb138f07a1a3"
+    }
+  },
+  "direct_prompt_hashes": {
+    "9": {
+      "correct": "d0343816d2d5054dc8f09239f157ba3ebadd29a09a88e5d3636daea07cf529ba",
+      "hallucinated": "d0343816d2d5054dc8f09239f157ba3ebadd29a09a88e5d3636daea07cf529ba"
+    },
+    "18": {
+      "correct": "d0343816d2d5054dc8f09239f157ba3ebadd29a09a88e5d3636daea07cf529ba",
+      "hallucinated": "d0343816d2d5054dc8f09239f157ba3ebadd29a09a88e5d3636daea07cf529ba"
+    },
+    "27": {
+      "correct": "d0343816d2d5054dc8f09239f157ba3ebadd29a09a88e5d3636daea07cf529ba",
+      "hallucinated": "d0343816d2d5054dc8f09239f157ba3ebadd29a09a88e5d3636daea07cf529ba"
+    },
+    "36": {
+      "correct": "d0343816d2d5054dc8f09239f157ba3ebadd29a09a88e5d3636daea07cf529ba",
+      "hallucinated": "d0343816d2d5054dc8f09239f157ba3ebadd29a09a88e5d3636daea07cf529ba"
+    }
+  },
+  "pool_sizes": {
+    "9": {
+      "correct": 6000,
+      "hallucinated": 6000
+    },
+    "18": {
+      "correct": 6000,
+      "hallucinated": 6000
+    },
+    "27": {
+      "correct": 6000,
+      "hallucinated": 6000
+    },
+    "36": {
+      "correct": 6000,
+      "hallucinated": 6000
+    }
+  },
+  "barcodes_stats": {
+    "correct": {
+      "h0_merge_mean": 6.303977111342731,
+      "h0_merge_sd": 2.638772605359874,
+      "h0_merge_q25": 4.820430161952135,
+      "h0_merge_q75": 7.990883120664838,
+      "h1_longest": 4.429471015930176,
+      "h1_count": 0,
+      "mean_pairwise_dist": 22.234930947893638
+    },
+    "hallucinated": {
+      "h0_merge_mean": 5.749252766633163,
+      "h0_merge_sd": 1.4690099486039314,
+      "h0_merge_q25": 4.87818073884872,
+      "h0_merge_q75": 6.256171634077555,
+      "h1_longest": 2.0852041244506836,
+      "h1_count": 0,
+      "mean_pairwise_dist": 13.403575720228577
+    },
+    "correct2": {
+      "h0_merge_mean": 6.2793046326091195,
+      "h0_merge_sd": 2.565150687411285,
+      "h0_merge_q25": 4.615449417655431,
+      "h0_merge_q75": 8.046770580843347,
+      "h1_longest": 3.8977622985839844,
+      "h1_count": 0,
+      "mean_pairwise_dist": 22.211321832712237
+    }
+  },
+  "barcodes_cross_check_vs_llm_barcodes_stats_csv": {
+    "correct": {
+      "h0_merge_mean": {
+        "old": 6.304131849265611,
+        "new": 6.303977111342731,
+        "rel_diff": 2.454547693152338e-05
+      },
+      "h1_longest": {
+        "old": 4.434366226196289,
+        "new": 4.429471015930176,
+        "rel_diff": 0.0011039255705118409
+      },
+      "mean_pairwise_dist": {
+        "old": 22.235453489500284,
+        "new": 22.234930947893638,
+        "rel_diff": 2.3500380007658108e-05
+      }
+    },
+    "hallucinated": {
+      "h0_merge_mean": {
+        "old": 5.7490521268687145,
+        "new": 5.749252766633163,
+        "rel_diff": 3.4899625194074705e-05
+      },
+      "h1_longest": {
+        "old": 2.087716579437256,
+        "new": 2.0852041244506836,
+        "rel_diff": 0.0012034463927322427
+      },
+      "mean_pairwise_dist": {
+        "old": 13.403295089169928,
+        "new": 13.403575720228577,
+        "rel_diff": 2.0937467748187052e-05
+      }
+    },
+    "correct2": {
+      "h0_merge_mean": {
+        "old": 6.279037102841314,
+        "new": 6.2793046326091195,
+        "rel_diff": 4.2606814297137855e-05
+      },
+      "h1_longest": {
+        "old": 3.900936126708984,
+        "new": 3.8977622985839844,
+        "rel_diff": 0.0008136067912694421
+      },
+      "mean_pairwise_dist": {
+        "old": 22.21144930441336,
+        "new": 22.211321832712237,
+        "rel_diff": 5.739008714669901e-06
+      }
+    }
+  },
+  "artifacts_sha256": {
+    "l3d_pca2_r0.parquet": "92b7a891cc0e94ccd1fc3965d5cdaa9bd3e3e05a8281bd5f525b3ddf951753fc",
+    "l4a_mixture_pca2_r0.parquet": "95c9d8084d2a0e8bb7b948950ba76cc89079d190abfe98aa037231c3b94a2645",
+    "l3_direct_pca2_layers_r0.parquet": "426084edd5fa88130d4f3d4bbef5607f182986a3f1f40b864e079fc0349fa205",
+    "l3_barcodes_layer18_r0.parquet": "a78b788ebc396a45d0d69bbb854465918a770994c68028b8f7e10a0c53427ac0"
+  },
+  "runtime_seconds": 64.29933960200003
+}
